@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const Schema = mongoose.Schema;
 const PassportLocalMongoose = require('passport-local-mongoose');
 const ERROR = 'user already exists'
@@ -26,10 +27,13 @@ userSchema.statics.newUser = async function (user) {
     throw new Error(ERROR);
   }
 
+  // create new Stripe customer
+  newStripeUser = await stripe.customers.create({email: user.username});
+
   // add new user to database
   return new Promise((resolve, reject) => {
     User.register(
-      new User({username: user.username}), user.password, function(err, user) {
+      new User({username: user.username, stripeCustomerId: newStripeUser.id}), user.password, function(err, user) {
       if (err) { reject(err); }
       else { resolve(user); }
     });

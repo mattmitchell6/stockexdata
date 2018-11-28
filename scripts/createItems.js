@@ -48,7 +48,6 @@ const sampleItems = [
 
 sampleItems.forEach((item) => {
   const newItem = new Item({
-    _id: new mongoose.Types.ObjectId(),
     name: item.name,
     imageUrl: item.imageUrl,
     price: item.price,

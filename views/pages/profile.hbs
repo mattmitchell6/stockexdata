@@ -6,20 +6,20 @@
 	<h2 class="text-center mtm">Welcome, {{user.username}}</h2>
 	<hr>
 	<div class="row">
-		<div class="col col-md-6 col-lg-4 mtm">
+		<!-- <div class="col col-md-6 col-lg-4 mtm">
 			<h4>Customer Information</h4>
 			<h4>Actions...</h4>
-		</div>
+		</div> -->
 
-		<div class="col col-lg-8 col-md-6">
+		<div class="col col-md-12">
 
 			<div class="row mtm">
 				<ul class="nav nav-pills" id="file-options" role="tablist">
 					<li class="nav-item">
-						<a class="nav-link active" id="explorer-tab" data-toggle="pill" href="#explorer" role="tab">Box Content Explorer</a>
+						<a class="nav-link active" id="explorer-tab" data-toggle="pill" href="#items" role="tab">Browse Available Items</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" id="custom-tab" data-toggle="pill" href="#custom" role="tab">Custom List Files</a>
+						<a class="nav-link" id="custom-tab" data-toggle="pill" href="#purchases" role="tab">Previous Purchases</a>
 					</li>
 				</ul>
 			</div>
@@ -27,12 +27,40 @@
 			<div class="tab-content">
 
 				<!-- Box Content Explorer -->
-				<div class="tab-pane show active mts" role="tabpanel">
-					tab content 1
-				</div>
+				<div class="tab-pane show active mts" role="tabpanel" id="items">
+
+					<div class="row">
+						<div class="col col-md-8">
+							<h4>Available Items</h4>
+							<div class="mtm row">
+								{{#each items}}
+									<div class="card col col-md-4 ms" style="width: 18rem;">
+									  <img class="card-img-top" src="..." alt="Card image cap">
+									  <div class="card-body">
+									    <h5 class="card-title">Card title</h5>
+									    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+									    <a href="#" class="btn btn-primary">Go somewhere</a>
+									  </div>
+									</div>
+								{{/each}}
+							</div>
+						</div>
+						<div class="col col-md-4">
+							<h4>Cart</h4>
+							<div class="mtm">
+								items in cart...
+							</div>
+							<form action="/profile/charge" method="post" id="payment-form">
+								<label for="card-element">Credit or Debit Card</label>
+								<div id="card-element"></div>
+								<button type="submit" class="mts btn btn-primary btn-sm">Checkout</button>
+							</form>
+						</div>
+						</div>
+					</div>
 
 				<!-- Custom ui for listing files -->
-				<div class="tab-pane mts" role="tabpanel" id="custom">
+				<div class="tab-pane mts" role="tabpanel" id="purchases">
 					tab content 2
 				</div>
 			</div>
@@ -42,7 +70,57 @@
 </div>
 
 <script>
-	// put the stripe UI element here
+	// Create a Stripe client.
+	const stripe = Stripe("{{stripeKey}}");
+
+	// Create an instance of Elements.
+	const elements = stripe.elements();
+
+	// Create an instance of the card Element.
+	const card = elements.create('card');
+
+	// Add an instance of the card Element into the `card-element` <div>.
+	card.mount('#card-element');
+
+	// Handle real-time validation errors from the card Element.
+	// card.addEventListener('change', function(event) {
+	//   var displayError = document.getElementById('card-errors');
+	//   if (event.error) {
+	//     displayError.textContent = event.error.message;
+	//   } else {
+	//     displayError.textContent = '';
+	//   }
+	// });
+
+	// Handle form submission.
+	var form = document.getElementById('payment-form');
+	form.addEventListener('submit', function(event) {
+	  event.preventDefault();
+
+	  stripe.createToken(card).then(function(result) {
+	    if (result.error) {
+	      // Inform the user if there was an error.
+	      var errorElement = document.getElementById('card-errors');
+	      // errorElement.textContent = result.error.message;
+	    } else {
+	      // Send the token to your server.
+	      stripeTokenHandler(result.token);
+	    }
+	  });
+	});
+
+	// Submit the form with the token ID.
+	function stripeTokenHandler(token) {
+	  // Insert the token ID into the form so it gets submitted to the server
+	  var form = document.getElementById('payment-form');
+	  var hiddenInput = document.createElement('input');
+	  hiddenInput.setAttribute('type', 'hidden');
+	  hiddenInput.setAttribute('name', 'stripeToken');
+	  hiddenInput.setAttribute('value', token.id);
+	  form.appendChild(hiddenInput);
+
+	  form.submit();
+	}
 </script>
 
 {{/inline}}
