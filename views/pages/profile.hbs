@@ -1,0 +1,50 @@
+{{#> base }}
+
+{{#*inline "content-block"}}
+
+<div class="container">
+	<h2 class="text-center mtm">Welcome, {{user.username}}</h2>
+	<hr>
+	<div class="row">
+		<div class="col col-md-6 col-lg-4 mtm">
+			<h4>Customer Information</h4>
+			<h4>Actions...</h4>
+		</div>
+
+		<div class="col col-lg-8 col-md-6">
+
+			<div class="row mtm">
+				<ul class="nav nav-pills" id="file-options" role="tablist">
+					<li class="nav-item">
+						<a class="nav-link active" id="explorer-tab" data-toggle="pill" href="#explorer" role="tab">Box Content Explorer</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" id="custom-tab" data-toggle="pill" href="#custom" role="tab">Custom List Files</a>
+					</li>
+				</ul>
+			</div>
+
+			<div class="tab-content">
+
+				<!-- Box Content Explorer -->
+				<div class="tab-pane show active mts" role="tabpanel">
+					tab content 1
+				</div>
+
+				<!-- Custom ui for listing files -->
+				<div class="tab-pane mts" role="tabpanel" id="custom">
+					tab content 2
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<script>
+	// put the stripe UI element here
+</script>
+
+{{/inline}}
+
+{{/base}}
