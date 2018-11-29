@@ -6,12 +6,20 @@
 	<h2 class="text-center mtm">Welcome, {{user.username}}</h2>
 	<hr>
 	<div class="row">
-		<!-- <div class="col col-md-6 col-lg-4 mtm">
-			<h4>Customer Information</h4>
-			<h4>Actions...</h4>
-		</div> -->
 
 		<div class="col col-md-12">
+
+			{{#if purchase}}
+				<div class="alert alert-success alert-dismissible fade show" role="alert">
+					<strong>Thank you for your Purchase</strong>
+					<div>Order Total: ${{purchase.total}}</div>
+					<div>Item(s): {{purchase.description}}</div>
+					<div>Purchase Id: {{purchase.id}}</div>
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+			{{/if}}
 
 			<div class="row mtm">
 				<ul class="nav nav-pills" id="file-options" role="tablist">
@@ -39,7 +47,9 @@
 									  <div class="card-body">
 									    <h5 class="card-title" style="height: 50px">{{this.name}}</h5>
 									    <p class="card-text">${{this.price}}</p>
-									    <a href="#" class="btn btn-primary">Add to Cart</a>
+									    <a href="#" class="btn btn-primary" onclick="addToCart('{{this.name}}', '{{this.price}}', '{{this.id}}')">
+												Add to Cart
+											</a>
 									  </div>
 									</div>
 								{{/each}}
@@ -47,11 +57,18 @@
 						</div>
 						<div class="col col-md-4">
 							<h4>Cart</h4>
-							<div class="mtm">
-								items in cart...
-							</div>
 							<form action="/profile/charge" method="post" id="payment-form">
-								<label class="mtm" for="card-element">Enter Credit or Debit Card</label>
+								<table class="table mtm">
+								  <thead>
+								    <tr>
+								      <th scope="col">Item Name</th>
+								      <th scope="col">Price</th>
+								    </tr>
+								  </thead>
+								  <tbody id="cart-item">
+								  </tbody>
+								</table>
+								<label class="mts" for="card-element">Enter Credit Card Information</label>
 								<div id="card-element"></div>
 								<button type="submit" class="mts btn btn-primary btn-sm">Checkout</button>
 							</form>
@@ -61,7 +78,26 @@
 
 				<!-- Custom ui for listing files -->
 				<div class="tab-pane mts" role="tabpanel" id="purchases">
-					tab content 2
+					<table class="table mtm">
+						<thead>
+							<tr>
+								<th scope="col"></th>
+								<th scope="col">Total</th>
+								<th scope="col">Description</th>
+								<th scope="col">Purchase Date</th>
+							</tr>
+						</thead>
+						<tbody id="cart-item">
+							{{#each charges}}
+								<tr>
+									<td></td>
+									<td>{{this.amount}}</td>
+									<td>{{this.description}}</td>
+									<td>{{this.created}}</td>
+								</tr>
+							{{/each}}
+						</tbody>
+					</table>
 				</div>
 			</div>
 
@@ -120,6 +156,19 @@
 	  form.appendChild(hiddenInput);
 
 	  form.submit();
+	}
+
+	function addToCart(name, price, id) {
+		// add new item to cart table
+  	$('#cart-item').append("<tr><td>" + name + "</td><td>$" + price + "</td></tr>");
+
+		// add new item to cart input
+		var form = document.getElementById('payment-form');
+	  var hiddenInput = document.createElement('input');
+	  hiddenInput.setAttribute('type', 'hidden');
+	  hiddenInput.setAttribute('name', 'itemIds');
+	  hiddenInput.setAttribute('value', id);
+	  form.appendChild(hiddenInput);
 	}
 </script>
 
