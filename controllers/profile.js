@@ -16,8 +16,6 @@ router.get('/', async function (req, res) {
 
   // fetch all available items
   const items = await Item.find()
-  console.log(items);
-
 
   res.render('pages/profile', {
     user: req.user,

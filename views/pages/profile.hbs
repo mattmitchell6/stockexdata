@@ -34,12 +34,12 @@
 							<h4>Available Items</h4>
 							<div class="mtm row">
 								{{#each items}}
-									<div class="card col col-md-4 ms" style="width: 18rem;">
-									  <img class="card-img-top" src="..." alt="Card image cap">
+									<div class="card col col-md-4 ms">
+									  <img class="card-img-top" src="{{this.imageUrl}}" alt="no image flound">
 									  <div class="card-body">
-									    <h5 class="card-title">Card title</h5>
-									    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-									    <a href="#" class="btn btn-primary">Go somewhere</a>
+									    <h5 class="card-title" style="height: 50px">{{this.name}}</h5>
+									    <p class="card-text">${{this.price}}</p>
+									    <a href="#" class="btn btn-primary">Add to Cart</a>
 									  </div>
 									</div>
 								{{/each}}
@@ -51,7 +51,7 @@
 								items in cart...
 							</div>
 							<form action="/profile/charge" method="post" id="payment-form">
-								<label for="card-element">Credit or Debit Card</label>
+								<label class="mtm" for="card-element">Enter Credit or Debit Card</label>
 								<div id="card-element"></div>
 								<button type="submit" class="mts btn btn-primary btn-sm">Checkout</button>
 							</form>

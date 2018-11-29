@@ -5,21 +5,9 @@ const Schema = mongoose.Schema;
 let itemSchema = new Schema({
   name: String,
   imageUrl: String,
-  cost: Number,
+  price: Number,
   currency: String
 });
-
-/**
- * Create new item and add to database
- */
-// itemSchema.statics.newItem = function (name, imageUrl, cost) {
-//
-//   // add new item to database
-//   new Item({name: name, imageUrl: imageUrl, cost: cost}) function(err, item) {
-//     if (err) { reject(err); }
-//     else { resolve(user); }
-//   });
-// }
 
 var Item = mongoose.model('Item', itemSchema);
 
