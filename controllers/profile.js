@@ -19,6 +19,8 @@ router.get('/', async function (req, res) {
     description: req.query.description
   }
 
+  console.log(await stripe.customers.retrieve(stripeCustomerId));
+
   // fetch all available items
   const items = await Item.find()
 
@@ -27,7 +29,6 @@ router.get('/', async function (req, res) {
     limit: 20,
     customer: stripeCustomerId
   });
-  console.log(previousCharges);
 
   res.render('pages/profile', {
     user: req.user,

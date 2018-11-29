@@ -70,7 +70,7 @@
 								</table>
 								<label class="mts" for="card-element">Enter Credit Card Information</label>
 								<div id="card-element"></div>
-								<button type="submit" class="mts btn btn-primary btn-sm">Checkout</button>
+								<button type="submit" class="mts btn btn-primary btn-sm" id="checkout-btn" disabled>Checkout</button>
 							</form>
 						</div>
 						</div>
@@ -137,8 +137,9 @@
 	    if (result.error) {
 	      // Inform the user if there was an error.
 	      var errorElement = document.getElementById('card-errors');
-	      // errorElement.textContent = result.error.message;
+	      errorElement.textContent = result.error.message;
 	    } else {
+				console.log(result);
 	      // Send the token to your server.
 	      stripeTokenHandler(result.token);
 	    }
@@ -161,6 +162,9 @@
 	function addToCart(name, price, id) {
 		// add new item to cart table
   	$('#cart-item').append("<tr><td>" + name + "</td><td>$" + price + "</td></tr>");
+
+		var checkoutBtn = document.getElementById('checkout-btn');
+		checkoutBtn.removeAttribute("disabled");
 
 		// add new item to cart input
 		var form = document.getElementById('payment-form');
