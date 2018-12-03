@@ -3,7 +3,7 @@
 A sample ecommerce site that leverages Stripe's API to process charges for customer 'item' purchases.
 
 ## Prerequisites
-[Mongodb](https://treehouse.github.io/installation-guides/mac/mongo-mac.html) - for storing user objects (username, password, Stripe customer id)
+[Mongodb](https://treehouse.github.io/installation-guides/mac/mongo-mac.html)
 
 [Node.js (v9)](https://nodejs.org/en/)
 
