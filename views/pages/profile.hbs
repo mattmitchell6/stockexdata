@@ -28,17 +28,17 @@
 						<a class="nav-link active" id="explorer-tab" data-toggle="pill" href="#items" role="tab">Browse Available Items</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" id="custom-tab" data-toggle="pill" href="#purchases" role="tab">Previous Purchases</a>
+						<a class="nav-link" id="custom-tab" data-toggle="pill" href="#purchases" role="tab">Purchase History</a>
 					</li>
 				</ul>
 			</div>
 
 			<div class="tab-content">
 
-				<!-- Box Content Explorer -->
 				<div class="tab-pane show active mts" role="tabpanel" id="items">
-
 					<div class="row">
+
+						<!-- Available Items -->
 						<div class="col col-md-8">
 							<h4>Available Items</h4>
 							<div class="mtm row">
@@ -48,7 +48,7 @@
 									  <div class="card-body">
 									    <h5 class="card-title" style="height: 50px">{{this.name}}</h5>
 									    <p class="card-text">${{this.price}}</p>
-									    <a href="#" class="btn btn-primary" onclick="addToCart('{{this.name}}', '{{this.price}}', '{{this.id}}')">
+									    <a href="#!" class="btn btn-primary" onclick="addToCart('{{this.name}}', '{{this.price}}', '{{this.id}}')">
 												Add to Cart
 											</a>
 									  </div>
@@ -56,6 +56,8 @@
 								{{/each}}
 							</div>
 						</div>
+
+						<!-- Cart -->
 						<div class="col col-md-4">
 							<h4>Cart</h4>
 							<form action="/profile/charge" method="post" id="payment-form">
@@ -107,27 +109,11 @@
 </div>
 
 <script>
-	// Create a Stripe client.
+	// Create a Stripe client, instance of Elements, instance of Card Element
 	const stripe = Stripe("{{stripeKey}}");
-
-	// Create an instance of Elements.
 	const elements = stripe.elements();
-
-	// Create an instance of the card Element.
 	const card = elements.create('card');
-
-	// Add an instance of the card Element into the `card-element` <div>.
 	card.mount('#card-element');
-
-	// Handle real-time validation errors from the card Element.
-	// card.addEventListener('change', function(event) {
-	//   var displayError = document.getElementById('card-errors');
-	//   if (event.error) {
-	//     displayError.textContent = event.error.message;
-	//   } else {
-	//     displayError.textContent = '';
-	//   }
-	// });
 
 	// Handle form submission.
 	var form = document.getElementById('payment-form');

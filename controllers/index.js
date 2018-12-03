@@ -35,7 +35,7 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/' }), 
 router.post('/signup', async function(req, res) {
   let userInfo = req.body;
 
-  // create new box app user and db user
+  // create new Stripe customer and db user
   await User.newUser(userInfo);
   console.log("Successfully created new user");
 
