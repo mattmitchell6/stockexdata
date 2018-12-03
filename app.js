@@ -44,4 +44,12 @@ app.use((err, req, res, next) => {
 	res.render('pages/error', { error: err});
 });
 
-app.listen(3000);
+//start server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, (err) => {
+	if (err) {
+		console.log(err);
+	} else {
+		console.log('Getting served on port ' + PORT);
+	}
+});
