@@ -35,7 +35,7 @@ const sampleItems = [
   {
     name: "Tent",
     imageUrl: "https://i5.walmartimages.com/asr/1493d369-1a7f-495e-976b-21b14e523bb5_1.0017e8ab4fbae6a82870b9f3413a4ee4.jpeg?odnHeight=450&odnWidth=450&odnBg=FFFFFF",
-    price: 229000,
+    price: 22900,
     currency: "usd"
   },
   {
