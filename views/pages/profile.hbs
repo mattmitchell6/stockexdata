@@ -9,6 +9,7 @@
 
 		<div class="col col-md-12">
 
+			<!-- purchase alert -->
 			{{#if purchase}}
 				<div class="alert alert-success alert-dismissible fade show" role="alert">
 					<strong>Thank you for your Purchase</strong>
@@ -76,7 +77,7 @@
 						</div>
 					</div>
 
-				<!-- Custom ui for listing files -->
+				<!-- List previous purchases -->
 				<div class="tab-pane mts" role="tabpanel" id="purchases">
 					<table class="table mtm">
 						<thead>
@@ -91,7 +92,7 @@
 							{{#each charges}}
 								<tr>
 									<td></td>
-									<td>{{this.amount}}</td>
+									<td>${{this.amount}}</td>
 									<td>{{this.description}}</td>
 									<td>{{this.created}}</td>
 								</tr>

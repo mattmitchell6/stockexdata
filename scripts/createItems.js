@@ -21,15 +21,15 @@ const sampleItems = [
     currency: "usd"
   },
   {
-    name: "Airpods",
-    imageUrl: "https://store.storeimages.cdn-apple.com/4981/as-images.apple.com/is/image/AppleInc/aos/published/images/M/ME/MMEF2/MMEF2?wid=572&hei=572&fmt=jpeg&qlt=95&op_usm=0.5,0.5&.v=1503962928226",
-    price: 15900,
+    name: "Anchor Steam 6 Pack",
+    imageUrl: "https://cdn3.volusion.com/xqdoq.bdyht/v/vspfiles/photos/Bin-7261-2.jpg",
+    price: 1000,
     currency: "usd"
   },
   {
     name: "The Office DVD Set",
     imageUrl: "http://www.dvdsetsdiscount.com/images/634520909517360000.jpg",
-    price: 20000,
+    price: 2000,
     currency: "usd"
   },
   {
@@ -39,9 +39,9 @@ const sampleItems = [
     currency: "usd"
   },
   {
-    name: "SF Giants Tickets (2018)",
-    imageUrl: "https://images.offerup.com/ng17OIRTYq4ss4zva8mv0lFptcg=/300x300/31b5/31b57324e47f479da2f953941cd285e6.jpg",
-    price: 299,
+    name: "SF Giants Hat",
+    imageUrl: "https://i.ebayimg.com/images/g/eDcAAOSwx6pYq1T9/s-l225.jpg",
+    price: 3900,
     currency: "usd"
   }
 ];

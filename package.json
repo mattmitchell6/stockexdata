@@ -1,7 +1,7 @@
 {
-  "name": "box-node-passport-sample",
+  "name": "ecommerce-sample",
   "version": "1.0.0",
-  "description": "Sample app that gets you up and running with Box Platform and user authentication",
+  "description": "Sample app ecommerce app that leverages Stripe to process charges",
   "scripts": {
     "start": "nodemon app.js",
     "createItems": "node scripts/createItems.js"
@@ -19,6 +19,7 @@
     "express-handlebars": "^3.0.0",
     "express-session": "^1.11.3",
     "hbs": "^4.0.1",
+    "moment": "^2.22.2",
     "mongoose": "^5.0.10",
     "nodemon": "^1.11.0",
     "passport": "^0.2.2",

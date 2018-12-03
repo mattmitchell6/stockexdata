@@ -4,7 +4,7 @@
 const express = require('express');
 const router = express.Router();
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-
+const moment = require('moment');
 
 const Item = require('../models/items');
 
@@ -20,18 +20,28 @@ router.get('/', async function (req, res) {
   }
 
   // fetch all available items
-  const items = await Item.find()
+  let items = await Item.find()
 
   // fetch all previous customer purchases, limit 20
-  const previousCharges = await stripe.charges.list({
+  let previousCharges = await stripe.charges.list({
     limit: 20,
     customer: stripeCustomerId
   });
+  previousCharges = previousCharges.data;
+
+  // iterate through previous purchases / available items and format dates / cents -> dollars
+  items.forEach((item, index, items) => {
+    items[index].price = items[index].price / 100.0
+  })
+  previousCharges.forEach((charge, index, previousCharges) => {
+    previousCharges[index].amount = previousCharges[index].amount / 100.0;
+    previousCharges[index].created = moment.unix(previousCharges[index].created).format('MM/DD/YY h:mm A')
+  })
 
   res.render('pages/profile', {
     user: req.user,
     items: items,
-    charges: previousCharges.data,
+    charges: previousCharges,
     purchase: purchase.total ? purchase : null,
     stripeKey: process.env.STRIPE_PUBLISHABLE_KEY
   });
@@ -73,7 +83,7 @@ router.post('/charge', async function(req, res) {
   // and dirty way to tie charges to a customer's account.
   // With more time, a custom UI component would probably accompany this functionality
   // to prompt a user as to whether or not they'd like to "save their inputted card"
-  // or use a previous card
+  // or "use a previous card"
   const customer = await stripe.customers.update(stripeCustomerId, {
     source: token
   });
@@ -86,6 +96,7 @@ router.post('/charge', async function(req, res) {
     source: customer.default_source,
     customer: stripeCustomerId
   });
+  charge.amount = charge.amount / 100.0;
 
   res.redirect('/profile?amount=' + charge.amount + '&tid=' + charge.id + "&description=" + charge.description)
 });
