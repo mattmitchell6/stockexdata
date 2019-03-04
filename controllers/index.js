@@ -9,14 +9,15 @@ const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn('/');
 const User = require('../models/users');
 
 // load routes
-router.use('/profile', ensureLoggedIn, require('./profile'))
+router.use('/dashboard', ensureLoggedIn, require('./dashboard'))
+router.use('/subscriptions', ensureLoggedIn, require('./subscriptions'))
 
 /**
  * base route
  */
 router.get('/', function(req, res) {
   if (req.user) {
-    res.redirect('/profile');
+    res.redirect('/dashboard');
   } else {
     res.render('pages/home');
   }
@@ -40,7 +41,7 @@ router.post('/signup', async function(req, res) {
   console.log("Successfully created new user");
 
   passport.authenticate('local') (req, res, function() {
-    res.redirect('/profile');
+    res.redirect('/dashboard');
   });
 });
 

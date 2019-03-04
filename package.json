@@ -1,10 +1,9 @@
 {
-  "name": "ecommerce-sample",
+  "name": "stripe-billing-demo",
   "version": "1.0.0",
-  "description": "Sample app ecommerce app that leverages Stripe to process charges",
+  "description": "Sample stripe billing demo",
   "scripts": {
-    "start": "nodemon app.js",
-    "createItems": "node scripts/createItems.js"
+    "start": "nodemon app.js"
   },
   "author": "Matt Mitchell",
   "license": "MIT",

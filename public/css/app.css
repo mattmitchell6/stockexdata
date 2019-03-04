@@ -10,7 +10,10 @@
   margin-top: 100px;
 }
 
-
 .ms {
   margin: 10px;
+}
+
+.date {
+  font-weight: bold;
 }

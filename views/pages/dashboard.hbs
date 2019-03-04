@@ -1,0 +1,75 @@
+{{#> base }}
+
+{{#*inline "content-block"}}
+
+<div class="container">
+	<h2 class="text-center mtm">Welcome, {{user.username}}</h2>
+	<hr>
+	<div class="row">
+		<div class="col col-md-12">
+			<h5>Current Subscription: </h5>
+			{{#if subscription}}
+				<div class="card col col-md-5">
+					<div class="card-body">
+						<h5 class="card-title">Plan: {{subscription.plan.nickname}}</h5>
+						<h6 class="card-subtitle mb-2 text-muted">subscription {{subscription.plan.amount}} / {{subscription.plan.interval}}</h6>
+						<p class="card-text">Your subscription will automatically renew on
+							<span class="date" data-date="{{subscription.current_period_end}}"></span>
+						</p>
+						<p class="card-text">Subscription started date:
+							<span class="date" data-date="{{subscription.start}}"></span>
+						</p>
+
+						<a href="/subscriptions" class="card-link">Update/Cancel Subscription</a>
+					</div>
+				</div>
+			{{else}}
+				<p>You are currently not subscribed to a plan.</p>
+				<a class="btn btn-primary" href="/subscriptions">Select a Plan</a>
+			{{/if}}
+		</div>
+	</div>
+</div>
+<!--
+<script>
+	// Create a Stripe client, instance of Elements, instance of Card Element
+	const stripe = Stripe("stripekey...");
+	const elements = stripe.elements();
+	const card = elements.create('card');
+	card.mount('#card-element');
+
+	// Handle form submission.
+	var form = document.getElementById('payment-form');
+	form.addEventListener('submit', function(event) {
+	  event.preventDefault();
+
+	  stripe.createToken(card).then(function(result) {
+	    if (result.error) {
+	      // Inform the user if there was an error.
+	      var errorElement = document.getElementById('card-errors');
+	      errorElement.textContent = result.error.message;
+	    } else {
+				console.log(result);
+	      // Send the token to your server.
+	      stripeTokenHandler(result.token);
+	    }
+	  });
+	});
+
+	// Submit the form with the token ID.
+	function stripeTokenHandler(token) {
+	  // Insert the token ID into the form so it gets submitted to the server
+	  var form = document.getElementById('payment-form');
+	  var hiddenInput = document.createElement('input');
+	  hiddenInput.setAttribute('type', 'hidden');
+	  hiddenInput.setAttribute('name', 'stripeToken');
+	  hiddenInput.setAttribute('value', token.id);
+	  form.appendChild(hiddenInput);
+
+	  form.submit();
+	}
+</script> -->
+
+{{/inline}}
+
+{{/base}}

@@ -1,0 +1,35 @@
+{{#> base }}
+
+{{#*inline "content-block"}}
+
+<div class="mtm container">
+  <h5>Select a Plan: </h5>
+
+  <div class="row">
+    {{#each plans}}
+      <div class="card col col-lg-4">
+        <div class="card-body">
+          <h5 class="card-title">{{this.nickname}}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">${{this.amount}} per {{this.interval}}</h6>
+          <p class="card-text">Usage Type: {{this.usage_type}}</p>
+          <form action="/subscriptions/subscribe" method="POST">
+            <input type="hidden" name="plan" value="{{this.id}}">
+            <script
+              src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+              data-key="pk_test_yFlF77AqfAveVhLfTtBCGRh3"
+              data-name="{{this.nickname}}"
+              data-label="Subscribe"
+              data-panel-label="Pay ${{this.amount}} per {{this.interval}}"
+              data-description=""
+              data-locale="auto">
+            </script>
+          </form>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+</div>
+
+{{/inline}}
+
+{{/base}}
