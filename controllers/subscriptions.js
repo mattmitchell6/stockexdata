@@ -10,12 +10,12 @@ const moment = require('moment');
  * main route for rendering items and previous charges page
  */
 router.get('/', async function (req, res) {
-  const stripeCustomerId = req.user.stripeCustomerId
 
   // fetch current subscriptions
   const subscriptions = await stripe.subscriptions.list({
-    customer: stripeCustomerId
+    customer: req.user.stripeCustomerId
   });
+  console.log(subscriptions);
 
   // fetch all plans for generic product
   const plans = await stripe.plans.list({
@@ -24,6 +24,7 @@ router.get('/', async function (req, res) {
 
   res.render('pages/subscriptions', {
     user: req.user,
+    subscription: subscriptions.data ? subscriptions.data[0].plan.nickname : "none",
     plans: plans.data,
     stripeKey: process.env.STRIPE_PUBLISHABLE_KEY
   });
