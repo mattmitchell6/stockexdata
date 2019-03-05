@@ -24,4 +24,8 @@ router.get('/', async function (req, res) {
   });
 });
 
+router.post('/create-usage-record', async function(req, res) {
+
+})
+
 module.exports = router;

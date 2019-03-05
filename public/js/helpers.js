@@ -17,7 +17,8 @@ $(document).ready(function() {
   var amounts = document.getElementsByClassName("amount-usd");
 
   for (var i = 0; i < amounts.length; i++) {
-    amount = amounts[i].getAttribute('data-amount');
-    amounts[i].innerHTML = "$" + amount / 100.00;
+    amount = amounts[i].getAttribute('data-amount') / 100;
+    amount = amount.toFixed(2);
+    amounts[i].innerHTML = "$" + amount;
   }
 })

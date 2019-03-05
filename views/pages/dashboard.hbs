@@ -7,29 +7,23 @@
 	<hr>
 	<div class="row">
 		<div class="col col-md-12">
-			<h5>Current Subscription: </h5>
-			{{#if subscription}}
-				<div class="card col col-md-5">
-					<div class="card-body">
-						<h5 class="card-title">Plan: {{subscription.plan.nickname}}</h5>
-						<h6 class="card-subtitle mb-2 text-muted">subscription
-							<span class="amount-usd" data-amount="{{subscription.plan.amount}}"></span>
-							/ {{subscription.plan.interval}}
-						</h6>
-						<p class="card-text">Your subscription will automatically renew on
-							<span class="date" data-date="{{subscription.current_period_end}}"></span>
-						</p>
-						<p class="card-text">Subscription start date:
-							<span class="date" data-date="{{subscription.start}}"></span>
-						</p>
 
-						<a href="/subscriptions" class="card-link">Update/Cancel Subscription</a>
-					</div>
-				</div>
+			<!-- list customer's current subscription if one exists -->
+			{{#if subscription}}
+				<h5 class="card-title">Current Plan:
+					<span style="font-size: 16px" class="text-muted">{{subscription.plan.nickname}}</span>
+				</h5>
+				<a href="/subscriptions" class="card-link">View Subscription</a>
 			{{else}}
 				<p>You are currently not subscribed to a plan.</p>
 				<a class="btn btn-primary" href="/subscriptions">Select a Plan</a>
 			{{/if}}
+
+			<h5 class="text-center">Use our product: </h5>
+			<div class="row justify-content-center">
+				<button class="btn btn-success" {{#if_not subscription}}disabled{{/if_not}}>Use 1 Unit</button>
+			</div>
+
 		</div>
 	</div>
 </div>

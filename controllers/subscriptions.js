@@ -15,7 +15,12 @@ router.get('/', async function (req, res) {
   const subscriptions = await stripe.subscriptions.list({
     customer: req.user.stripeCustomerId
   });
-  console.log(subscriptions);
+
+  // fetch customer info
+  const customer = await stripe.customers.retrieve(req.user.stripeCustomerId)
+  const defaultCard = await stripe.customers.retrieveCard(
+    req.user.stripeCustomerId, customer.default_source);
+  console.log(defaultCard);
 
   // fetch all plans for generic product
   const plans = await stripe.plans.list({
@@ -24,14 +29,14 @@ router.get('/', async function (req, res) {
 
   res.render('pages/subscriptions', {
     user: req.user,
-    subscription: subscriptions.data ? subscriptions.data[0].plan.nickname : "none",
+    subscription: subscriptions.data ? subscriptions.data[0] : null,
+    card: defaultCard,
     plans: plans.data,
     stripeKey: process.env.STRIPE_PUBLISHABLE_KEY
   });
 });
 
 router.post('/subscribe', async function(req, res) {
-
   const customer = await stripe.customers.update(req.user.stripeCustomerId, {
     source: req.body.stripeToken
   });
@@ -44,8 +49,13 @@ router.post('/subscribe', async function(req, res) {
       }
     ]})
 
-  console.log(subscription);
-  res.redirect('/dashboard');
+  res.redirect('/subscriptions');
+});
+
+router.post('/cancel-subscription', async function(req, res) {
+  const deletedSubscription = await stripe.subscriptions.del(req.body.subscription)
+
+  res.redirect('/subscriptions')
 })
 
 module.exports = router;

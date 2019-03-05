@@ -3,36 +3,112 @@
 {{#*inline "content-block"}}
 
 <div class="mtm container">
-  <h5>Current Plan: <span style="font-size: 16px; color: #6c757d">{{subscription}}</span></h5>
+  <h3 class="mtm">Subscription and payment</h3>
+  <hr>
 
-  <h5 class="mtm">Select a Plan: </h5>
-
-  <div class="row">
-    {{#each plans}}
-      <div class="card col col-lg-4">
+  {{#if subscription}}
+    <div class="row justify-content-center">
+      <div class="card col col-md-8 text-center">
+        <h5 class="text-center mts">Your Plan</h5>
         <div class="card-body">
-          <h5 class="card-title">{{this.nickname}}</h5>
+          <h5 class="card-title">{{subscription.plan.nickname}}</h5>
           <h6 class="card-subtitle mb-2 text-muted">
-             <span class="amount-usd" data-amount="{{this.amount}}"></span>
-             per {{this.interval}}
+            <span class="amount-usd" data-amount="{{subscription.plan.amount}}"></span>
+            per {{subscription.plan.interval}}
           </h6>
-          <p class="card-text">Usage Type: {{this.usage_type}}</p>
-          <form action="/subscriptions/subscribe" method="POST">
-            <input type="hidden" name="plan" value="{{this.id}}">
-            <script
-              src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-              data-key="pk_test_yFlF77AqfAveVhLfTtBCGRh3"
-              data-name="{{this.nickname}}"
-              data-label="Subscribe"
-              data-panel-label="Pay ${{this.amount}} per {{this.interval}}"
-              data-description=""
-              data-locale="auto">
-            </script>
+          <p class="card-text">Your plan will automatically renew on
+            <span class="date" data-date="{{subscription.current_period_end}}"></span>
+            and you will be charged
+            <span class="amount-usd" data-amount="{{subscription.plan.amount}}"></span>
+          </p>
+          <p class="card-text">Subscription service started on
+            <span class="date" data-date="{{subscription.start}}"></span>
+          </p>
+
+          <h6>Payment method</h6>
+          <p>{{card.brand}} ending in {{card.last4}} (expires {{card.exp_month}}/{{card.exp_year}})</p>
+
+          <form action="/subscriptions/cancel-subscription" method="post">
+            <input type="hidden" name="subscription" value="{{subscription.id}}">
+            <button class="btn btn-danger" type="submit" name="button">Cancel</button>
           </form>
         </div>
       </div>
-    {{/each}}
-  </div>
+    </div>
+  {{else}}
+    <p>You are currently not subscribed to a plan. Select a plan below.</p>
+  {{/if}}
+
+  <h5 class="mtm text-center">Plans</h5>
+  {{#each plans}}
+    <div class="row justify-content-center">
+      <div class="card col col-lg-8 ms">
+
+        <!-- subscription card for 'licensed' usage type -->
+        {{#if_equals this.usage_type "licensed"}}
+          <div class="card-body">
+            <div class="row">
+              <div class="col col-lg-8">
+                <h5 class="card-title">{{this.nickname}}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                   <span class="amount-usd" data-amount="{{this.amount}}"></span>
+                   per {{this.interval}}
+                </h6>
+                <p class="card-text">Unlimited access</p>
+              </div>
+
+              <div class="col col-lg-4">
+                <form action="/subscriptions/subscribe" method="POST">
+                  <input type="hidden" name="plan" value="{{this.id}}">
+                  <script
+                    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                    data-key="pk_test_yFlF77AqfAveVhLfTtBCGRh3"
+                    data-name="{{this.nickname}}"
+                    data-label="Subscribe"
+                    data-panel-label="Pay ${{this.amount}} per {{this.interval}}"
+                    data-description=""
+                    data-locale="auto">
+                  </script>
+                </form>
+              </div>
+            </div>
+          </div>
+        {{/if_equals}}
+
+        <!-- subscription card for 'metered' usage type -->
+        {{#if_equals this.usage_type "metered"}}
+          <div class="card-body">
+            <div class="row">
+              <div class="col col-lg-8">
+                <h5 class="card-title">{{this.nickname}}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                   <span class="amount-usd" data-amount="{{this.amount}}"></span>
+                   per unit
+                </h6>
+                <p class="card-text">Pay per unit used</p>
+              </div>
+              <div class="col col-lg-4">
+                <form action="/subscriptions/subscribe" method="POST">
+                  <input type="hidden" name="plan" value="{{this.id}}">
+                  <script
+                    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                    data-key="pk_test_yFlF77AqfAveVhLfTtBCGRh3"
+                    data-name="{{this.nickname}}"
+                    data-label="Subscribe"
+                    data-panel-label="Pay ${{this.amount}} per unit"
+                    data-description=""
+                    data-locale="auto">
+                  </script>
+                </form>
+              </div>
+
+            </div>
+          </div>
+        {{/if_equals}}
+
+      </div>
+    </div>
+  {{/each}}
 </div>
 
 {{/inline}}
