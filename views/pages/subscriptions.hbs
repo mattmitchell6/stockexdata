@@ -3,7 +3,7 @@
 {{#*inline "content-block"}}
 
 <div class="mtm container">
-  <h3 class="mtm">Subscription and payment</h3>
+  <h4 class="mtm">Subscription and payment</h4>
   <hr>
 
   {{#if subscription}}
@@ -58,7 +58,7 @@
               </div>
 
               <div class="col col-lg-4">
-                <form action="/subscriptions/subscribe" method="POST">
+                <form class="pull-right" action="/subscriptions/subscribe" method="POST">
                   <input type="hidden" name="plan" value="{{this.id}}">
                   <script
                     src="https://checkout.stripe.com/checkout.js" class="stripe-button"
@@ -88,7 +88,7 @@
                 <p class="card-text">Pay per unit used</p>
               </div>
               <div class="col col-lg-4">
-                <form action="/subscriptions/subscribe" method="POST">
+                <form class="pull-right" action="/subscriptions/subscribe" method="POST">
                   <input type="hidden" name="plan" value="{{this.id}}">
                   <script
                     src="https://checkout.stripe.com/checkout.js" class="stripe-button"

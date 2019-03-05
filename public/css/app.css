@@ -25,3 +25,7 @@ body {
 .amount-usd {
   font-weight: bold;
 }
+
+.pull-right {
+  float: right;
+}
