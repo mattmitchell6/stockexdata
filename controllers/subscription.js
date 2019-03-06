@@ -22,7 +22,7 @@ router.get('/', async function (req, res) {
   // fetch customer card info
   const defaultCard = await stripe.customers.retrieveCard(stripeId, customer.default_source);
 
-  res.render('pages/subscriptions', {
+  res.render('pages/subscription', {
     user: req.user,
     subscription: subscriptions.data ? subscriptions.data[0] : null,
     card: defaultCard,
@@ -44,13 +44,30 @@ router.post('/subscribe', async function(req, res) {
       }
     ]})
 
-  res.redirect('/subscriptions');
+  res.redirect('/subscription');
 });
 
 router.post('/cancel-subscription', async function(req, res) {
   const deletedSubscription = await stripe.subscriptions.del(req.body.subscription)
 
-  res.redirect('/subscriptions')
+  res.redirect('/subscription')
+})
+
+router.get('/update-payment', async function (req, res) {
+
+  res.render('pages/payment', {
+    user: req.user
+  })
+})
+
+router.post('/update-payment', async function(req, res) {
+  const token = req.body.stripeToken;
+
+  const customer = await stripe.customers.update(req.user.stripeCustomerId, {
+    source: token
+  });
+
+  res.redirect('/subscription')
 })
 
 module.exports = router;

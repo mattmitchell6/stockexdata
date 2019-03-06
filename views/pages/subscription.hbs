@@ -25,10 +25,17 @@
             <span class="date" data-date="{{subscription.start}}"></span>
           </p>
 
+          <!-- payment method card -->
           <h6>Payment method</h6>
-          <p>{{card.brand}} ending in {{card.last4}} (expires {{card.exp_month}}/{{card.exp_year}})</p>
+          <div class="row justify-content-center">
+            <div class="col col-lg-4 payment-card">
+              <div>{{card.brand}} ending in {{card.last4}}</div>
+              <div style="font-size: 12px" class="text-muted">Expires: {{card.exp_month}}/{{card.exp_year}}</div>
+              <a class="btn btn-sm btn-success" style="text-align: center !important" href="/subscription/update-payment">Update</a>
+            </div>
+          </div>
 
-          <form action="/subscriptions/cancel-subscription" method="post">
+          <form action="/subscription/cancel-subscription" class="mts" method="post">
             <input type="hidden" name="subscription" value="{{subscription.id}}">
             <button class="btn btn-danger" type="submit" name="button">Cancel</button>
           </form>
@@ -58,7 +65,7 @@
               </div>
 
               <div class="col col-lg-4">
-                <form class="pull-right" action="/subscriptions/subscribe" method="POST">
+                <form class="pull-right" action="/subscription/subscribe" method="POST">
                   <input type="hidden" name="plan" value="{{this.id}}">
                   <script
                     src="https://checkout.stripe.com/checkout.js" class="stripe-button"
@@ -88,7 +95,7 @@
                 <p class="card-text">Pay per unit used</p>
               </div>
               <div class="col col-lg-4">
-                <form class="pull-right" action="/subscriptions/subscribe" method="POST">
+                <form class="pull-right" action="/subscription/subscribe" method="POST">
                   <input type="hidden" name="plan" value="{{this.id}}">
                   <script
                     src="https://checkout.stripe.com/checkout.js" class="stripe-button"
