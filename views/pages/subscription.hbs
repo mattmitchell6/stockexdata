@@ -18,7 +18,7 @@
             <span class="amount-usd" data-amount="{{subscription.plan.amount}}"></span>
             per {{subscription.plan.interval}}
           </h6>
-          <div class="card-text">Your plan will automatically renew on
+          <div class="card-text">Your subscription will automatically renew on
             <span class="date" data-date="{{subscription.current_period_end}}"></span>
             and you will be charged
             <span class="amount-usd" data-amount="{{subscription.plan.amount}}"></span>
@@ -40,7 +40,7 @@
           <!-- cancel subscription -->
           <form action="/subscription/cancel-subscription" class="mts" method="post">
             <input type="hidden" name="subscription" value="{{subscription.id}}">
-            <button class="btn btn-danger" type="submit" name="button">Cancel</button>
+            <button class="btn btn-danger" type="submit" name="button">Cancel Subscription</button>
           </form>
         </div>
       </div>
@@ -73,12 +73,13 @@
                     src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                     data-key="pk_test_yFlF77AqfAveVhLfTtBCGRh3"
                     data-name="{{this.nickname}}"
-                    data-label="Subscribe"
+                    data-label="Subscribe (Checkout)"
                     data-panel-label="Pay ${{this.amount}} per {{this.interval}}"
                     data-description=""
                     data-locale="auto">
                   </script>
                 </form>
+                <a class="btn btn-primary btn-sm pull-right mts" href="/subscribe/create-subscription/{{this.id}}">Subscribe (Custom)</a>
               </div>
             </div>
           </div>
@@ -103,12 +104,13 @@
                     src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                     data-key="pk_test_yFlF77AqfAveVhLfTtBCGRh3"
                     data-name="{{this.nickname}}"
-                    data-label="Subscribe"
+                    data-label="Subscribe (Checkout)"
                     data-panel-label="Pay ${{this.amount}} per unit"
                     data-description=""
                     data-locale="auto">
                   </script>
                 </form>
+                <a class="btn btn-primary btn-sm pull-right mts" href="/subscribe/create-subscription/{{this.id}}">Subscribe (Custom)</a>
               </div>
 
             </div>
@@ -118,6 +120,39 @@
       </div>
     </div>
   {{/each}}
+
+  <!-- List previous purchases -->
+  <h4 class="mtm text-center">Payment History</h4>
+  <div class="row justify-content-center">
+    <div class="col col-lg-8">
+      <table class="table">
+    		<thead>
+    			<tr>
+            <th scope="col">Purchase Date</th>
+            <th scope="col">Amount</th>
+    				<th scope="col">Description</th>
+    			</tr>
+    		</thead>
+    		<tbody id="cart-item">
+    			{{#each invoices}}
+    				<tr>
+    					<td>
+                <span class="date" data-date="{{this.created}}"></span>
+              </td>
+              <td>
+                <span class="amount-usd" data-amount="{{this.amount}}"></span>
+              </td>
+    					<td>
+                <a target="_blank" href="{{this.receipt_url}}">
+                  {{this.description}}
+                </a>
+              </td>
+    				</tr>
+    			{{/each}}
+    		</tbody>
+    	</table>
+    </div>
+  </div>
 </div>
 
 {{/inline}}

@@ -13,10 +13,11 @@ router.get('/', async function (req, res) {
   const stripeId = req.user.stripeCustomerId
 
   // fetch customer subscriptions, customer info, and available plans
-  const [subscriptions, customer, plans] = await Promise.all([
+  const [subscriptions, customer, plans, invoices] = await Promise.all([
     stripe.subscriptions.list({customer: stripeId}),
     stripe.customers.retrieve(stripeId),
-    stripe.plans.list({product: process.env.PRODUCT_ID})
+    stripe.plans.list({product: process.env.PRODUCT_ID}),
+    stripe.charges.list({customer: stripeId})
   ])
 
   // fetch customer card info
@@ -27,6 +28,7 @@ router.get('/', async function (req, res) {
     subscription: subscriptions.data ? subscriptions.data[0] : null,
     card: defaultCard,
     plans: plans.data,
+    invoices: invoices ? invoices.data : null,
     stripeKey: process.env.STRIPE_PUBLISHABLE_KEY
   });
 });
