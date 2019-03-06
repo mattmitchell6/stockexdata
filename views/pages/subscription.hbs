@@ -10,17 +10,19 @@
     <div class="row justify-content-center">
       <div class="card col col-md-8 text-center">
         <h5 class="text-center mts">Your Plan</h5>
+
+        <!-- plan description -->
         <div class="card-body">
           <h5 class="card-title">{{subscription.plan.nickname}}</h5>
           <h6 class="card-subtitle mb-2 text-muted">
             <span class="amount-usd" data-amount="{{subscription.plan.amount}}"></span>
             per {{subscription.plan.interval}}
           </h6>
-          <p class="card-text">Your plan will automatically renew on
+          <div class="card-text">Your plan will automatically renew on
             <span class="date" data-date="{{subscription.current_period_end}}"></span>
             and you will be charged
             <span class="amount-usd" data-amount="{{subscription.plan.amount}}"></span>
-          </p>
+          </div>
           <p class="card-text">Subscription service started on
             <span class="date" data-date="{{subscription.start}}"></span>
           </p>
@@ -29,12 +31,13 @@
           <h6>Payment method</h6>
           <div class="row justify-content-center">
             <div class="col col-lg-4 payment-card">
-              <div>{{card.brand}} ending in {{card.last4}}</div>
-              <div style="font-size: 12px" class="text-muted">Expires: {{card.exp_month}}/{{card.exp_year}}</div>
-              <a class="btn btn-sm btn-success" style="text-align: center !important" href="/subscription/update-payment">Update</a>
+              <div style="text-align: left;">{{card.brand}} ending in {{card.last4}}</div>
+              <div style="font-size: 12px; text-align: left;" class="text-muted">Expires: {{card.exp_month}}/{{card.exp_year}}</div>
+              <a class="btn btn-sm btn-success text-center mts" href="/subscription/update-payment">Update</a>
             </div>
           </div>
 
+          <!-- cancel subscription -->
           <form action="/subscription/cancel-subscription" class="mts" method="post">
             <input type="hidden" name="subscription" value="{{subscription.id}}">
             <button class="btn btn-danger" type="submit" name="button">Cancel</button>
@@ -63,7 +66,6 @@
                 </h6>
                 <p class="card-text">Unlimited access</p>
               </div>
-
               <div class="col col-lg-4">
                 <form class="pull-right" action="/subscription/subscribe" method="POST">
                   <input type="hidden" name="plan" value="{{this.id}}">

@@ -1,5 +1,6 @@
 body {
   background-color: #F8F8F8;
+  font-family: Camphor,Open Sans,Segoe UI,sans-serif;
 }
 
 .mts {
@@ -37,7 +38,6 @@ body {
 .payment-card {
   border: 1px solid #DCDCDC;
   padding: 10px 15px;
-  text-align: left;
   background-color: #F8F8F8;
 }
 
