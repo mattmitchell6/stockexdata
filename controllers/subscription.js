@@ -10,7 +10,8 @@ const moment = require('moment');
  * main route for rendering items and previous charges page
  */
 router.get('/', async function (req, res) {
-  const stripeId = req.user.stripeCustomerId
+  const stripeId = req.user.stripeCustomerId;
+  let defaultCard = null;
 
   // fetch customer subscriptions, customer info, and available plans
   const [subscriptions, customer, plans, invoices] = await Promise.all([
@@ -21,7 +22,9 @@ router.get('/', async function (req, res) {
   ])
 
   // fetch customer card info
-  const defaultCard = await stripe.customers.retrieveCard(stripeId, customer.default_source);
+  if(customer.default_source) {
+    defaultCard = await stripe.customers.retrieveCard(stripeId, customer.default_source);
+  }
 
   res.render('pages/subscription', {
     user: req.user,

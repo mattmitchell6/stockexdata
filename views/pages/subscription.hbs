@@ -67,6 +67,11 @@
                 <p class="card-text">Unlimited access</p>
               </div>
               <div class="col col-lg-4">
+
+                <!-- new Checkout.js -->
+                <button id="checkout-button" class="btn btn-primary btn-sm pull-right mts" role="link">Subscribe (Checkout)</button>
+                <div id="error-message"></div>
+                
                 <form class="pull-right" action="/subscription/subscribe" method="POST">
                   <input type="hidden" name="plan" value="{{this.id}}">
                   <script
@@ -154,6 +159,33 @@
     </div>
   </div>
 </div>
+
+<script>
+  var stripe = Stripe('pk_test_yFlF77AqfAveVhLfTtBCGRh3', {
+    betas: ['checkout_beta_4']
+  });
+
+  var checkoutButton = document.getElementById('checkout-button');
+  checkoutButton.addEventListener('click', function () {
+    // When the customer clicks on the button, redirect
+    // them to Checkout.
+    stripe.redirectToCheckout({
+      items: [{plan: 'plan_EdJHMnuhJWa4Jh', quantity: 1}],
+      customerEmail: '{{user.username}}',
+      successUrl: 'http://localhost:3000/subscription',
+      cancelUrl: 'https://your-website.com/canceled',
+    })
+    .then(function (result) {
+      if (result.error) {
+        // If `redirectToCheckout` fails due to a browser or network
+        // error, display the localized error message to your customer.
+        var displayError = document.getElementById('error-message');
+        displayError.textContent = result.error.message;
+      }
+    });
+  });
+</script>
+
 
 {{/inline}}
 
