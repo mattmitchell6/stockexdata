@@ -69,9 +69,10 @@
               <div class="col col-lg-4">
 
                 <!-- new Checkout.js -->
-                <button id="checkout-button" class="btn btn-primary btn-sm pull-right mts" role="link">Subscribe (Checkout)</button>
-                <div id="error-message"></div>
-                
+                <!-- <button id="checkout-button" class="btn btn-primary btn-sm pull-right mts" role="link">Subscribe (Checkout)</button>
+                <div id="error-message"></div> -->
+
+                <!-- old Checkout -->
                 <form class="pull-right" action="/subscription/subscribe" method="POST">
                   <input type="hidden" name="plan" value="{{this.id}}">
                   <script
@@ -84,7 +85,9 @@
                     data-locale="auto">
                   </script>
                 </form>
-                <a class="btn btn-primary btn-sm pull-right mts" href="/subscribe/create-subscription/{{this.id}}">Subscribe (Custom)</a>
+
+                <!-- redirect to Subscribe w/Elements page -->
+                <a class="btn btn-primary btn-sm pull-right mts" href="/subscription/create-subscription/{{this.id}}">Subscribe (Custom)</a>
               </div>
             </div>
           </div>

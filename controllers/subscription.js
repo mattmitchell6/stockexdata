@@ -36,6 +36,7 @@ router.get('/', async function (req, res) {
   });
 });
 
+// create subscription
 router.post('/subscribe', async function(req, res) {
   const customer = await stripe.customers.update(req.user.stripeCustomerId, {
     source: req.body.stripeToken
@@ -52,19 +53,21 @@ router.post('/subscribe', async function(req, res) {
   res.redirect('/subscription');
 });
 
+// cancel subscription
 router.post('/cancel-subscription', async function(req, res) {
   const deletedSubscription = await stripe.subscriptions.del(req.body.subscription)
 
   res.redirect('/subscription')
 })
 
+// update payment - get
 router.get('/update-payment', async function (req, res) {
-
-  res.render('pages/payment', {
+  res.render('pages/payment-update', {
     user: req.user
   })
 })
 
+// update payment - post
 router.post('/update-payment', async function(req, res) {
   const token = req.body.stripeToken;
 
@@ -73,6 +76,16 @@ router.post('/update-payment', async function(req, res) {
   });
 
   res.redirect('/subscription')
+})
+
+// create subscriptions
+router.get('/create-subscription/:id', async function(req, res) {
+  const plan = await stripe.plans.retrieve(req.params.id)
+
+  res.render('pages/payment-subscribe', {
+    user: req.user,
+    plan: plan
+  })
 })
 
 module.exports = router;
