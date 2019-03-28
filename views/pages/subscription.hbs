@@ -16,10 +16,30 @@
 
         <div class="card-text"><strong>Plan:</strong> {{subscription.plan.nickname}}</div>
         <div class="card-text"><strong>Price:</strong>
-          <span class="amount-usd" data-amount="{{subscription.plan.amount}}"></span> / {{subscription.plan.interval}}
+          <span class="amount-usd" data-amount="{{subscription.plan.amount}}"></span> per
+          {{#if_equals subscription.plan.usage_type "licensed"}}
+            {{subscription.plan.interval}}
+          {{/if_equals}}
+          {{#if_equals subscription.plan.usage_type "metered"}}
+            unit
+          {{/if_equals}}
         </div>
+        {{#if_equals subscription.plan.usage_type "metered"}}
+          <div><strong>Period Usage:</strong> {{lineItems.quantity}} Units</div>
+          <div><strong>Amount Owed: </strong> <span class="amount-usd" data-amount="{{lineItems.amount}}"></span></div>
+        {{/if_equals}}
         <div class="card-text"><strong>Start Date:</strong> <span class="date" data-date="{{subscription.start}}"></span></div>
-        <div class="card-text"><strong>Auto-Renewal Date:</strong> <span class="date" data-date="{{subscription.current_period_end}}"></span></div>
+        <div class="card-text">
+          <strong>
+            {{#if_equals subscription.plan.usage_type "licensed"}}
+              Auto-Renewal Date:
+            {{/if_equals}}
+            {{#if_equals subscription.plan.usage_type "metered"}}
+              Period End Date:
+            {{/if_equals}}
+          </strong>
+          <span class="date" data-date="{{subscription.current_period_end}}"></span>
+        </div>
         <div class="card-text"><strong>Payment Method:</strong> {{card.brand}} ending in {{card.last4}}
           <a class="" href="/subscription/update-payment">Update payment method</a>
         </div>
@@ -96,19 +116,27 @@
                 <p class="card-text">Pay per unit used</p>
               </div>
               <div class="col col-lg-4">
-                <form class="pull-right" action="/subscription/subscribe" method="POST">
-                  <input type="hidden" name="plan" value="{{this.id}}">
-                  <script
-                    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                    data-key="pk_test_iDllARnAoSpxhZPgitRSWrhq00ZuDEg41i"
-                    data-name="{{this.nickname}}"
-                    data-label="Subscribe (Checkout)"
-                    data-panel-label="Pay ${{this.amount}} per unit"
-                    data-description=""
-                    data-locale="auto">
-                  </script>
-                </form>
-                <a class="btn btn-primary btn-sm pull-right mts" href="/subscribe/create-subscription/{{this.id}}">Subscribe (Custom)</a>
+
+                {{#if_equals ../config.checkout "checkoutOld"}}
+                  <form class="pull-right" action="/subscription/subscribe" method="POST">
+                    <input type="hidden" name="plan" value="{{this.id}}">
+                    <script
+                      src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                      data-key="pk_test_iDllARnAoSpxhZPgitRSWrhq00ZuDEg41i"
+                      data-name="{{this.nickname}}"
+                      data-label="Subscribe"
+                      data-panel-label="Pay ${{this.amount}} per unit"
+                      data-description=""
+                      data-locale="auto">
+                    </script>
+                  </form>
+                {{/if_equals}}
+
+                <!-- old Checkout -->
+                {{#if_equals ../config.checkout "custom"}}
+                  <a class="btn btn-primary btn-sm pull-right mts" href="/subscription/create-subscription/{{this.id}}">Subscribe</a>
+                {{/if_equals}}
+
               </div>
 
             </div>
@@ -126,7 +154,7 @@
       <table class="table">
     		<thead>
     			<tr>
-            <th scope="col">Purchase Date</th>
+            <th scope="col">Payment Date</th>
             <th scope="col">Amount</th>
     				<th scope="col">Description</th>
     			</tr>

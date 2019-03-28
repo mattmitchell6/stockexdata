@@ -18,13 +18,19 @@ router.get('/', async function (req, res) {
 
   res.render('pages/settings', {
     user: req.user,
-    config: req.session.config
+    config: req.session.config,
+    success_message: req.flash('success')
   });
 });
 
-router.post('/', async function(req, res) {
+router.post('/configure', async function(req, res) {
+  const config = req.body;
 
+  req.session.config.checkout = config.checkout;
 
+  req.flash('success', `Updated demo configuration` )
+
+  res.redirect('/settings');
 })
 
 router.get('/reset-customer/:id', async function (req, res) {

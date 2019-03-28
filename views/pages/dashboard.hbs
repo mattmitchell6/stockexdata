@@ -5,12 +5,14 @@
 <div class="container">
 	<h4 class="text-center mtm">Welcome, {{user.username}}</h4>
 	<hr>
-	<div class="row">
-		<div class="col col-md-12">
 
+	{{> flash_message }}
+
+	<div class="row">
+		<div class="col col-md-6">
 			<!-- list customer's current subscription if one exists -->
 			{{#if subscription}}
-				<h5 class="card-title">Current Plan:
+				<h5 class="card-title">Plan:
 					<span style="font-size: 16px" class="text-muted">{{subscription.plan.nickname}}</span>
 				</h5>
 				<a href="/subscription" class="card-link">View Subscription</a>
@@ -18,10 +20,26 @@
 				<p>You are currently not subscribed to a plan.</p>
 				<a class="btn btn-primary" href="/subscription">Select a Plan</a>
 			{{/if}}
+		</div>
 
+
+		<div class="col col-md-6 text-right">
+			{{#if subscription}}
+				<h5>
+					Current Period Usage
+				</h5>
+				<div><strong>Usage:</strong> {{lineItems.quantity}} Units</div>
+				<div><strong>Period End Date:</strong> <span class="date" data-date="{{subscription.current_period_end}}"></span></div>
+				<div><strong>Amount Owed: </strong> <span class="amount-usd" data-amount="{{lineItems.amount}}"></span></div>
+			{{/if}}
+		</div>
+
+		<div class="col col-md-12">
 			<h5 class="text-center">Use our product: </h5>
 			<div class="row justify-content-center">
-				<button class="btn btn-success" {{#if_not subscription}}disabled{{/if_not}}>Use 1 Unit</button>
+				<a class="btn btn-success ms" href="/dashboard/use/{{subscriptionItemId}}/1" {{#if_not subscription}}disabled{{/if_not}}>Use 1 Unit</a>
+				<a class="btn btn-success ms" href="/dashboard/use/{{subscriptionItemId}}/5" {{#if_not subscription}}disabled{{/if_not}}>Use 5 Units</a>
+				<a class="btn btn-success ms" href="/dashboard/use/{{subscriptionItemId}}/10" {{#if_not subscription}}disabled{{/if_not}}>Use 10 Units</a>
 			</div>
 
 		</div>

@@ -1,21 +1,23 @@
 <!-- flash messages -->
 <div class="container">
   <div class="row justify-content-center">
-    {{#if success_message}}
-      <div class="alert alert-success mbs" role="alert">
-        {{success_message}}
-        <button type="button" class="close mls" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-    {{/if}}
-    {{#if error_message}}
-      <div class="alert alert-danger mbs" role="alert">
-        {{error_message}}
-        <button type="button" class="close mls" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-    {{/if}}
+    <div class="col-md-6">
+      {{#if success_message}}
+        <div class="alert alert-success mbs" role="alert">
+          {{success_message}}
+          <button type="button" class="close mls" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      {{/if}}
+      {{#if error_message}}
+        <div class="alert alert-danger mbs" role="alert">
+          {{error_message}}
+          <button type="button" class="close mls" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      {{/if}}
+    </div>
   </div>
 </div>

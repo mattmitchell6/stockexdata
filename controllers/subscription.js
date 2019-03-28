@@ -12,6 +12,7 @@ const moment = require('moment');
 router.get('/', async function (req, res) {
   const stripeId = req.user.stripeCustomerId;
   let defaultCard = null;
+  let lineItems;
 
   // fetch customer subscriptions, customer info, and available plans
   const [subscriptions, customer, plans, invoices] = await Promise.all([
@@ -25,12 +26,19 @@ router.get('/', async function (req, res) {
   if(customer.default_source) {
     defaultCard = await stripe.customers.retrieveCard(stripeId, customer.default_source);
   }
-  console.log(req.session.config);
+
+  // fetch upcoming invoice if metered usage
+  if(subscriptions.data[0] && subscriptions.data[0].plan.usage_type) {
+    lineItems = await stripe.invoices.retrieveLines("upcoming", {
+      customer: stripeId
+    })
+  }
 
   res.render('pages/subscription', {
     user: req.user,
     subscription: subscriptions.data ? subscriptions.data[0] : null,
     card: defaultCard,
+    lineItems: lineItems ? lineItems.data[0] : null,
     plans: plans.data,
     config: req.session.config,
     invoices: invoices ? invoices.data : null,
@@ -60,7 +68,7 @@ router.post('/subscribe', async function(req, res) {
         }
       ]});
 
-    req.flash('success', `Successfully subscribed! ${subscription.id}` )
+    req.flash('success', `Successfully subscribed! ${subscription.id}`)
     res.redirect('/subscription');
   } catch(error) {
     console.log(error.raw);
