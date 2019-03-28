@@ -25,35 +25,53 @@ router.get('/', async function (req, res) {
   if(customer.default_source) {
     defaultCard = await stripe.customers.retrieveCard(stripeId, customer.default_source);
   }
+  console.log(req.session.config);
 
   res.render('pages/subscription', {
     user: req.user,
     subscription: subscriptions.data ? subscriptions.data[0] : null,
     card: defaultCard,
     plans: plans.data,
+    config: req.session.config,
     invoices: invoices ? invoices.data : null,
-    stripeKey: process.env.STRIPE_PUBLISHABLE_KEY
+    stripeKey: process.env.STRIPE_PUBLISHABLE_KEY,
+    success_message: req.flash('success'),
+    error_message: req.flash('error')
   });
 });
 
-// create subscription
+/**
+ * create subscription
+ */
 router.post('/subscribe', async function(req, res) {
-  const customer = await stripe.customers.update(req.user.stripeCustomerId, {
-    source: req.body.stripeToken
-  });
 
-  const subscription = await stripe.subscriptions.create({
-    customer: customer.id,
-    items: [
-      {
-        plan: req.body.plan,
-      }
-    ]})
+  // TODO: some error handling to determine if subscription already exists
 
-  res.redirect('/subscription');
+  try {
+    const customer = await stripe.customers.update(req.user.stripeCustomerId, {
+      source: req.body.stripeToken
+    });
+
+    const subscription = await stripe.subscriptions.create({
+      customer: customer.id,
+      items: [
+        {
+          plan: req.body.plan,
+        }
+      ]});
+
+    req.flash('success', `Successfully subscribed! ${subscription.id}` )
+    res.redirect('/subscription');
+  } catch(error) {
+    console.log(error.raw);
+    req.flash('error', `${error.message}` )
+    res.redirect(`/subscription/create-subscription/${req.body.plan}`);
+  }
 });
 
-// cancel subscription
+/**
+ * cancel subscription
+ */
 router.post('/cancel-subscription', async function(req, res) {
   const deletedSubscription = await stripe.subscriptions.del(req.body.subscription)
 
@@ -74,6 +92,7 @@ router.post('/update-payment', async function(req, res) {
   const customer = await stripe.customers.update(req.user.stripeCustomerId, {
     source: token
   });
+  req.flash('success', `Successfully updated payment method!` )
 
   res.redirect('/subscription')
 })
@@ -84,7 +103,8 @@ router.get('/create-subscription/:id', async function(req, res) {
 
   res.render('pages/payment-subscribe', {
     user: req.user,
-    plan: plan
+    plan: plan,
+    error_message: req.flash('error')
   })
 })
 

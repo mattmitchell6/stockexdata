@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const path = require('path');
 const exphbs = require('express-handlebars')
 const hbs = require('hbs')
+const flash = require('connect-flash');
 const handlebarsHelpers = require('./helpers/handlebars');
 require('dotenv').config();
 require('express-async-errors');
@@ -28,6 +29,7 @@ hbs.registerPartials(__dirname + '/views/partials');
 app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(require('express-session')({ secret: 'unique-secret', resave: false, saveUninitialized: false }));
+app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Initialize Passport and restore authentication state, if any, from the session.

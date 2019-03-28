@@ -6,49 +6,35 @@
   <h4 class="mtm">Subscription and payment</h4>
   <hr>
 
+  {{> flash_message }}
+
+  <!-- Display active subscription if one exists -->
   {{#if subscription}}
     <div class="row justify-content-center">
-      <div class="card col col-md-8 text-center">
-        <h5 class="text-center mts">Your Plan</h5>
+      <div class="card col col-md-8">
+        <h5 class="text-center mts text-center">Your Subscription</h5>
 
-        <!-- plan description -->
-        <div class="card-body">
-          <h5 class="card-title">{{subscription.plan.nickname}}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">
-            <span class="amount-usd" data-amount="{{subscription.plan.amount}}"></span>
-            per {{subscription.plan.interval}}
-          </h6>
-          <div class="card-text">Your subscription will automatically renew on
-            <span class="date" data-date="{{subscription.current_period_end}}"></span>
-            and you will be charged
-            <span class="amount-usd" data-amount="{{subscription.plan.amount}}"></span>
-          </div>
-          <p class="card-text">Subscription service started on
-            <span class="date" data-date="{{subscription.start}}"></span>
-          </p>
-
-          <!-- payment method card -->
-          <h6>Payment method</h6>
-          <div class="row justify-content-center">
-            <div class="col col-lg-4 payment-card">
-              <div style="text-align: left;">{{card.brand}} ending in {{card.last4}}</div>
-              <div style="font-size: 12px; text-align: left;" class="text-muted">Expires: {{card.exp_month}}/{{card.exp_year}}</div>
-              <a class="btn btn-sm btn-success text-center mts" href="/subscription/update-payment">Update</a>
-            </div>
-          </div>
-
-          <!-- cancel subscription -->
-          <form action="/subscription/cancel-subscription" class="mts" method="post">
-            <input type="hidden" name="subscription" value="{{subscription.id}}">
-            <button class="btn btn-danger" type="submit" name="button">Cancel Subscription</button>
-          </form>
+        <div class="card-text"><strong>Plan:</strong> {{subscription.plan.nickname}}</div>
+        <div class="card-text"><strong>Price:</strong>
+          <span class="amount-usd" data-amount="{{subscription.plan.amount}}"></span> / {{subscription.plan.interval}}
         </div>
+        <div class="card-text"><strong>Start Date:</strong> <span class="date" data-date="{{subscription.start}}"></span></div>
+        <div class="card-text"><strong>Auto-Renewal Date:</strong> <span class="date" data-date="{{subscription.current_period_end}}"></span></div>
+        <div class="card-text"><strong>Payment Method:</strong> {{card.brand}} ending in {{card.last4}}
+          <a class="" href="/subscription/update-payment">Update payment method</a>
+        </div>
+        <!-- cancel subscription -->
+        <form action="/subscription/cancel-subscription" class="mts text-center mbs" method="post">
+          <input type="hidden" name="subscription" value="{{subscription.id}}">
+          <button class="btn btn-danger" type="submit" name="button">Cancel Subscription</button>
+        </form>
       </div>
     </div>
   {{else}}
     <p>You are currently not subscribed to a plan. Select a plan below.</p>
   {{/if}}
 
+  <!-- list available plans -->
   <h5 class="mtm text-center">Plans</h5>
   {{#each plans}}
     <div class="row justify-content-center">
@@ -61,7 +47,7 @@
               <div class="col col-lg-8">
                 <h5 class="card-title">{{this.nickname}}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">
-                   <span class="amount-usd" data-amount="{{this.amount}}"></span>
+                   <span class="amount-usd bold" data-amount="{{this.amount}}"></span>
                    per {{this.interval}}
                 </h6>
                 <p class="card-text">Unlimited access</p>
@@ -73,21 +59,25 @@
                 <div id="error-message"></div> -->
 
                 <!-- old Checkout -->
-                <form class="pull-right" action="/subscription/subscribe" method="POST">
-                  <input type="hidden" name="plan" value="{{this.id}}">
-                  <script
-                    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                    data-key="pk_test_yFlF77AqfAveVhLfTtBCGRh3"
-                    data-name="{{this.nickname}}"
-                    data-label="Subscribe (Checkout)"
-                    data-panel-label="Pay ${{this.amount}} per {{this.interval}}"
-                    data-description=""
-                    data-locale="auto">
-                  </script>
-                </form>
+                {{#if_equals ../config.checkout "checkoutOld"}}
+                  <form class="pull-right" action="/subscription/subscribe" method="POST">
+                    <input type="hidden" name="plan" value="{{this.id}}">
+                    <script
+                      src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                      data-key="pk_test_iDllARnAoSpxhZPgitRSWrhq00ZuDEg41i"
+                      data-name="{{this.nickname}}"
+                      data-label="Subscribe"
+                      data-panel-label="Pay ${{this.amount}} per {{this.interval}}"
+                      data-description=""
+                      data-locale="auto">
+                    </script>
+                  </form>
+                {{/if_equals}}
 
                 <!-- redirect to Subscribe w/Elements page -->
-                <a class="btn btn-primary btn-sm pull-right mts" href="/subscription/create-subscription/{{this.id}}">Subscribe (Custom)</a>
+                {{#if_equals ../config.checkout "custom"}}
+                  <a class="btn btn-primary btn-sm pull-right mts" href="/subscription/create-subscription/{{this.id}}">Subscribe</a>
+                {{/if_equals}}
               </div>
             </div>
           </div>
@@ -100,7 +90,7 @@
               <div class="col col-lg-8">
                 <h5 class="card-title">{{this.nickname}}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">
-                   <span class="amount-usd" data-amount="{{this.amount}}"></span>
+                   <span class="amount-usd bold" data-amount="{{this.amount}}"></span>
                    per unit
                 </h6>
                 <p class="card-text">Pay per unit used</p>
@@ -110,7 +100,7 @@
                   <input type="hidden" name="plan" value="{{this.id}}">
                   <script
                     src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                    data-key="pk_test_yFlF77AqfAveVhLfTtBCGRh3"
+                    data-key="pk_test_iDllARnAoSpxhZPgitRSWrhq00ZuDEg41i"
                     data-name="{{this.nickname}}"
                     data-label="Subscribe (Checkout)"
                     data-panel-label="Pay ${{this.amount}} per unit"
@@ -164,7 +154,7 @@
 </div>
 
 <script>
-  var stripe = Stripe('pk_test_yFlF77AqfAveVhLfTtBCGRh3', {
+  var stripe = Stripe('pk_test_iDllARnAoSpxhZPgitRSWrhq00ZuDEg41i', {
     betas: ['checkout_beta_4']
   });
 

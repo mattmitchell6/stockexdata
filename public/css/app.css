@@ -4,6 +4,10 @@ body {
   font-weight: 400;
 }
 
+.navbar.navbar-dark {
+    /*background-color: #32325d !;*/
+}
+
 .mts {
   margin-top: 20px;
 }
@@ -20,17 +24,34 @@ body {
   margin: 20px;
 }
 
+.mbm {
+  margin-bottom: 40px;
+}
+
+.mbs {
+  margin-bottom: 10px;
+}
+
 .ms {
   margin: 10px;
 }
 
-.date {
+.mls {
+  margin-left: 10px
+}
+
+
+.bold {
+  font-weight: bold;
+}
+
+/*.date {
   font-weight: bold;
 }
 
 .amount-usd {
   font-weight: bold;
-}
+}*/
 
 .pull-right {
   float: right;

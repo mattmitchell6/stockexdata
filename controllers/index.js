@@ -11,15 +11,23 @@ const User = require('../models/users');
 // load routes
 router.use('/dashboard', ensureLoggedIn, require('./dashboard'))
 router.use('/subscription', ensureLoggedIn, require('./subscription'))
+router.use('/settings', ensureLoggedIn, require('./settings'))
 
 /**
  * base route
  */
 router.get('/', function(req, res) {
+  // initialize configuration obj
+  req.session.config = {
+    checkout: "custom"
+  }
+
   if (req.user) {
     res.redirect('/dashboard');
   } else {
-    res.render('pages/home');
+    res.render('pages/home', {
+      error_message: req.flash('error')
+    });
   }
 });
 
