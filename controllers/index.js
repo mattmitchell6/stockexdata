@@ -17,17 +17,10 @@ router.use('/settings', ensureLoggedIn, require('./settings'))
  * base route
  */
 router.get('/', function(req, res) {
-  // initialize configuration obj
-  req.session.config = {
-    checkout: "custom"
-  }
-
   if (req.user) {
     res.redirect('/dashboard');
   } else {
-    res.render('pages/home', {
-      error_message: req.flash('error')
-    });
+    res.render('pages/home');
   }
 });
 

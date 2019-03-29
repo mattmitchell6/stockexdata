@@ -5,7 +5,7 @@ const path = require('path');
 const exphbs = require('express-handlebars')
 const hbs = require('hbs')
 const flash = require('connect-flash');
-const handlebarsHelpers = require('./helpers/handlebars');
+const handlebarsHelpers = require('./public/js/handlebars');
 require('dotenv').config();
 require('express-async-errors');
 
@@ -39,6 +39,22 @@ app.use(passport.session());
 // mongoose connect
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
 
+// include recurring session variables to route
+app.use(function(req, res, next) {
+	// initialize configuration obj if empty
+	if(!req.session.config) {
+		req.session.config = {
+			checkout: "custom"
+		}
+	}
+	res.locals.user = req.user;
+	res.locals.success_message = req.flash('success');
+	res.locals.error_message = req.flash('error');
+	res.locals.stripePublishableKey = process.env.STRIPE_PUBLISHABLE_KEY;
+	res.locals.config = req.session.config
+  next();
+});
+
 // load controllers & routes
 app.use(require('./controllers'));
 
@@ -47,6 +63,7 @@ app.use((err, req, res, next) => {
 	console.log(err);
 	res.render('pages/error', { error: err});
 });
+
 
 //start server
 const PORT = process.env.PORT || 3000;

@@ -29,12 +29,9 @@ router.get('/', async function (req, res) {
   }
 
   res.render('pages/dashboard', {
-    user: req.user,
     subscription: subscriptions.data && subscriptions.data.length > 0 ? subscriptions.data[0] : null,
     subscriptionItemId: subscriptionItemId,
-    lineItems: lineItems ? lineItems.data[0] : null,
-    success_message: req.flash('success')
-    // stripeKey: process.env.STRIPE_PUBLISHABLE_KEY
+    lineItems: lineItems ? lineItems.data[0] : null
   });
 });
 
@@ -45,9 +42,8 @@ router.get('/use/:subscription/:quantity', async function(req, res) {
     timestamp: Date.now() / 1000 | 0
   });
 
-  req.flash('success', `Successfully used ${req.params.quantity} units` )
-
+  req.flash('success', `Successfully used ${req.params.quantity} unit(s)` )
   res.redirect('/dashboard')
-})
+});
 
 module.exports = router;

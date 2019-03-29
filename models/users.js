@@ -14,7 +14,7 @@ let userSchema = new Schema({
 userSchema.plugin(PassportLocalMongoose);
 
 /**
- * Create new app user and add user to database
+ * Create new user (db and stripe) and add user to database
  */
 userSchema.statics.newUser = async function (user) {
   let dbUser;
@@ -40,6 +40,9 @@ userSchema.statics.newUser = async function (user) {
   });
 }
 
+/**
+ * Delete old stripe customer, create new, update existing db object
+ */
 userSchema.statics.refreshStripeId = async function(_id, stripeId, username) {
   //fetch user
   dbUser = await User.findOne({stripeCustomerId: stripeId});
@@ -56,7 +59,6 @@ userSchema.statics.refreshStripeId = async function(_id, stripeId, username) {
       else { resolve(user); }
     });
   });
-
 }
 
 var User = mongoose.model('User', userSchema);

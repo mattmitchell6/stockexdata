@@ -9,7 +9,7 @@
 	{{> flash_message }}
 
 	<div class="row">
-		<div class="col col-md-6">
+		<div class="col col-md-8">
 			<!-- list customer's current subscription if one exists -->
 			{{#if subscription}}
 				<h5 class="card-title">Plan:
@@ -23,14 +23,18 @@
 		</div>
 
 
-		<div class="col col-md-6 text-right">
+		<div class="col col-md-4">
 			{{#if subscription}}
-				<h5>
-					Current Period Usage
-				</h5>
-				<div><strong>Usage:</strong> {{lineItems.quantity}} Units</div>
-				<div><strong>Period End Date:</strong> <span class="date" data-date="{{subscription.current_period_end}}"></span></div>
-				<div><strong>Amount Owed: </strong> <span class="amount-usd" data-amount="{{lineItems.amount}}"></span></div>
+				<div class="card">
+					<strong class="card-header">
+						Current Period Usage
+					</strong>
+					<div class="container mts mbs">
+						<div><strong>Usage:</strong> {{lineItems.quantity}} Units</div>
+						<div><strong>Period End Date:</strong> <span class="date" data-date="{{subscription.current_period_end}}"></span></div>
+						<div><strong>Amount Owed: </strong> <span class="amount-usd" data-amount="{{lineItems.amount}}"></span></div>
+					</div>
+				</div>
 			{{/if}}
 		</div>
 

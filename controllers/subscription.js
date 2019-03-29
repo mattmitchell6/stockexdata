@@ -35,16 +35,11 @@ router.get('/', async function (req, res) {
   }
 
   res.render('pages/subscription', {
-    user: req.user,
     subscription: subscriptions.data ? subscriptions.data[0] : null,
     card: defaultCard,
     lineItems: lineItems ? lineItems.data[0] : null,
     plans: plans.data,
-    config: req.session.config,
-    invoices: invoices ? invoices.data : null,
-    stripeKey: process.env.STRIPE_PUBLISHABLE_KEY,
-    success_message: req.flash('success'),
-    error_message: req.flash('error')
+    invoices: invoices ? invoices.data : null
   });
 });
 
@@ -83,14 +78,13 @@ router.post('/subscribe', async function(req, res) {
 router.post('/cancel-subscription', async function(req, res) {
   const deletedSubscription = await stripe.subscriptions.del(req.body.subscription)
 
+  req.flash('success', `Subscription successfully cancelled`)
   res.redirect('/subscription')
 })
 
 // update payment - get
 router.get('/update-payment', async function (req, res) {
-  res.render('pages/payment-update', {
-    user: req.user
-  })
+  res.render('pages/payment-update')
 })
 
 // update payment - post
@@ -110,9 +104,7 @@ router.get('/create-subscription/:id', async function(req, res) {
   const plan = await stripe.plans.retrieve(req.params.id)
 
   res.render('pages/payment-subscribe', {
-    user: req.user,
-    plan: plan,
-    error_message: req.flash('error')
+    plan: plan
   })
 })
 

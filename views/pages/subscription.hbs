@@ -84,7 +84,7 @@
                     <input type="hidden" name="plan" value="{{this.id}}">
                     <script
                       src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                      data-key="pk_test_iDllARnAoSpxhZPgitRSWrhq00ZuDEg41i"
+                      data-key="{{stripePublishableKey}}"
                       data-name="{{this.nickname}}"
                       data-label="Subscribe"
                       data-panel-label="Pay ${{this.amount}} per {{this.interval}}"
@@ -122,7 +122,7 @@
                     <input type="hidden" name="plan" value="{{this.id}}">
                     <script
                       src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                      data-key="pk_test_iDllARnAoSpxhZPgitRSWrhq00ZuDEg41i"
+                      data-key="{{stripePublishableKey}}"
                       data-name="{{this.nickname}}"
                       data-label="Subscribe"
                       data-panel-label="Pay ${{this.amount}} per unit"
@@ -182,7 +182,7 @@
 </div>
 
 <script>
-  var stripe = Stripe('pk_test_iDllARnAoSpxhZPgitRSWrhq00ZuDEg41i', {
+  var stripe = Stripe('{{stripePublishableKey}}', {
     betas: ['checkout_beta_4']
   });
 

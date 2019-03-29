@@ -43,7 +43,7 @@
 
 <script type="text/javascript">
 
-  var stripe = Stripe('pk_test_iDllARnAoSpxhZPgitRSWrhq00ZuDEg41i');
+  var stripe = Stripe('{{stripePublishableKey}}');
   // Create an instance of Stripe Elements.
   var elements = stripe.elements();
   var card = elements.create('card', {
