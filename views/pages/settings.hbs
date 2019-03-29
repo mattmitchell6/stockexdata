@@ -6,31 +6,45 @@
   <h4 class="mtm">Settings</h4>
   <hr>
 
-  {{> flash_message }}
-  
-  <form action="/settings/configure" method="post">
+  <div class="row">
+    {{> flash_message }}
 
-    <label class="mtm"><strong>Checkout</strong></label>
-    <div class="form-check">
-      <input class="form-check-input" type="radio" name="checkout" value="custom" {{#if_equals config.checkout "custom"}}checked{{/if_equals}}>
-      <label class="form-check-label">
-        Custom Checkout (default)
-      </label>
+    <div class="col col-md-8">
+      <div class="card">
+        <strong class="card-header">
+          Custom Configuration
+        </strong>
+        <form class="container mbs" action="/settings/configure" method="post">
+
+          <label class="mts"><strong>Checkout</strong></label>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="checkout" value="custom" {{#if_equals config.checkout "custom"}}checked{{/if_equals}}>
+            <label class="form-check-label">
+              Custom Checkout (default)
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="checkout" value="checkoutOld" {{#if_equals config.checkout "checkoutOld"}}checked{{/if_equals}}>
+            <label class="form-check-label">
+              Old Checkout
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="checkoutNew" value="checkoutNew" disabled>
+            <label class="form-check-label">
+              New Checkout
+            </label>
+          </div>
+          <button type="submit" class="btn btn-primary mts">Submit</button>
+        </form>
+      </div>
     </div>
-    <div class="form-check">
-      <input class="form-check-input" type="radio" name="checkout" value="checkoutOld" {{#if_equals config.checkout "checkoutOld"}}checked{{/if_equals}}>
-      <label class="form-check-label">
-        Old Checkout
-      </label>
+
+    <div class="col col-md-4">
+      <a class="btn btn-danger" href="/settings/reset-customer">Reset Stripe Customer</a>
     </div>
-    <div class="form-check">
-      <input class="form-check-input" type="radio" name="checkoutNew" value="checkoutNew" disabled>
-      <label class="form-check-label">
-        New Checkout
-      </label>
-    </div>
-    <button type="submit" class="btn btn-primary mts">Submit</button>
-  </form>
+  </div>
+
 
 </div>
 

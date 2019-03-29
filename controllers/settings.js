@@ -3,12 +3,12 @@
  */
 const express = require('express');
 const router = express.Router();
+const User = require('../models/users');
 
 /**
  * main route for rendering items and previous charges page
  */
 router.get('/', async function (req, res) {
-  const stripeCustomerId = req.user.stripeCustomerId
 
   if(!req.session.config) {
     req.session.config = {
@@ -33,8 +33,11 @@ router.post('/configure', async function(req, res) {
   res.redirect('/settings');
 })
 
-router.get('/reset-customer/:id', async function (req, res) {
-  const stripeCustomerId = req.params.id
+router.get('/reset-customer', async function (req, res) {
+
+  const newStripeCustomer = await User.refreshStripeId(req.user._id, req.user.stripeCustomerId, req.user.username);
+  req.user.stripeCustomerId = newStripeCustomer.stripeCustomerId;
+  req.flash('success', `Created new user with id, ${newStripeCustomer.stripeCustomerId}` )
 
   res.redirect('/settings')
 });
