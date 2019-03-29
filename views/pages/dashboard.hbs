@@ -41,9 +41,9 @@
 		<div class="col col-md-12">
 			<h5 class="text-center">Use our product: </h5>
 			<div class="row justify-content-center">
-				<a class="btn btn-success ms" href="/dashboard/use/{{subscriptionItemId}}/1" {{#if_not subscription}}disabled{{/if_not}}>Use 1 Unit</a>
-				<a class="btn btn-success ms" href="/dashboard/use/{{subscriptionItemId}}/5" {{#if_not subscription}}disabled{{/if_not}}>Use 5 Units</a>
-				<a class="btn btn-success ms" href="/dashboard/use/{{subscriptionItemId}}/10" {{#if_not subscription}}disabled{{/if_not}}>Use 10 Units</a>
+				<a class="btn btn-success ms" href="{{#if subscription}}/dashboard/use/{{subscriptionItemId}}/1{{/if}}">Use 1 Unit</a>
+				<a class="btn btn-success ms" href="{{#if subscription}}/dashboard/use/{{subscriptionItemId}}/5{{/if}}" >Use 5 Units</a>
+				<a class="btn btn-success ms" href="{{#if subscription}}/dashboard/use/{{subscriptionItemId}}/10{{/if}}">Use 10 Units</a>
 			</div>
 
 		</div>
