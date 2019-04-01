@@ -11,32 +11,25 @@ const moment = require('moment');
  */
 router.get('/', async function (req, res) {
   const stripeId = req.user.stripeCustomerId;
-  let defaultCard = null;
   let lineItems;
 
-  // fetch customer subscriptions, customer info, and available plans
-  const [subscriptions, customer, plans, invoices] = await Promise.all([
-    stripe.subscriptions.list({customer: stripeId}),
-    stripe.customers.retrieve(stripeId),
+  // fetch customer, available plans, charge history
+  const [customer, plans, invoices] = await Promise.all([
+    stripe.customers.retrieve(stripeId, {expand: ["default_source", "subscriptions"]}),
     stripe.plans.list({product: process.env.PRODUCT_ID}),
     stripe.charges.list({customer: stripeId})
   ])
 
-  // fetch customer card info
-  if(customer.default_source) {
-    defaultCard = await stripe.customers.retrieveCard(stripeId, customer.default_source);
-  }
-
   // fetch upcoming invoice if metered usage
-  if(subscriptions.data[0] && subscriptions.data[0].plan.usage_type) {
+  if(customer.subscriptions.data[0] && customer.subscriptions.data[0].plan.usage_type) {
     lineItems = await stripe.invoices.retrieveLines("upcoming", {
       customer: stripeId
     })
   }
 
   res.render('pages/subscription', {
-    subscription: subscriptions.data ? subscriptions.data[0] : null,
-    card: defaultCard,
+    subscription: customer.subscriptions.data ? customer.subscriptions.data[0] : null,
+    defaultCard: customer.default_source ? customer.default_source : null,
     lineItems: lineItems ? lineItems.data[0] : null,
     plans: plans.data,
     invoices: invoices ? invoices.data : null
@@ -47,8 +40,6 @@ router.get('/', async function (req, res) {
  * create subscription
  */
 router.post('/subscribe', async function(req, res) {
-
-  // TODO: some error handling to determine if subscription already exists
 
   try {
     const customer = await stripe.customers.update(req.user.stripeCustomerId, {

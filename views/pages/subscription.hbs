@@ -28,19 +28,14 @@
           <div><strong>Period Usage:</strong> {{lineItems.quantity}} Units</div>
           <div><strong>Amount Owed: </strong> <span class="amount-usd" data-amount="{{lineItems.amount}}"></span></div>
         {{/if_equals}}
-        <div class="card-text"><strong>Start Date:</strong> <span class="date" data-date="{{subscription.start}}"></span></div>
+        <div class="card-text"><strong>Period Start Date:</strong> <span class="date" data-date="{{subscription.start}}"></span></div>
         <div class="card-text">
           <strong>
-            {{#if_equals subscription.plan.usage_type "licensed"}}
-              Auto-Renewal Date:
-            {{/if_equals}}
-            {{#if_equals subscription.plan.usage_type "metered"}}
-              Period End Date:
-            {{/if_equals}}
+            Next Payment Date:
           </strong>
           <span class="date" data-date="{{subscription.current_period_end}}"></span>
         </div>
-        <div class="card-text"><strong>Payment Method:</strong> {{card.brand}} ending in {{card.last4}}
+        <div class="card-text"><strong>Payment Method:</strong> {{defaultCard.brand}} ending in {{defaultCard.last4}}
           <a class="" href="/subscription/update-payment">Update payment method</a>
         </div>
         <!-- cancel subscription -->
