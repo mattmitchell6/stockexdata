@@ -17,7 +17,7 @@
 				</h5>
 				<a href="/subscription" class="card-link">View Subscription</a>
 			{{else}}
-				<p>You are currently not subscribed to a plan.</p>
+				<p>You are currently not subscribed to a plan</p>
 				<a class="btn btn-primary" href="/subscription">Select a Plan</a>
 			{{/if}}
 		</div>
@@ -30,7 +30,12 @@
 						Current Period Usage
 					</strong>
 					<div class="container mts mbs">
-						<div><strong>Usage:</strong> {{lineItems.quantity}} Units</div>
+						{{#if_equals subscription.plan.usage_type "metered"}}
+							<div><strong>Usage:</strong> {{lineItems.quantity}} Units</div>
+						{{/if_equals}}
+						{{#if_equals subscription.plan.usage_type "licensed"}}
+							<div><strong>Usage:</strong> Unlimited</div>
+						{{/if_equals}}
 						<div><strong>Period End Date:</strong> <span class="date" data-date="{{subscription.current_period_end}}"></span></div>
 						<div><strong>Amount Owed: </strong> <span class="amount-usd" data-amount="{{lineItems.amount}}"></span></div>
 					</div>

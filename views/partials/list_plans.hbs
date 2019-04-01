@@ -1,0 +1,99 @@
+{{#each plans}}
+  <div class="row justify-content-center">
+    <div class="card col col-lg-8 ms">
+
+      <!-- subscription card for 'licensed' usage type -->
+      {{#if_equals this.usage_type "licensed"}}
+        <div class="card-body">
+          <div class="row">
+            <div class="col col-lg-8">
+              <h5 class="card-title">{{this.nickname}}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">
+                 <span class="amount-usd bold" data-amount="{{this.amount}}"></span>
+                 per {{this.interval}}
+              </h6>
+              <p class="card-text">Unlimited access</p>
+            </div>
+            <div class="col col-lg-4">
+
+              <!-- new Checkout.js -->
+              <!-- <button id="checkout-button" class="btn btn-primary btn-sm pull-right mts" role="link">Subscribe (Checkout)</button>
+              <div id="error-message"></div> -->
+
+              <!-- check if subscription exists -->
+              {{#if ../subscription}}
+                <a class="btn btn-primary btn-sm pull-right mts" href="/subscription/update-subscription/{{this.id}}/{{../subscription.id}}">Update Subscription</a>
+              {{else}}
+                <!-- old Checkout -->
+                {{#if_equals ../config.checkout "checkoutOld"}}
+                  <form class="pull-right" action="/subscription/subscribe" method="POST">
+                    <input type="hidden" name="plan" value="{{this.id}}">
+                    <script
+                      src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                      data-key="pk_test_iDllARnAoSpxhZPgitRSWrhq00ZuDEg41i"
+                      data-name="{{this.nickname}}"
+                      data-label="Subscribe"
+                      data-panel-label="Pay ${{this.amount}} per {{this.interval}}"
+                      data-description=""
+                      data-locale="auto">
+                    </script>
+                  </form>
+                {{/if_equals}}
+
+                <!-- redirect to Subscribe w/Elements page -->
+                {{#if_equals ../config.checkout "custom"}}
+                  <a class="btn btn-primary btn-sm pull-right mts" href="/subscription/create-subscription/{{this.id}}">Subscribe</a>
+                {{/if_equals}}
+              {{/if}}
+            </div>
+          </div>
+        </div>
+      {{/if_equals}}
+
+      <!-- subscription card for 'metered' usage type -->
+      {{#if_equals this.usage_type "metered"}}
+        <div class="card-body">
+          <div class="row">
+            <div class="col col-lg-8">
+              <h5 class="card-title">{{this.nickname}}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">
+                 <span class="amount-usd bold" data-amount="{{this.amount}}"></span>
+                 per unit
+              </h6>
+              <p class="card-text">Pay per unit used</p>
+            </div>
+            <div class="col col-lg-4">
+
+              <!-- check if subscription exists -->
+              {{#if ../subscription}}
+                <a class="btn btn-primary btn-sm pull-right mts" href="/subscription/update-subscription/{{this.id}}/{{../subscription.id}}">Update Subscription</a>
+              {{else}}
+                {{#if_equals ../config.checkout "checkoutOld"}}
+                  <form class="pull-right" action="/subscription/subscribe" method="POST">
+                    <input type="hidden" name="plan" value="{{this.id}}">
+                    <script
+                      src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                      data-key="pk_test_iDllARnAoSpxhZPgitRSWrhq00ZuDEg41i"
+                      data-name="{{this.nickname}}"
+                      data-label="Subscribe"
+                      data-panel-label="Pay ${{this.amount}} per unit"
+                      data-description=""
+                      data-locale="auto">
+                    </script>
+                  </form>
+                {{/if_equals}}
+
+                <!-- old Checkout -->
+                {{#if_equals ../config.checkout "custom"}}
+                  <a class="btn btn-primary btn-sm pull-right mts" href="/subscription/create-subscription/{{this.id}}">Subscribe</a>
+                {{/if_equals}}
+              {{/if}}
+            </div>
+
+          </div>
+        </div>
+      {{/if_equals}}
+
+    </div>
+  </div>
+{{/each}}

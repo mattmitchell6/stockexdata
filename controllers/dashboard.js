@@ -37,10 +37,16 @@ router.get('/', async function (req, res) {
 
 
 router.get('/use/:subscription/:quantity', async function(req, res) {
-  const usageRecord = await stripe.usageRecords.create(req.params.subscription, {
-    quantity: req.params.quantity,
-    timestamp: Date.now() / 1000 | 0
-  });
+
+  // will fail if currently subscribed to 'licensed plan'
+  try {
+    const usageRecord = await stripe.usageRecords.create(req.params.subscription, {
+      quantity: req.params.quantity,
+      timestamp: Date.now() / 1000 | 0
+    });
+  } catch(error) {
+    console.log('caught error: ' + error.message);
+  }
 
   req.flash('success', `Successfully used ${req.params.quantity} unit(s)` )
   res.redirect('/dashboard')
