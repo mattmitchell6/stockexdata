@@ -75,12 +75,11 @@ router.post('/subscribe', async function(req, res) {
  * update subscription plan
  */
  router.get('/update-subscription/:newPlanId/:oldSubId', async function(req, res) {
-   let baseSub, variableSub;
-   let basePlan, variablePlan;
+   let baseSub, variableSub, basePlan, variablePlan;
 
    // fetch 'to update' plans
    basePlan = await stripe.plans.retrieve(req.params.newPlanId)
-   variablePlan = await stripe.plans.retrieve(basePlan.metadata.variablePlan);
+   variablePlan = basePlan.metadata.variablePlan;
 
    // fetch 'to update' subscription items
    const subscription = await stripe.subscriptions.retrieve(req.params.oldSubId);
@@ -94,9 +93,10 @@ router.post('/subscribe', async function(req, res) {
 
    // update subscription with new plan
    const updatedSubscription = await stripe.subscriptions.update(req.params.oldSubId, {
-    items: [
-      { id: baseSub, plan: basePlan.id },
-      { id: variableSub, plan: variablePlan.id }]
+     billing_cycle_anchor: "now",
+     items: [
+       { id: baseSub, plan: basePlan.id },
+       { id: variableSub, plan: variablePlan }]
    })
 
    req.flash('success', `Successfully updated to '${basePlan.nickname}'!`)
