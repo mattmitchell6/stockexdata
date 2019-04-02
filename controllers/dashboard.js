@@ -11,27 +11,33 @@ const moment = require('moment');
  */
 router.get('/', async function (req, res) {
   const stripeId = req.user.stripeCustomerId
-  let lineItems;
-  let subscriptions;
+  let upcomingInvoice;
+  let subscription;
   let subscriptionItemId;
 
   // fetch current subscriptions
-  subscriptions = await stripe.subscriptions.list({
+  subscription = await stripe.subscriptions.list({
     customer: stripeId
   });
 
-  // fetch usage
-  if(subscriptions.data && subscriptions.data.length > 0) {
-    lineItems = await stripe.invoices.retrieveLines("upcoming", {
+  // fetch usage, metered subscription id
+  if(subscription.data && subscription.data.length > 0) {
+    upcomingInvoice = await stripe.invoices.retrieveUpcoming("upcoming", {
       customer: stripeId
     })
-    subscriptionItemId = subscriptions.data[0].items.data[0].id
+
+    // fetch "metered" subscription item
+    subscription.data[0].items.data.forEach((item) => {
+      if(item.plan.usage_type == "metered") {
+        subscriptionItemId = item.id;
+      }
+    })
   }
 
   res.render('pages/dashboard', {
-    subscription: subscriptions.data && subscriptions.data.length > 0 ? subscriptions.data[0] : null,
+    subscription: subscription.data && subscription.data.length > 0 ? subscription.data[0] : null,
     subscriptionItemId: subscriptionItemId,
-    lineItems: lineItems ? lineItems.data[0] : null
+    upcomingInvoice: upcomingInvoice
   });
 });
 

@@ -14,26 +14,34 @@
       <div class="card col col-md-8">
         <h5 class="text-center mts text-center">Your Subscription</h5>
 
-        <div class="card-text"><strong>Plan:</strong> {{subscription.plan.nickname}}</div>
-        <div class="card-text"><strong>Price:</strong>
-          <span class="amount-usd" data-amount="{{subscription.plan.amount}}"></span> per
-          {{#if_equals subscription.plan.usage_type "licensed"}}
-            {{subscription.plan.interval}}
+        <!-- list out plan details -->
+        {{#each subscription.items.data}}
+          {{#if_equals this.plan.usage_type "licensed"}}
+            <div class="card-text"><strong>Plan:</strong> {{this.plan.nickname}},
+              <span class="amount-usd" data-amount="{{this.plan.amount}}"></span> per {{this.plan.interval}}
+            </div>
           {{/if_equals}}
-          {{#if_equals subscription.plan.usage_type "metered"}}
-            unit
+          {{#if_equals this.plan.usage_type "metered"}}
+            <div class="">
+              <span class="amount-usd" data-amount="{{this.plan.amount}}"></span> per unit used
+            </div>
           {{/if_equals}}
-        </div>
-        {{#if_equals subscription.plan.usage_type "metered"}}
-          <div><strong>Period Usage:</strong> {{lineItems.quantity}} Units</div>
-          <div><strong>Amount Owed: </strong> <span class="amount-usd" data-amount="{{lineItems.amount}}"></span></div>
-        {{/if_equals}}
-        <div class="card-text"><strong>Period Start Date:</strong> <span class="date" data-date="{{subscription.start}}"></span></div>
+        {{/each}}
+
+        <!-- list usage data -->
+        {{#each upcomingInvoice.lines.data}}
+          {{#if_equals this.plan.usage_type "metered"}}
+            <div><strong>Period Usage:</strong> {{this.quantity}} Units</div>
+          {{/if_equals}}
+        {{/each}}
+        
         <div class="card-text">
           <strong>
-            Next Payment Date:
+            Billing Cycle:
           </strong>
-          <span class="date" data-date="{{subscription.current_period_end}}"></span>
+          You will be billed
+          <span class="amount-usd bold" data-amount="{{upcomingInvoice.amount_due}}"></span> on
+          <span class="date bold" data-date="{{upcomingInvoice.period_end}}"></span>
         </div>
         <div class="card-text"><strong>Payment Method:</strong> {{defaultCard.brand}} ending in {{defaultCard.last4}}
           <a class="" href="/subscription/update-payment">Update payment method</a>

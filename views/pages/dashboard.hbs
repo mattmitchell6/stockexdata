@@ -9,12 +9,22 @@
 	{{> flash_message }}
 
 	<div class="row">
+
+		<!-- list customer's current subscription if one exists -->
 		<div class="col col-md-8">
-			<!-- list customer's current subscription if one exists -->
 			{{#if subscription}}
-				<h5 class="card-title">Plan:
-					<span style="font-size: 16px" class="text-muted">{{subscription.plan.nickname}}</span>
-				</h5>
+				{{#each subscription.items.data}}
+					{{#if_equals this.plan.usage_type "licensed"}}
+						<div class="card-text"><strong>Plan:</strong> {{this.plan.nickname}},
+							<span class="amount-usd" data-amount="{{this.plan.amount}}"></span> per {{this.plan.interval}}
+						</div>
+					{{/if_equals}}
+					{{#if_equals this.plan.usage_type "metered"}}
+						<div class="">
+							<span class="amount-usd" data-amount="{{this.plan.amount}}"></span> per unit used
+						</div>
+					{{/if_equals}}
+				{{/each}}
 				<a href="/subscription" class="card-link">View Subscription</a>
 			{{else}}
 				<p>You are currently not subscribed to a plan</p>
@@ -23,6 +33,7 @@
 		</div>
 
 
+		<!-- list current plan usage -->
 		<div class="col col-md-4">
 			{{#if subscription}}
 				<div class="card">
@@ -30,14 +41,13 @@
 						Current Period Usage
 					</strong>
 					<div class="container mts mbs">
-						{{#if_equals subscription.plan.usage_type "metered"}}
-							<div><strong>Usage:</strong> {{lineItems.quantity}} Units</div>
-						{{/if_equals}}
-						{{#if_equals subscription.plan.usage_type "licensed"}}
-							<div><strong>Usage:</strong> Unlimited</div>
-						{{/if_equals}}
-						<div><strong>Period End Date:</strong> <span class="date" data-date="{{subscription.current_period_end}}"></span></div>
-						<div><strong>Amount Owed: </strong> <span class="amount-usd" data-amount="{{lineItems.amount}}"></span></div>
+						{{#each upcomingInvoice.lines.data}}
+							{{#if_equals this.plan.usage_type "metered"}}
+								<div><strong>Usage:</strong> {{this.quantity}} Units</div>
+							{{/if_equals}}
+						{{/each}}
+						<div><strong>Period End Date: </strong><span class="date" data-date="{{upcomingInvoice.period_end}}"></span></div>
+						<div><strong>Amount Due: </strong> <span class="amount-usd" data-amount="{{upcomingInvoice.amount_due}}"></span></div>
 					</div>
 				</div>
 			{{/if}}
