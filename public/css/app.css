@@ -11,6 +11,16 @@ h1, h2, h3 {
     /*background-color: #32325d !;*/
 }
 
+.btn {
+  text-transform: uppercase;
+}
+
+.btn.btn-primary {
+  background: #32325d;
+  color: #fff;
+  border: none;
+}
+
 .mts {
   margin-top: 20px;
 }

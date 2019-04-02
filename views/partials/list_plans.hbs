@@ -11,8 +11,8 @@
                per {{this.interval}}
             </h6>
             <p class="card-text">
-              <span class="amount-usd bold" data-amount="{{this.variable.amount}}"></span>
-              per unit
+              Pay an additional <span class="amount-usd" data-amount="{{this.variable.amount}}"></span>
+              per unit used
             </p>
           </div>
           <div class="col col-lg-4">
@@ -24,7 +24,7 @@
             <!-- check if subscription exists -->
             {{#if ../subscription}}
               {{#if_not_equals ../currentPlanId this.id}}
-                <a class="btn btn-primary btn-sm pull-right mts" href="/subscription/update-subscription/{{this.id}}/{{../subscription.id}}">Update Subscription</a>
+                <a class="btn btn-primary btn-md pull-right mts" style="width: 250px" href="/subscription/update-subscription/{{this.id}}/{{../subscription.id}}">Change to {{this.nickname}}</a>
               {{/if_not_equals}}
             {{else}}
               <!-- old Checkout -->
@@ -46,7 +46,7 @@
 
               <!-- redirect to Subscribe w/Elements page -->
               {{#if_equals ../config.checkout "custom"}}
-                <a class="btn btn-primary btn-sm pull-right mts" href="/subscription/create-subscription/{{this.id}}">Subscribe</a>
+                <a class="btn btn-primary btn-md pull-right mts" style="width: 250px" href="/subscription/create-subscription/{{this.id}}">Subscribe to {{this.nickname}}</a>
               {{/if_equals}}
             {{/if}}
           </div>

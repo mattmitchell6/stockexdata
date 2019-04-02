@@ -2,52 +2,75 @@
 
 {{#*inline "content-block"}}
 
-  <div class="container">
-    <div class="row mts">
-
+  <div class="container mtm">
+    <div class="row">
       {{> flash_message }}
 
-      <ul class="nav nav-pills mb-3 col col-lg-4 col-md-6 offset-lg-4 offset-md-3" id="login-options" role="tablist">
-        <li class="nav-item">
-          <a class="nav-link active" id="login-tab" data-toggle="pill" href="#login" role="tab">Login</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" id="signup-tab" data-toggle="pill" href="#signup" role="tab">Signup</a>
-        </li>
-      </ul>
-    </div>
+      <div class="col col-md-6 mts">
+        <h5 class="bold">Stripe Billing Demo</h5>
+          <p>
+            The goal of this demo is to show how Stripe's billing product
+            can be leveraged in a custom application to support a recurring payments
+            model. Login in as a customer and subscribe to a plan to see Stripe's
+            Billing product in action.
+          </p>
+        <h5 class="bold">Demo Functionality</h5>
+          <ul>
+            <li>Subscribe to a plan with both a fixed monthly price and a usage based component</li>
+            <li>Save/Update card information through Stripe Elements</li>
+            <li>View historical and upcoming invoices</li>
+            <li>Simulate product usage and observe monthly billing impact</li>
+          </ul>
+        <h5 class="bold">Stripe Products and Features</h5>
+        <ul style="list-style-type:none">
+          <li><img src="/img/payments-icon.png" height="30px" style="margin-right: 5px" alt="">Payments</li>
+          <li>Elements</li>
+          <li><img src="/img/billing-icon.png" height="30px" style="margin-right: 5px" alt="">Billing</li>
+        </ul>
+      </div>
+      <div class="col col-md-6 mts">
+        <ul class="nav nav-pills mb-3 col col-md-12" id="login-options" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="login-tab" data-toggle="pill" href="#login" role="tab">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="signup-tab" data-toggle="pill" href="#signup" role="tab">Signup</a>
+          </li>
+        </ul>
 
-    <div class="row">
-      <div class="tab-content col col-lg-4 col-md-6 offset-lg-4 offset-md-3">
-        <div class="tab-pane show active" id="login" role="tabpanel" aria-labelledby="login">
+        <div class="row">
+          <div class="tab-content col col-lg-12 col-md-12">
+            <div class="tab-pane show active" id="login" role="tabpanel" aria-labelledby="login">
 
-          <!-- log in -->
-          <form action="/login" method="post" class="">
-            <div class="form-group">
-              <label for="username">Email</label>
-              <input type="email" class="form-control" id="username" name="username" placeholder="example@demo.com">
+              <!-- log in -->
+              <form action="/login" method="post" class="">
+                <div class="form-group">
+                  <label for="username">Email</label>
+                  <input type="email" class="form-control" id="username" name="username" placeholder="example@demo.com">
+                </div>
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <input type="password" class="form-control" id="password" name="password" placeholder="password">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
             </div>
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" class="form-control" id="password" name="password" placeholder="password">
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
-        </div>
 
-        <!-- sign up -->
-        <div class="tab-pane" id="signup" role="tabpanel" aria-labelledby="signup">
-          <form action="/signup" method="post" class="">
-            <div class="form-group">
-              <label for="username">Email</label>
-              <input type="email" class="form-control" id="username" name="username" placeholder="username">
+            <!-- sign up -->
+            <div class="tab-pane" id="signup" role="tabpanel" aria-labelledby="signup">
+              <form action="/signup" method="post" class="">
+                <div class="form-group">
+                  <label for="username">Email</label>
+                  <input type="email" class="form-control" id="username" name="username" placeholder="username">
+                </div>
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <input type="password" class="form-control" id="password" name="password" placeholder="password">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
             </div>
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" class="form-control" id="password" name="password" placeholder="password">
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
+          </div>
         </div>
       </div>
     </div>
