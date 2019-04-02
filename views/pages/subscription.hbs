@@ -31,7 +31,9 @@
         <!-- list usage data -->
         {{#each upcomingInvoice.lines.data}}
           {{#if_equals this.plan.usage_type "metered"}}
-            <div><strong>Period Usage:</strong> {{this.quantity}} Units</div>
+            <div><strong>Period Usage:</strong> {{this.quantity}} Units
+              <a class="" href="/dashboard">Simulate usage</a>
+            </div>
           {{/if_equals}}
         {{/each}}
 

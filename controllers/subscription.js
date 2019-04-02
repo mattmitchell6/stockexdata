@@ -13,6 +13,7 @@ router.get('/', async function (req, res) {
   const stripeId = req.user.stripeCustomerId;
   let lineItems;
   let upcomingInvoice;
+  let currentPlanId;
 
   // fetch customer, available plans, charge history
   const [customer, allPlans, invoices] = await Promise.all([
@@ -28,11 +29,18 @@ router.get('/', async function (req, res) {
     let variable = variablePlans.filter(variablePlan => basePlan.metadata.variablePlan == variablePlan.id)
     basePlan.variable = variable[0];
   });
+  basePlans = basePlans.sort((a, b) => (a.amount > b.amount) ? 1 : -1) // sort by plan amount
 
   // fetch upcoming invoice if subscription exists
   if(customer.subscriptions.data && customer.subscriptions.data.length > 0) {
     upcomingInvoice = await stripe.invoices.retrieveUpcoming("upcoming", {
       customer: stripeId
+    })
+    // fetch active licensed plan id
+    customer.subscriptions.data[0].items.data.forEach((item) => {
+      if(item.plan.usage_type == "licensed") {
+        currentPlanId = item.plan.id
+      }
     })
   }
 
@@ -41,6 +49,7 @@ router.get('/', async function (req, res) {
     defaultCard: customer.default_source ? customer.default_source : null,
     upcomingInvoice: upcomingInvoice,
     plans: basePlans,
+    currentPlanId: currentPlanId,
     invoices: invoices ? invoices.data : null
   });
 });

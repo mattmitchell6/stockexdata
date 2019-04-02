@@ -23,7 +23,9 @@
 
             <!-- check if subscription exists -->
             {{#if ../subscription}}
-              <a class="btn btn-primary btn-sm pull-right mts" href="/subscription/update-subscription/{{this.id}}/{{../subscription.id}}">Update Subscription</a>
+              {{#if_not_equals ../currentPlanId this.id}}
+                <a class="btn btn-primary btn-sm pull-right mts" href="/subscription/update-subscription/{{this.id}}/{{../subscription.id}}">Update Subscription</a>
+              {{/if_not_equals}}
             {{else}}
               <!-- old Checkout -->
               {{#if_equals ../config.checkout "checkoutOld"}}
