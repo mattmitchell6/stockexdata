@@ -66,9 +66,9 @@
 
   <!-- List previous purchases -->
   <h5 class="text-center mtm">Payment History</h5>
-  <div class="row justify-content-center">
-    <div class="card col col-lg-8">
-      {{#if invoices}}
+    {{#if invoices}}
+    <div class="row justify-content-center">
+      <div class="card col col-lg-8">
         <table class="table">
       		<thead>
       			<tr>
@@ -95,13 +95,15 @@
       			{{/each}}
       		</tbody>
       	</table>
-      {{else}}
-        <div class="mbm">
-          You have no payment history
-        </div>
-      {{/if}}
+      </div>
     </div>
-  </div>
+  {{else}}
+    <div class="row justify-content-center">
+      <div class="col col-lg-8 mbm">
+        You have no payment history
+      </div>
+    </div>
+  {{/if}}
 </div>
 
 
