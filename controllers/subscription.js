@@ -116,7 +116,9 @@ router.post('/subscribe', async function(req, res) {
  * cancel subscription
  */
 router.post('/cancel-subscription', async function(req, res) {
-  const deletedSubscription = await stripe.subscriptions.del(req.body.subscription)
+  const deletedSubscription = await stripe.subscriptions.del(req.body.subscription, {
+    invoice_now: true
+  })
 
   req.flash('success', `Subscription successfully cancelled`)
   res.redirect('/subscription')
