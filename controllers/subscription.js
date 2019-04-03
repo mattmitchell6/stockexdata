@@ -58,7 +58,6 @@ router.get('/', async function (req, res) {
  * create subscription
  */
 router.post('/subscribe', async function(req, res) {
-
   try {
     const customer = await stripe.customers.update(req.user.stripeCustomerId, {
       source: req.body.stripeToken
@@ -71,7 +70,7 @@ router.post('/subscribe', async function(req, res) {
         { plan: req.body.variablePlanId, }
       ]});
 
-    req.flash('success', `Successfully subscribed! ${subscription.id}`)
+    req.flash('success', `Successfully subscribed! Your subscription ID is ${subscription.id}`)
     res.redirect('/subscription');
   } catch(error) {
     console.log(error.raw);
@@ -119,6 +118,9 @@ router.post('/cancel-subscription', async function(req, res) {
   const deletedSubscription = await stripe.subscriptions.del(req.body.subscription, {
     invoice_now: true
   })
+
+  // pay if there's unpaid metered usage on the invoice
+  await stripe.invoices.pay(deletedSubscription.latest_invoice)
 
   req.flash('success', `Subscription successfully cancelled`)
   res.redirect('/subscription')

@@ -24,7 +24,7 @@ router.get('/reset-customer', async function (req, res) {
   const newStripeCustomer = await User.refreshStripeId(req.user._id, req.user.stripeCustomerId, req.user.username);
 
   req.user.stripeCustomerId = newStripeCustomer.stripeCustomerId;
-  req.flash('success', `Created new user with id, ${newStripeCustomer.stripeCustomerId}` )
+  req.flash('success', `Created new user. Your customer ID is ${newStripeCustomer.stripeCustomerId}` )
   res.redirect('/settings')
 });
 

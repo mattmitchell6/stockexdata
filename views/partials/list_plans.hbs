@@ -26,6 +26,9 @@
               {{#if_not_equals ../currentPlanId this.id}}
                 <a class="btn btn-primary btn-md pull-right mts" style="width: 250px" href="/subscription/update-subscription/{{this.id}}/{{../subscription.id}}">Change to {{this.nickname}}</a>
               {{/if_not_equals}}
+              {{#if_equals ../currentPlanId this.id}}
+                <span class="badge badge-success pull-right">Current Plan</span>
+              {{/if_equals}}
             {{else}}
               <!-- old Checkout -->
               {{#if_equals ../config.checkout "checkoutOld"}}

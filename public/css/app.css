@@ -1,16 +1,29 @@
 body {
-  background-color: #F8F8F8;
+  background-color: #FFF;
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
 }
 
 
-.navbar.navbar-dark {
-    /*background-color: #32325d !;*/
+.navbar {
+  background-color: #32325d !important;
 }
 
 .btn {
   text-transform: uppercase;
+}
+
+.badge-success {
+  background-color: #3ecf8e;
+}
+
+.nav-link.active {
+  background-color: #3ecf8e !important;
+}
+
+.btn.btn-success {
+  background-color: #3ecf8e !important;
+  border: none;
 }
 
 .btn.btn-primary {
@@ -55,14 +68,6 @@ body {
 .bold {
   font-weight: bold;
 }
-
-/*.date {
-  font-weight: bold;
-}
-
-.amount-usd {
-  font-weight: bold;
-}*/
 
 .pull-right {
   float: right;
