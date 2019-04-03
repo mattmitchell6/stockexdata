@@ -21,7 +21,7 @@ router.get('/', async function (req, res) {
     stripe.plans.list({active: true}),
     stripe.charges.list({customer: stripeId})
   ])
-  customer.default_source.brand = customer.default_source.brand.toLowerCase();
+  // customer.default_source.brand = customer.default_source.brand.toLowerCase();
 
   // populate 'base' plans with their respective variable plans
   let basePlans = allPlans.data.filter(plan => plan.usage_type == "licensed");
