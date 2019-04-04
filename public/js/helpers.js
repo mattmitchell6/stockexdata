@@ -11,7 +11,13 @@ $(document).ready(function() {
   for (var i = 0; i < amounts.length; i++) {
     amount = amounts[i].getAttribute('data-amount') / 100;
     amount = amount.toFixed(2);
-    amounts[i].innerHTML = "$" + amount;
+    if(amount >= 0) {
+      amounts[i].innerHTML = "$" + amount;
+    } else {
+      amount = amount * -1;
+      amount = amount.toFixed(2);
+      amounts[i].innerHTML = "-$" + amount + " (credit to be applied to upcoming bill)";
+    }
   }
 
   // iterate through all "date" elements and convert from unix timestart to human readable

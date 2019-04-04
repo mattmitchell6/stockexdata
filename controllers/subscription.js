@@ -20,7 +20,7 @@ router.get('/', async function (req, res) {
     stripe.customers.retrieve(stripeId, {expand: ["default_source"]}),
     stripe.plans.list({active: true}),
     stripe.charges.list({customer: stripeId})
-  ])
+  ]);
 
   // populate 'base' plans with their respective variable plans
   let basePlans = allPlans.data.filter(plan => plan.usage_type == "licensed");
@@ -47,7 +47,7 @@ router.get('/', async function (req, res) {
 
   res.render('pages/subscription', {
     subscription: customer.subscriptions.data ? customer.subscriptions.data[0] : null,
-    defaultCard: customer.default_source ? customer.default_source : null,
+    customer: customer,
     upcomingInvoice: upcomingInvoice,
     plans: basePlans,
     currentPlanId: currentPlanId,
