@@ -1,4 +1,5 @@
 const express = require('express');
+const favicon = require('serve-favicon');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const path = require('path');
@@ -31,6 +32,7 @@ app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(require('express-session')({ secret: 'unique-secret', resave: false, saveUninitialized: false }));
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(favicon(path.join(__dirname, 'public', 'img/billing-icon.png')))
 
 // Initialize Passport and restore authentication state, if any, from the session.
 app.use(passport.initialize());

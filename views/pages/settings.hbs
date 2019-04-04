@@ -16,25 +16,44 @@
         </strong>
         <form class="container mbs" action="/settings/configure" method="post">
 
-          <label class="mts"><strong>Checkout</strong></label>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="checkout" value="custom" {{#if_equals config.checkout "custom"}}checked{{/if_equals}}>
-            <label class="form-check-label">
-              Custom Checkout (default)
-            </label>
+          <div class="form-group">
+            <label class="mts"><strong>Checkout</strong></label>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="checkout" value="custom" {{#if_equals config.checkout "custom"}}checked{{/if_equals}}>
+              <label class="form-check-label">
+                Custom Checkout (default)
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="checkout" value="checkoutOld" {{#if_equals config.checkout "checkoutOld"}}checked{{/if_equals}}>
+              <label class="form-check-label">
+                Old Checkout
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="checkoutNew" value="checkoutNew" disabled>
+              <label class="form-check-label">
+                Hosted Checkout (does not support billing yet)
+              </label>
+            </div>
           </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="checkout" value="checkoutOld" {{#if_equals config.checkout "checkoutOld"}}checked{{/if_equals}}>
-            <label class="form-check-label">
-              Old Checkout
-            </label>
+
+          <div class="form-group">
+            <label><strong>Trial Period</strong></label>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="on" name="freeTrial" disabled>
+              <label class="form-check-label">Free 30 trial (coming soon...)</label>
+            </div>
           </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="checkoutNew" value="checkoutNew" disabled>
-            <label class="form-check-label">
-              New Checkout (does not support building yet)
-            </label>
+
+          <div class="form-group">
+            <label><strong>Coupons</strong></label>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="on" name="freeTrial" disabled>
+              <label class="form-check-label">25% off first 3 months (coming soon...)</label>
+            </div>
           </div>
+
           <button type="submit" class="btn btn-primary mts">Submit</button>
         </form>
       </div>

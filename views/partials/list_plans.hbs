@@ -24,7 +24,7 @@
             <!-- check if subscription exists -->
             {{#if ../subscription}}
               {{#if_not_equals ../currentPlanId this.id}}
-                <a class="btn btn-primary btn-md pull-right mts" style="width: 250px" href="/subscription/update-subscription/{{this.id}}/{{../subscription.id}}">Change to {{this.nickname}}</a>
+                <a class="btn btn-primary btn-md pull-right mts" style="min-width: 250px; white-space: nowrap;" href="/subscription/update-subscription/{{this.id}}/{{../subscription.id}}">Change to {{this.nickname}}</a>
               {{/if_not_equals}}
               {{#if_equals ../currentPlanId this.id}}
                 <span class="badge badge-success pull-right">Current Plan</span>
@@ -49,7 +49,7 @@
 
               <!-- redirect to Subscribe w/Elements page -->
               {{#if_equals ../config.checkout "custom"}}
-                <a class="btn btn-primary btn-md pull-right mts" style="width: 250px" href="/subscription/create-subscription/{{this.id}}">Subscribe to {{this.nickname}}</a>
+                <a class="btn btn-primary btn-md pull-right mts" style="min-width: 250px; white-space: nowrap;" href="/subscription/create-subscription/{{this.id}}">Subscribe to {{this.nickname}}</a>
               {{/if_equals}}
             {{/if}}
           </div>

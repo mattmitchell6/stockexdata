@@ -23,6 +23,13 @@ $(document).ready(function() {
   }
 })
 
+$(function(){
+  $('a.btn, button.btn').click(function() {
+    this.innerHTML = `<span class="spinner-border spinner-border-sm" style="margin-right: 4px; margin-bottom: 2px" role="status" aria-hidden="true">
+      </span>${this.innerHTML}...`;
+  });
+});
+
 // make navbar items active
 $(function () {
   setNavigation();
