@@ -16,8 +16,13 @@
         </strong>
         <form class="container mbs" action="/settings/configure" method="post">
 
+          <div class="form-group mts">
+            <label><strong>Custom Logo</strong></label>
+            <input type="text" class="form-control" name="customLogo" placeholder="https://someurl.com/logo.png">
+          </div>
+
           <div class="form-group">
-            <label class="mts"><strong>Checkout</strong></label>
+            <label><strong>Checkout</strong></label>
             <div class="form-check">
               <input class="form-check-input" type="radio" name="checkout" value="custom" {{#if_equals config.checkout "custom"}}checked{{/if_equals}}>
               <label class="form-check-label">
@@ -63,6 +68,7 @@
 
       <a href="https://admin.corp.stripe.com/merchants/acct_1EIdeGKccharpfW6/login_as?redirect=" class="">acct_1EIdeGKccharpfW6</a>
       <a class="btn btn-danger mts" href="/settings/reset-customer">Reset Stripe Customer</a>
+      <a class="btn btn-danger mts" href="/settings/reset-config">Reset Configuration</a>
     </div>
   </div>
 

@@ -46,7 +46,8 @@ app.use(function(req, res, next) {
 	// initialize configuration obj if empty
 	if(!req.session.config) {
 		req.session.config = {
-			checkout: "custom"
+			checkout: "custom",
+			customLogo: null
 		}
 	}
 	res.locals.user = req.user;

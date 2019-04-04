@@ -16,6 +16,7 @@ router.post('/configure', async function(req, res) {
   const config = req.body;
 
   req.session.config.checkout = config.checkout;
+  req.session.config.customLogo = config.customLogo;
   req.flash('success', `Updated demo configuration` )
   res.redirect('/settings');
 })
@@ -28,5 +29,13 @@ router.get('/reset-customer', async function (req, res) {
   res.redirect('/settings')
 });
 
+router.get('/reset-config', async function (req, res) {
+  req.session.config = {
+    checkout: "custom",
+    customLogo: null
+  }
+  req.flash('success', `Reset custom configuration`);
+  res.redirect('/settings')
+});
 
 module.exports = router;

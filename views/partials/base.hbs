@@ -18,10 +18,14 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="navbar-header">
-          <img src="/img/billing-icon.png" height="30px" style="margin-right: 5px; margin-top: -2%" alt="">
-          <a href="/" class="navbar-brand">
-            Stripe Billing
-          </a>
+          {{#if config.customLogo}}
+            <img src="{{config.customLogo}}" height="30px" style="margin-right: 5px; margin-top: -2%" alt="">
+          {{else}}
+            <img src="/img/billing-icon.png" height="30px" style="margin-right: 5px; margin-top: -2%" alt="">
+            <a href="/" class="navbar-brand">
+              Stripe Billing
+            </a>
+          {{/if}}
         </div>
 
         {{#if user}}
