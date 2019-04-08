@@ -3,77 +3,72 @@
 {{#*inline "content-block"}}
 
 <div class="container">
-	<h4 class="text-center mtm">Welcome, {{user.username}}</h4>
-	<hr>
+  <h4 class="text-center mtm">Welcome, {{user.username}}</h4>
+  <hr>
 
-	{{> flash_message }}
+  {{> flash_message }}
 
-	<div class="row">
+  <div class="row">
 
-		<!-- list customer's current subscription if one exists -->
-		<div class="col col-md-8">
-			{{#if subscription}}
-				{{#each subscription.items.data}}
-					{{#if_equals this.plan.usage_type "licensed"}}
-						<div class="card-text"><strong>Plan:</strong> {{this.plan.nickname}},
-							<span class="amount-usd" data-amount="{{this.plan.amount}}"></span> per {{this.plan.interval}}
-						</div>
-					{{/if_equals}}
-					{{#if_equals this.plan.usage_type "metered"}}
-						<div class="">
-							<span class="amount-usd" data-amount="{{this.plan.amount}}"></span> per unit used
-						</div>
-					{{/if_equals}}
-				{{/each}}
-				<a href="/subscription" class="card-link">View Subscription</a>
-			{{else}}
-				<p>You are currently not subscribed to a plan</p>
-				<a class="btn btn-primary" href="/subscription">Select a Plan</a>
-			{{/if}}
-		</div>
+    <!-- list customer's current subscription if one exists -->
+    <div class="col col-md-8">
+      {{#if subscription}}
+        {{#each subscription.items.data}}
+          {{#if_equals this.plan.usage_type "licensed"}}
+            <div class="card-text"><strong>Plan:</strong> {{this.plan.nickname}},
+              <span class="amount-usd" data-amount="{{this.plan.amount}}"></span> per {{this.plan.interval}}
+            </div>
+          {{/if_equals}}
+          {{#if_equals this.plan.usage_type "metered"}}
+            <div class="">
+              <span class="amount-usd" data-amount="{{this.plan.amount}}"></span> per unit used
+            </div>
+          {{/if_equals}}
+        {{/each}}
+        <a href="/subscription" class="card-link">View Subscription</a>
+      {{else}}
+        <p>You are currently not subscribed to a plan</p>
+        <a class="btn btn-primary" href="/subscription">Select a Plan</a>
+      {{/if}}
+    </div>
 
 
-		<!-- list current plan usage -->
-		<div class="col col-md-4">
-			{{#if subscription}}
-				<div class="card">
-					<strong class="card-header">
-						Current Period Usage
-					</strong>
-					<div class="container mts mbs">
-						{{#each upcomingInvoice.lines.data}}
-							{{#if_equals this.plan.usage_type "metered"}}
-								<div><strong>Usage:</strong> {{this.quantity}} Units</div>
-							{{/if_equals}}
-						{{/each}}
-						<div><strong>Period End Date: </strong><span class="date" data-date="{{upcomingInvoice.period_end}}"></span></div>
-						<div><strong>Amount Due: </strong> <span class="amount-usd" data-amount="{{upcomingInvoice.amount_due}}"></span></div>
-					</div>
-				</div>
-			{{/if}}
-		</div>
+    <!-- list current plan usage -->
+    <div class="col col-md-4">
+      {{#if subscription}}
+        <div class="card">
+          <strong class="card-header">
+            Current Period Usage
+          </strong>
+          <div class="container mts mbs">
+            {{#each upcomingInvoice.lines.data}}
+              {{#if_equals this.plan.usage_type "metered"}}
+                <div><strong>Usage:</strong> {{this.quantity}} Units</div>
+              {{/if_equals}}
+            {{/each}}
+            <div><strong>Period End Date: </strong><span class="date" data-date="{{upcomingInvoice.period_end}}"></span></div>
+            <div><strong>Amount Due: </strong> <span class="amount-usd" data-amount="{{upcomingInvoice.amount_due}}"></span></div>
+          </div>
+        </div>
+      {{/if}}
+    </div>
 
-		<div class="col col-md-12">
-			<h5 class="text-center">Use our product</h5>
-			<!-- <div class="row justify-content-center"> -->
-				{{#if subscription}}
-					<div class="row justify-content-center">
-						<a class="btn btn-success ms" href="{{#if subscription}}/dashboard/use/{{subscriptionItemId}}/1{{/if}}">Use 1 Unit</a>
-						<a class="btn btn-success ms" href="{{#if subscription}}/dashboard/use/{{subscriptionItemId}}/5{{/if}}" >Use 5 Units</a>
-						<a class="btn btn-success ms" href="{{#if subscription}}/dashboard/use/{{subscriptionItemId}}/10{{/if}}">Use 10 Units</a>
-					</div>
-				{{else}}
-					<div class="row justify-content-center">
-						<button class="btn btn-success ms" disabled>Use 1 Unit</button>
-						<button class="btn btn-success ms" disabled>Use 5 Units</button>
-						<button class="btn btn-success ms" disabled>Use 10 Units</button>
-					</div>
-					<div class="text-center"><br/>*<a href="/subscription">Subscribe</a> to use units</div>
-				{{/if}}
-			<!-- </div> -->
+    <div class="col col-md-12">
+      <h5 class="text-center">Use our product</h5>
+      <!-- <div class="row justify-content-center"> -->
+        {{#if subscription}}
+          <div class="row justify-content-center">
+            <a class="btn btn-success ms" href="{{#if subscription}}/dashboard/use/{{subscriptionItemId}}/1{{/if}}">Use 1 Unit</a>
+            <a class="btn btn-success ms" href="{{#if subscription}}/dashboard/use/{{subscriptionItemId}}/5{{/if}}" >Use 5 Units</a>
+            <a class="btn btn-success ms" href="{{#if subscription}}/dashboard/use/{{subscriptionItemId}}/10{{/if}}">Use 10 Units</a>
+          </div>
+        {{else}}
+          <div class="text-center"><br/>*<a href="/subscription">Subscribe</a> to use units</div>
+        {{/if}}
+      <!-- </div> -->
 
-		</div>
-	</div>
+    </div>
+  </div>
 </div>
 
 {{/inline}}
