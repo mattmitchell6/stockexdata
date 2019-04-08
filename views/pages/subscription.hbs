@@ -76,31 +76,31 @@
     <div class="row justify-content-center">
       <div class="card col col-lg-8">
         <table class="table">
-      		<thead>
-      			<tr>
+          <thead>
+            <tr>
               <th scope="col">Payment Date</th>
               <th scope="col">Amount</th>
-      				<th scope="col">Description</th>
-      			</tr>
-      		</thead>
-      		<tbody id="cart-item">
-      			{{#each invoices}}
-      				<tr>
-      					<td>
+              <th scope="col">Description</th>
+            </tr>
+          </thead>
+          <tbody id="cart-item">
+            {{#each invoices}}
+              <tr>
+                <td>
                   <span class="date" data-date="{{this.created}}"></span>
                 </td>
                 <td>
                   <span class="amount-usd" data-amount="{{this.amount}}"></span>
                 </td>
-      					<td>
+                <td>
                   <a target="_blank" href="{{this.receipt_url}}">
                     {{this.description}}
                   </a>
                 </td>
-      				</tr>
-      			{{/each}}
-      		</tbody>
-      	</table>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
       </div>
     </div>
   {{else}}
