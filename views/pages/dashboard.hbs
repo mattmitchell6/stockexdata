@@ -37,10 +37,9 @@
     <div class="col col-md-4">
       {{#if subscription}}
         <div class="card">
-          <strong class="card-header">
-            Current Period Usage
-          </strong>
           <div class="container mts mbs">
+            <h5>Current Period Usage</h5>
+
             {{#each upcomingInvoice.lines.data}}
               {{#if_equals this.plan.usage_type "metered"}}
                 <div><strong>Usage:</strong> {{this.quantity}} Units</div>
