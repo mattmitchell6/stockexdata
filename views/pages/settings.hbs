@@ -18,7 +18,9 @@
 
           <div class="form-group mts">
             <label><strong>Custom Logo</strong></label>
-            <input type="text" class="form-control" name="customLogo" placeholder="https://someurl.com/logo.png">
+            <input type="text" class="form-control" name="customLogo"
+              placeholder="https://someurl.com/logo.png"
+              {{#if config.customLogo}}value="{{config.customLogo}}"{{/if}}>
           </div>
 
           <div class="form-group">

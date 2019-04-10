@@ -76,7 +76,7 @@ router.post('/subscribe', async function(req, res) {
   } catch(error) {
     console.log(error.raw);
     req.flash('error', `${error.message}` )
-    res.redirect(`/subscription/create-subscription/${req.body.plan}`);
+    res.redirect(`/subscription/create-subscription/${req.body.basePlanId}`);
   }
 });
 
@@ -140,12 +140,16 @@ router.get('/update-payment', async function (req, res) {
 router.post('/update-payment', async function(req, res) {
   const token = req.body.stripeToken;
 
-  const customer = await stripe.customers.update(req.user.stripeCustomerId, {
-    source: token
-  });
-  req.flash('success', `Successfully updated payment method!` )
-
-  res.redirect('/subscription')
+  try {
+    const customer = await stripe.customers.update(req.user.stripeCustomerId, {
+      source: token
+    });
+    req.flash('success', `Successfully updated payment method!` )
+    res.redirect('/subscription')
+  } catch(error) {
+    req.flash('error', `${error.message}` )
+    res.redirect('/subscription/update-payment')
+  }
 })
 
 /**
