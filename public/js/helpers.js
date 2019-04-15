@@ -29,8 +29,14 @@ $(document).ready(function() {
   // add spinner to all btn elements
   $('a.btn, button.btn').click(function() {
     this.innerHTML = `<span class="spinner-border spinner-border-sm" style="margin-right: 4px; margin-bottom: 2px" role="status" aria-hidden="true">
-      </span>${this.innerHTML}...`;
+      </span>${this.innerHTML}...`;  
   });
+
+  $('form').submit(function(){
+    $("button", this).attr('disabled', 'disabled');
+    return true;
+  });
+
 })
 
 // make navbar items active
