@@ -42,7 +42,8 @@ router.get('/', async function (req, res) {
         currentPlanId = item.plan.id
       }
     })
-    customer.default_source.brand = customer.default_source.brand.toLowerCase();
+    
+    customer.default_source.card.brand = customer.default_source.card.brand.toLowerCase();
   }
 
   res.render('pages/subscription', {
