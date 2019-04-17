@@ -49,9 +49,9 @@
           <span class="amount-usd" data-amount="{{customer.account_balance}}"></span>
         </div>
         <div class="card-text"><strong>Payment Method:</strong>
-          <object data="/img/cards/{{customer.default_source.card.brand}}.svg" style="margin-bottom: -4px" height="20px"  type="image/svg+xml">
+          <object data="/img/cards/{{customer.default_source.brand}}.svg" style="margin-bottom: -4px" height="20px"  type="image/svg+xml">
             <img src="/img/cards/unknown.svg"  style="margin-bottom: 4px" height="20px" />
-          </object> ••••{{customer.default_source.card.last4}}
+          </object> ••••{{customer.default_source.last4}}
           <a class="" href="/subscription/update-payment">Update payment method</a>
         </div>
         <!-- cancel subscription -->
