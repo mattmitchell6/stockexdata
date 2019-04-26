@@ -22,12 +22,12 @@ router.get('/', async function (req, res) {
     stripe.charges.list({customer: stripeId})
   ]);
 
-  // populate 'base' plans with their respective variable plans
+  // populate 'base' plans with their respective metered plans
   let basePlans = allPlans.data.filter(plan => plan.usage_type == "licensed");
-  let variablePlans = allPlans.data.filter(plan => plan.usage_type == "metered");
+  let meteredPlans = allPlans.data.filter(plan => plan.usage_type == "metered");
   basePlans.forEach((basePlan) => {
-    let variable = variablePlans.filter(variablePlan => basePlan.metadata.variablePlan == variablePlan.id)
-    basePlan.variable = variable[0];
+    let metered = meteredPlans.filter(meteredPlan => basePlan.product == meteredPlan.product)
+    basePlan.metered = metered[0];
   });
   basePlans = basePlans.sort((a, b) => (a.amount > b.amount) ? 1 : -1) // sort by plan amount
 
@@ -68,7 +68,7 @@ router.post('/subscribe', async function(req, res) {
       customer: customer.id,
       items: [
         { plan: req.body.basePlanId, },
-        { plan: req.body.variablePlanId, }
+        { plan: req.body.meteredPlanId, }
       ]});
 
     req.flash('success', `Successfully subscribed! Your subscription ID is ${subscription.id}`)
@@ -84,17 +84,17 @@ router.post('/subscribe', async function(req, res) {
  * update subscription plan
  */
  router.get('/update-subscription/:newPlanId/:oldSubId', async function(req, res) {
-   let baseSub, variableSub, basePlan, variablePlan;
+   let baseSub, meteredSub, basePlan, meteredPlan;
 
    // fetch 'to update' plans
    basePlan = await stripe.plans.retrieve(req.params.newPlanId)
-   variablePlan = basePlan.metadata.variablePlan;
+   meteredPlan = basePlan.metadata.meteredPlan;
 
    // fetch 'to update' subscription items
    const subscription = await stripe.subscriptions.retrieve(req.params.oldSubId);
    subscription.items.data.forEach((item) => {
      if(item.plan.usage_type == "metered") {
-       variableSub = item.id
+       meteredSub = item.id
      } else if(item.plan.usage_type == "licensed") {
        baseSub = item.id
      }
@@ -105,7 +105,7 @@ router.post('/subscribe', async function(req, res) {
      billing_cycle_anchor: "now",
      items: [
        { id: baseSub, plan: basePlan.id },
-       { id: variableSub, plan: variablePlan }]
+       { id: meteredSub, plan: meteredPlan }]
    })
 
    req.flash('success', `Successfully updated to '${basePlan.nickname}'!`)
@@ -157,8 +157,8 @@ router.post('/update-payment', async function(req, res) {
  */
 router.get('/create-subscription/:id', async function(req, res) {
   let plan = await stripe.plans.retrieve(req.params.id)
-  const variablePlan = await stripe.plans.retrieve(plan.metadata.variablePlan);
-  plan.variable = variablePlan;
+  const meteredPlan = await stripe.plans.retrieve(plan.metadata.meteredPlan);
+  plan.metered = meteredPlan;
 
   res.render('pages/payment-subscribe', {
     plan: plan

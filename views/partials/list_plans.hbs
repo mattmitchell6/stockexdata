@@ -11,7 +11,7 @@
                per {{this.interval}}
             </h6>
             <p class="card-text">
-              Pay an additional <span class="amount-usd" data-amount="{{this.variable.amount}}"></span>
+              Pay an additional <span class="amount-usd" data-amount="{{this.metered.amount}}"></span>
               per unit used
             </p>
           </div>
@@ -34,7 +34,7 @@
               {{#if_equals ../config.checkout "checkoutOld"}}
                 <form class="pull-right" action="/subscription/subscribe" method="POST">
                   <input type="hidden" name="basePlanId" value="{{this.id}}">
-                  <input type="hidden" name="variablePlanId" value="{{this.variable.id}}">
+                  <input type="hidden" name="meteredPlanId" value="{{this.metered.id}}">
                   <script
                     src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                     data-key="pk_test_iDllARnAoSpxhZPgitRSWrhq00ZuDEg41i"

@@ -41,7 +41,7 @@ app.use(passport.session());
 // mongoose connect
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
 
-// include recurring session variables to route
+// include recurring session metereds to route
 app.use(function(req, res, next) {
   // initialize configuration obj if empty
   if(!req.session.config) {
