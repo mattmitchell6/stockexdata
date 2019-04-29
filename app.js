@@ -39,7 +39,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // mongoose connect
-mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
+mongoose.connect(process.env.DATABASE_URL, {
+  useNewUrlParser: true,
+  reconnectTries: Number.MAX_VALUE,
+  reconnectInterval: 1000
+ });
+
 
 // include recurring session metereds to route
 app.use(function(req, res, next) {
