@@ -60,6 +60,7 @@ app.use(function(req, res, next) {
   res.locals.error_message = req.flash('error');
   res.locals.stripePublishableKey = process.env.STRIPE_PUBLISHABLE_KEY;
   res.locals.config = req.session.config
+  res.locals.layout = false
   next();
 });
 
