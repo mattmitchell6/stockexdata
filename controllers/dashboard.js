@@ -54,7 +54,7 @@ router.get('/use/:subscription/:quantity', async function(req, res) {
     console.log('caught error: ' + error.message);
   }
 
-  req.flash('success', `Successfully used ${req.params.quantity} unit(s)` )
+  req.flash('success', `Successfully added usage for ${req.params.quantity} GB(s)` )
   res.redirect('/dashboard')
 });
 

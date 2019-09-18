@@ -1,9 +1,12 @@
 body {
-  background-color: #FFF;
+  background: #f2f6fa;
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
 }
 
+h1, h2, h3, h4, h5 {
+  font-weight: 300;
+}
 
 .navbar {
   background-color: #32325d !important;
@@ -19,6 +22,23 @@ body {
 
 .nav-link.active {
   background-color: #3ecf8e !important;
+}
+
+.btn {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  border-radius: 4px;
+  text-transform: uppercase;
+  -webkit-box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+  -moz-box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+  text-decoration: none;
+  transition: all 150ms ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
 }
 
 .btn.btn-success {
@@ -83,6 +103,7 @@ body {
   background-color: #F8F8F8;
 }
 
+/* Demo-specific styles */
 .StripeElement {
   box-sizing: border-box;
   height: 40px;
@@ -108,7 +129,6 @@ body {
   background-color: #fefde5 !important;
 }
 
-/* Demo-specific styles */
 .card {
   -webkit-box-shadow: 0 7px 14px rgba(50, 50, 93, 0.10), 0 3px 6px rgba(0, 0, 0, 0.08);
   -moz-box-shadow: 0 7px 14px rgba(50, 50, 93, 0.10), 0 3px 6px rgba(0, 0, 0, 0.08);
@@ -129,4 +149,24 @@ body {
   -webkit-box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
   -moz-box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
   box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.error {
+  color: red;
+}
+
+.alert {
+  color: #000;
+  -webkit-box-shadow: 0 7px 14px rgba(50, 50, 93, 0.10), 0 3px 6px rgba(0, 0, 0, 0.08);
+  -moz-box-shadow: 0 7px 14px rgba(50, 50, 93, 0.10), 0 3px 6px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 7px 14px rgba(50, 50, 93, 0.10), 0 3px 6px rgba(0, 0, 0, 0.08);
+}
+.alert-danger {
+  background-color: #fff8f5;
+}
+.alert-success {
+  background-color: #efffed;
+}
+.alert-warning {
+  background-color: #fcf9e9;
 }

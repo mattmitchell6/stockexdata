@@ -14,6 +14,15 @@
       <div class="card col col-md-8">
         <h5 class="text-center mts text-center">Your Subscription</h5>
 
+        <!-- list trial if exists -->
+        {{#if_equals subscription.status "trialing"}}
+          <div class="row">
+            <div class="col col-md-12">
+              <span class="badge badge-warning pull-right">Free trial ends on <span class="date bold" data-date="{{subscription.trial_end}}"></span></span>
+            </div>
+          </div>
+        {{/if_equals}}
+
         <!-- list out plan details -->
         {{#each subscription.items.data}}
           {{#if_equals this.plan.usage_type "licensed"}}
@@ -23,7 +32,7 @@
           {{/if_equals}}
           {{#if_equals this.plan.usage_type "metered"}}
             <div class="">
-              <span class="amount-usd" data-amount="{{this.plan.amount}}"></span> per unit used
+              <span class="amount-usd" data-amount="{{this.plan.amount}}"></span> per GB
             </div>
           {{/if_equals}}
         {{/each}}
@@ -31,7 +40,7 @@
         <!-- list usage data -->
         {{#each upcomingInvoice.lines.data}}
           {{#if_equals this.plan.usage_type "metered"}}
-            <div><strong>Period Usage:</strong> {{this.quantity}} Units
+            <div><strong>Period Usage:</strong> {{this.quantity}} GB(s)
               <a class="" href="/dashboard">Simulate usage</a>
             </div>
           {{/if_equals}}
@@ -57,7 +66,7 @@
         <!-- cancel subscription -->
         <form action="/subscription/cancel-subscription" class="mts text-center mbs" method="post">
           <input type="hidden" name="subscription" value="{{subscription.id}}">
-          <button class="btn btn-danger" type="submit" name="button">Cancel Subscription</button>
+          <button class="btn btn-danger" type="submit" name="button" data-loading="Canceling Subscription...">Cancel Subscription</button>
         </form>
       </div>
     </div>
@@ -114,31 +123,24 @@
 
 
 <!-- to be used for new checkout -->
-<script>
-  var stripe = Stripe('{{stripePublishableKey}}', {
-    betas: ['checkout_beta_4']
-  });
+<!-- <script>
 
-  var checkoutButton = document.getElementById('checkout-button');
-  checkoutButton.addEventListener('click', function () {
-    // When the customer clicks on the button, redirect
-    // them to Checkout.
-    stripe.redirectToCheckout({
-      items: [{plan: 'plan_EdJHMnuhJWa4Jh', quantity: 1}],
-      customerEmail: '{{user.username}}',
-      successUrl: 'http://localhost:3000/subscription',
-      cancelUrl: 'https://your-website.com/canceled',
-    })
-    .then(function (result) {
-      if (result.error) {
-        // If `redirectToCheckout` fails due to a browser or network
-        // error, display the localized error message to your customer.
-        var displayError = document.getElementById('error-message');
-        displayError.textContent = result.error.message;
-      }
-    });
-  });
-</script>
+  function setupCheckout(id) {
+    console.log(id);
+    fetch('/subscription/setup-checkout?id=' + id, { method: 'GET'})
+      .then(function(result) {
+        // Handle server response
+        result.json().then(function(json) {
+          stripe.redirectToCheckout({
+            sessionId: json.session.id
+          }).then(function (result) {
+            console.log(result);
+          });
+        })
+      });
+  }
+
+</script> -->
 
 
 {{/inline}}

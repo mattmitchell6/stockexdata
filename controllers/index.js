@@ -11,7 +11,7 @@ const User = require('../models/users');
 // load routes
 router.use('/dashboard', ensureLoggedIn, require('./dashboard'))
 router.use('/subscription', ensureLoggedIn, require('./subscription'))
-router.use('/settings', ensureLoggedIn, require('./settings'))
+router.use('/settings', require('./settings'))
 
 /**
  * base route

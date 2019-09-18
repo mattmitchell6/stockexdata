@@ -26,10 +26,11 @@ $(document).ready(function() {
     dates[i].innerHTML = moment.unix(date).format('MMMM Do YYYY');
   }
 
-  // add spinner to all btn elements
-  $('a.btn, button.btn').click(function() {
-    this.innerHTML = `<span class="spinner-border spinner-border-sm" style="margin-right: 4px; margin-bottom: 2px" role="status" aria-hidden="true">
-      </span>${this.innerHTML}...`;
+  // button loading state
+  $(".btn").on("click", function(){
+    loadingMsg = $(this).attr("data-loading");
+    $(this).addClass('disabled');
+    $(this).html("<i class='fas fa-spinner fa-spin'></i> " + loadingMsg);
   });
 
   $('form').submit(function(){

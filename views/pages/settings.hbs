@@ -23,29 +23,23 @@
               {{#if config.customLogo}}value="{{config.customLogo}}"{{/if}}>
           </div>
 
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label><strong>Checkout</strong></label>
             <div class="form-check">
               <input class="form-check-input" type="radio" name="checkout" value="custom" {{#if_equals config.checkout "custom"}}checked{{/if_equals}}>
               <label class="form-check-label">
-                Custom Checkout (default)
+                Custom checkout with elements (default)
               </label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="checkout" value="checkoutOld" {{#if_equals config.checkout "checkoutOld"}}checked{{/if_equals}}>
+              <input class="form-check-input" type="radio" name="stripeCheckout" value="stripeCheckout" {{#if_equals config.checkout "stripeCheckout"}}checked{{/if_equals}}>
               <label class="form-check-label">
-                Old Checkout
+                Stripe Checkout
               </label>
             </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="checkoutNew" value="checkoutNew" disabled>
-              <label class="form-check-label">
-                Hosted Checkout (does not support billing yet)
-              </label>
-            </div>
-          </div>
+          </div> -->
 
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label><strong>Trial Period</strong></label>
             <div class="form-check">
               <input class="form-check-input" type="checkbox" value="on" name="freeTrial" disabled>
@@ -59,16 +53,18 @@
               <input class="form-check-input" type="checkbox" value="on" name="freeTrial" disabled>
               <label class="form-check-label">25% off first 3 months (coming soon...)</label>
             </div>
-          </div>
+          </div> -->
 
-          <button type="submit" class="btn btn-primary mts">Submit</button>
+          <button type="submit" data-loading="Submitting..." class="btn btn-primary mts">Submit</button>
         </form>
       </div>
     </div>
 
     <div class="col col-md-4">
-      <a class="btn btn-danger mts" href="/settings/reset-customer">Reset Stripe Customer</a>
-      <a class="btn btn-danger mts" href="/settings/reset-config">Reset Configuration</a>
+      {{#if user}}
+        <a class="btn btn-danger mts" data-loading="Resetting Stripe Customer..." href="/settings/reset-customer">Reset Stripe Customer</a>
+      {{/if}}
+      <a class="btn btn-danger mts" data-loading="Resetting Configuration..." href="/settings/reset-config">Reset Configuration</a>
     </div>
   </div>
 
