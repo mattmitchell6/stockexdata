@@ -34,13 +34,9 @@
             <div id="card-errors" role="alert"></div>
 
             <div class="form-group mts">
-              <input type="text" class="form-control" id="coupon" name="coupon" placeholder="Promo code"
-                data-toggle="tooltip" data-placement="right" data-title="Input '3OFF' to apply a $3.00 discount to your first month's subscription">
-            </div>
-
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="on" name="trial">
-              <label class="form-check-label">Free 7-day trial</label>
+              <input type="text" class="form-control" id="promoCode" name="promoCode" placeholder="Promo code"
+                data-toggle="tooltip" data-placement="right">
+                <small class="form-text text-muted">Input <strong>'3OFF'</strong> to get $3.00 off your first month or <strong>'FREETRIAL'</strong> to get a 7 day free trial</small>
             </div>
 
             <button data-loading="Subscribing..." class="btn btn-primary mm">Subscribe</button>

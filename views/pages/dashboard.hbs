@@ -38,6 +38,15 @@
       {{#if subscription}}
         <div class="card">
           <div class="container mts mbs">
+            <!-- list trial if exists -->
+            {{#if_equals subscription.status "trialing"}}
+              <div class="row">
+                <div class="col col-md-12 text-center">
+                  <span class="badge badge-warning mbs text-center">Free trial ends on <span class="short-date bold" data-date="{{subscription.trial_end}}"></span></span>
+                </div>
+              </div>
+            {{/if_equals}}
+
             <h5>Current Period Usage</h5>
 
             {{#each upcomingInvoice.lines.data}}
@@ -45,7 +54,7 @@
                 <div><strong>Usage:</strong> {{this.quantity}} GB(s)</div>
               {{/if_equals}}
             {{/each}}
-            <div><strong>Period End Date: </strong><span class="date" data-date="{{upcomingInvoice.period_end}}"></span></div>
+            <div><strong>Period End Date: </strong><span class="short-date" data-date="{{upcomingInvoice.period_end}}"></span></div>
             <div><strong>Amount Due: </strong> <span class="amount-usd" data-amount="{{upcomingInvoice.amount_due}}"></span></div>
           </div>
         </div>

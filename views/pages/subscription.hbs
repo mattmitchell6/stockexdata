@@ -18,7 +18,7 @@
         {{#if_equals subscription.status "trialing"}}
           <div class="row">
             <div class="col col-md-12">
-              <span class="badge badge-warning pull-right">Free trial ends on <span class="date bold" data-date="{{subscription.trial_end}}"></span></span>
+              <span class="badge badge-warning pull-right">Free trial ends on <span class="short-date bold" data-date="{{subscription.trial_end}}"></span></span>
             </div>
           </div>
         {{/if_equals}}
@@ -89,7 +89,7 @@
             <tr>
               <th scope="col">Payment Date</th>
               <th scope="col">Amount</th>
-              <th scope="col">Description</th>
+              <th scope="col"></th>
             </tr>
           </thead>
           <tbody id="cart-item">
@@ -103,7 +103,7 @@
                 </td>
                 <td>
                   <a target="_blank" href="{{this.receipt_url}}">
-                    {{this.description}}
+                    Receipt link
                   </a>
                 </td>
               </tr>

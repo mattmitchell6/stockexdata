@@ -6,6 +6,8 @@ const router = express.Router();
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const moment = require('moment');
 const TRIAL_DAYS = 7;
+const TRIAL_CODE = "FREETRIAL"
+// const DISCOUNT_CODE = "3OFF"
 
 /**
  * main route for rendering subscription page
@@ -61,8 +63,8 @@ router.get('/', async function (req, res) {
  */
 router.post('/subscribe', async function(req, res) {
   try {
-    const coupon = req.body.coupon;
-    const trial = req.body.trial;
+    let promoCode = req.body.promoCode;
+    promoCode ? promoCode = promoCode.toUpperCase() : null;
 
     const customer = await stripe.customers.update(req.user.stripeCustomerId, {
       source: req.body.stripeToken
@@ -75,8 +77,10 @@ router.post('/subscribe', async function(req, res) {
         { plan: req.body.basePlanId, },
         { plan: req.body.meteredPlanId, }
       ]}
-    coupon ? subOptions.coupon = coupon.toUpperCase() : null;
-    trial ? subOptions.trial_period_days = TRIAL_DAYS : null;
+
+    // populate discount code or free trial in subscription options object
+    promoCode && promoCode != TRIAL_CODE ? subOptions.coupon = promoCode : null;
+    promoCode == TRIAL_CODE ? subOptions.trial_period_days = TRIAL_DAYS : null;
 
     const subscription = await stripe.subscriptions.create(subOptions);
 

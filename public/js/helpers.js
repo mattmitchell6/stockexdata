@@ -5,6 +5,7 @@
 $(document).ready(function() {
   var amounts = document.getElementsByClassName("amount-usd");
   var dates = document.getElementsByClassName("date");
+  var shortDates = document.getElementsByClassName("short-date");
   setNavigation();
 
   // iterate through all "amount-usd" elements and convert from cents to formatted USD
@@ -24,6 +25,12 @@ $(document).ready(function() {
   for (var i = 0; i < dates.length; i++) {
     date = dates[i].getAttribute('data-date');
     dates[i].innerHTML = moment.unix(date).format('MMMM Do YYYY');
+  }
+
+  // iterate through all "date" elements and convert from unix timestart to human readable
+  for (var i = 0; i < shortDates.length; i++) {
+    date = shortDates[i].getAttribute('data-date');
+    shortDates[i].innerHTML = moment.unix(date).format('MM/DD/YY');
   }
 
   // button loading state
