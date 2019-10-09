@@ -48,14 +48,7 @@
               {{/if_equals}} -->
 
               <!-- redirect to subscribe w/Elements page -->
-              <!-- {{#if_equals ../config.checkout "custom"}} -->
               <a class="btn btn-primary btn-md pull-right mts" data-loading="Subscribe to {{this.nickname}}..." style="min-width: 250px; white-space: nowrap;" href="/subscription/create-subscription/{{this.id}}">Subscribe to {{this.nickname}}</a>
-              <!-- {{/if_equals}} -->
-
-              <!-- Stripe Checkout -->
-              {{#if_equals ../config.checkout "stripeCheckout"}}
-                <!-- <a class="btn btn-primary btn-md pull-right mts" style="min-width: 250px; white-space: nowrap;" onclick="setupCheckout('{{this.id}}')">Subscribe to {{this.nickname}}</a> -->
-              {{/if_equals}}
             {{/if}}
           </div>
         </div>
