@@ -51,8 +51,10 @@ router.get('/', async function (req, res) {
  * create subscription
  */
 router.post('/subscribe', async function(req, res) {
+  const plan = availablePlans.find((plan) => plan.id == req.body.plan)
+
   try {
-    const plan = availablePlans.find((plan) => plan.id == req.body.plan)
+    console.log(plan);
     let promoCode = req.body.promoCode;
     promoCode ? promoCode = promoCode.toUpperCase() : null;
 
@@ -78,7 +80,7 @@ router.post('/subscribe', async function(req, res) {
     res.redirect('/subscription');
   } catch(error) {
     console.log(error.raw);
-    req.flash('error', `${error.message}` )
+    req.flash('error', `${error.message}`);
     res.redirect(`/subscription/create-subscription/${plan.id}`);
   }
 });
