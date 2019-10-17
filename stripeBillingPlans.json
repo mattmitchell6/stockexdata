@@ -1,6 +1,6 @@
 [{
     "id": "starter",
-    "nickname": "Starter Monthly",
+    "nickname": "Starter",
     "interval": "month",
     "licensed": "plan_ExB9JfKcxodQOn",
     "licensedAmount": 500,
@@ -8,7 +8,7 @@
     "meteredAmount": 300
   }, {
     "id": "growth",
-    "nickname": "Growth Monthly",
+    "nickname": "Growth",
     "interval": "month",
     "licensed": "plan_ExBTqycZRytdBU",
     "licensedAmount": 2000,
@@ -16,7 +16,7 @@
     "meteredAmount": 100
   }, {
     "id": "enterprise",
-    "nickname": "Enterprise Monthly",
+    "nickname": "Enterprise",
     "interval": "month",
     "licensed": "plan_ExBUHTnF5ecnDI",
     "licensedAmount": 10000,

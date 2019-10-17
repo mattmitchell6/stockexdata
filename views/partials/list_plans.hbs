@@ -26,7 +26,7 @@
               {{#if_not_equals ../currentPlanId this.licensed}}
                 <a class="btn btn-primary btn-md pull-right mts" style="min-width: 250px; white-space: nowrap;" href="/subscription/update-subscription/{{this.id}}/{{../subscription.id}}" data-loading="Changing to {{this.nickname}}...">Change to {{this.nickname}}</a>
               {{/if_not_equals}}
-              {{#if_equals ../currentPlanId this.id}}
+              {{#if_equals ../currentPlanId this.licensed}}
                 <span class="badge badge-success pull-right">Current Plan</span>
               {{/if_equals}}
             {{else}}

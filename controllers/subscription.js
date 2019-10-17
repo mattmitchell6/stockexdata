@@ -106,7 +106,7 @@ router.get('/update-subscription/:newPlan/:oldSubId', async function(req, res) {
      trial_end: "now",
      items: [
        { id: existingLicensedPlan, plan: plan.licensed },
-       { id: existingMeteredSub, plan: plan.mereted }]
+       { id: existingMeteredSub, plan: plan.metered }]
    })
 
    req.flash('success', `Successfully updated to '${plan.nickname}'!`)
