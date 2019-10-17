@@ -7,6 +7,7 @@ const exphbs = require('express-handlebars')
 const hbs = require('hbs')
 const flash = require('connect-flash');
 const handlebarsHelpers = require('./public/js/handlebars');
+ var fs = require("fs");
 require('dotenv').config();
 require('express-async-errors');
 

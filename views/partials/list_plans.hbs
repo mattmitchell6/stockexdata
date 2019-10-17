@@ -7,11 +7,11 @@
           <div class="col col-lg-8">
             <h5 class="card-title">{{this.nickname}}</h5>
             <h6 class="card-subtitle mb-2 text-muted">
-               <span class="amount-usd bold" data-amount="{{this.amount}}"></span>
+               <span class="amount-usd bold" data-amount="{{this.licensedAmount}}"></span>
                per {{this.interval}}
             </h6>
             <p class="card-text">
-              Pay an additional <span class="amount-usd" data-amount="{{this.metered.amount}}"></span>
+              Pay an additional <span class="amount-usd" data-amount="{{this.meteredAmount}}"></span>
               per GB
             </p>
           </div>
@@ -23,7 +23,7 @@
 
             <!-- check if subscription exists -->
             {{#if ../subscription}}
-              {{#if_not_equals ../currentPlanId this.id}}
+              {{#if_not_equals ../currentPlanId this.licensed}}
                 <a class="btn btn-primary btn-md pull-right mts" style="min-width: 250px; white-space: nowrap;" href="/subscription/update-subscription/{{this.id}}/{{../subscription.id}}" data-loading="Changing to {{this.nickname}}...">Change to {{this.nickname}}</a>
               {{/if_not_equals}}
               {{#if_equals ../currentPlanId this.id}}

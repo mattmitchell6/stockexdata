@@ -1,0 +1,25 @@
+[{
+    "id": "starter",
+    "nickname": "Starter Monthly",
+    "interval": "month",
+    "licensed": "plan_ExB9JfKcxodQOn",
+    "licensedAmount": 500,
+    "metered": "plan_ExBABpTgyFOacw",
+    "meteredAmount": 300
+  }, {
+    "id": "growth",
+    "nickname": "Growth Monthly",
+    "interval": "month",
+    "licensed": "plan_ExBTqycZRytdBU",
+    "licensedAmount": 2000,
+    "metered": "plan_ExBUAkRbEiPiYQ",
+    "meteredAmount": 100
+  }, {
+    "id": "enterprise",
+    "nickname": "Enterprise Monthly",
+    "interval": "month",
+    "licensed": "plan_ExBUHTnF5ecnDI",
+    "licensedAmount": 10000,
+    "metered": "plan_ExBVCV9LAP00rY",
+    "meteredAmount": 20
+  }]
