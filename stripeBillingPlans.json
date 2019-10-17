@@ -2,24 +2,24 @@
     "id": "starter",
     "nickname": "Starter",
     "interval": "month",
-    "licensed": "plan_ExB9JfKcxodQOn",
+    "licensed": "plan_G0hS4h0s0YbQLM",
     "licensedAmount": 500,
-    "metered": "plan_ExBABpTgyFOacw",
+    "metered": "plan_G0hgIgp83ZbMOI",
     "meteredAmount": 300
   }, {
     "id": "growth",
     "nickname": "Growth",
     "interval": "month",
-    "licensed": "plan_ExBTqycZRytdBU",
+    "licensed": "plan_G0hkAxGThwCOA7",
     "licensedAmount": 2000,
-    "metered": "plan_ExBUAkRbEiPiYQ",
+    "metered": "plan_G0hlOVONDsxTNb",
     "meteredAmount": 100
   }, {
     "id": "enterprise",
     "nickname": "Enterprise",
     "interval": "month",
-    "licensed": "plan_ExBUHTnF5ecnDI",
+    "licensed": "plan_G0hm0sMuCuAQJQ",
     "licensedAmount": 10000,
-    "metered": "plan_ExBVCV9LAP00rY",
+    "metered": "plan_G0hnpRkinCBLGu",
     "meteredAmount": 20
   }]
