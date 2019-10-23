@@ -4,58 +4,25 @@
   <div class="container mtm">
     <div class="row d-flex justify-content-center">
       <div class="tab-content col-md-6">
-        <ul class="nav nav-pills mb-3" id="login-options" role="tablist">
-          <li class="nav-item">
-            <a class="nav-link active" id="login-tab" data-toggle="pill" href="#login" role="tab">Login</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" id="signup-tab" data-toggle="pill" href="#signup" role="tab">Signup</a>
-          </li>
-        </ul>
         {{> flash_message }}
         <div class="tab-pane show active mtm" id="login" role="tabpanel" aria-labelledby="login">
           <!-- log in -->
           <div class="card">
             <div class="card-header">
-              <h4 class="text-center">Login</h4>
+              <h4 class="text-center">Search by Stock Ticker</h4>
             </div>
             <div class="card-body">
-              <form action="/login" method="post" class="">
+              <form action="/search" method="get" class="">
                 <div class="form-group">
-                  <label for="username">Email</label>
-                  <input type="email" class="form-control" id="username" name="username" value="{{login}}" placeholder="example@demo.com">
+                  <input type="text" class="form-control" id="ticker" name="symbol" placeholder="BOX, CRM, TEAM, etc.">
                 </div>
-                <div class="form-group">
-                  <label for="password">Password</label>
-                  <input type="password" class="form-control" id="password" name="password" placeholder="password">
-                </div>
-                <button type="submit" class="btn btn-primary btn-lg btn-block" data-loading="Logging in...">Log in</button>
+                <button type="submit" class="btn btn-primary btn-lg btn-block" data-loading="Searching...">Search</button>
               </form>
             </div>
           </div>
 
         </div>
-        <!-- sign up -->
-        <div class="tab-pane" id="signup" role="tabpanel" aria-labelledby="signup">
-          <div class="card mtm">
-            <div class="card-header">
-              <h4 class="text-center">Sign up</h4>
-            </div>
-            <div class="card-body">
-              <form action="/signup" method="post" class="">
-                <div class="form-group">
-                  <label for="username">Email</label>
-                  <input type="email" class="form-control" id="username" name="username" value="{{login}}" placeholder="example@demo.com">
-                </div>
-                <div class="form-group">
-                  <label for="password">Password</label>
-                  <input type="password" class="form-control" id="password" name="password" placeholder="password">
-                </div>
-                <button type="submit" data-loading="Signing up..." class="btn btn-primary btn-lg btn-block">Sign up</button>
-              </form>
-            </div>
-          </div>
-        </div>
+
       </div>
     </div>
   </div>

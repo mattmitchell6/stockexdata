@@ -1,0 +1,39 @@
+{{#> base }}
+
+{{#*inline "content-block"}}
+  <div class="container mtm">
+    <div class="row d-flex justify-content-center">
+      <div class="tab-content col-md-10">
+        {{> flash_message }}
+        <div class="tab-pane show active mtm" id="login" role="tabpanel" aria-labelledby="login">
+
+          <!-- stock info -->
+          <div class="card">
+            <div class="card-header">
+              <h4 class="text-center">Stock Info</h4>
+            </div>
+            <div class="card-body">
+              <div class="">
+                Symbol: {{info.symbol}}
+              </div>
+              <div class="">
+                companyName: {{info.companyName}}
+              </div>
+              <div class="">
+                Price: {{info.latestPrice}}
+              </div>
+              <div class="">
+                Daily Change: {{info.change}}
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+{{/inline}}
+
+{{/base}}

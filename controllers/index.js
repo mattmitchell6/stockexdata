@@ -3,13 +3,14 @@
  */
 const express = require('express');
 const router = express.Router();
+const IEX = require('../service/iex/iex');
 // const passport = require('passport');
 // const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn('/');
 
 // const User = require('../models/users');
 
 // load routes
-router.use('/dashboard', ensureLoggedIn, require('./dashboard'))
+// router.use('/dashboard', ensureLoggedIn, require('./dashboard'))
 
 /**
  * base route
@@ -22,6 +23,18 @@ router.get('/', function(req, res) {
   // }
   res.render('pages/home')
 });
+
+/**
+ * search by ticker
+ */
+router.get('/search', async function(req, res) {
+  const symbol = req.query.symbol;
+  const info = await IEX.getQuote(symbol)
+
+  res.render('pages/quote', {
+    info: info
+  })
+})
 
 /**
  * log in
