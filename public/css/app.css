@@ -9,7 +9,7 @@ h1, h2, h3, h4, h5 {
 }
 
 .navbar {
-  background-color: #32325d !important;
+  background-color: #403F57 !important;
 }
 
 .btn {
@@ -47,7 +47,7 @@ h1, h2, h3, h4, h5 {
 }
 
 .btn.btn-primary {
-  background: #32325d;
+  background: #403F57;
   color: #fff;
   border: none;
 }

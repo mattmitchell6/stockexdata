@@ -25,15 +25,30 @@ router.get('/', function(req, res) {
 });
 
 /**
- * search by ticker
+ * search by symbol
  */
 router.get('/search', async function(req, res) {
   const symbol = req.query.symbol;
-  const info = await IEX.getQuote(symbol)
 
-  res.render('pages/quote', {
-    info: info
-  })
+  try {
+    const info = await IEX.getQuote(symbol)
+    const logoUrl = await IEX.getLogo(symbol)
+
+    res.render('pages/quote', {
+      info: info,
+      logoUrl: logoUrl
+    })
+  } catch(error) {
+    let errorMessage;
+    if(error.response && error.response.status == 404) {
+      errorMessage = `Could not find symbol "${symbol}"`;
+    } else {
+      throw new Error(error);
+    }
+
+    req.flash('error', errorMessage)
+    res.redirect('/')
+  }
 })
 
 /**

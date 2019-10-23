@@ -5,20 +5,48 @@
     <div class="row d-flex justify-content-center">
       <div class="tab-content col-md-10">
         {{> flash_message }}
+
+        <div class="row">
+          <div class="col col-md-4">
+            <h4>Result for "{{info.symbol}}"</h4>
+          </div>
+          <div class="col col-md-8">
+            <form class="form-inline push-right">
+              <div class="form-group mb-2 mx-sm-3">
+                <label for="symbol" class="sr-only push-right">Email</label>
+                <input type="text" class="form-control" id="symbol" name="symbol" placeholder="BOX, CRM, TEAM, etc.">
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Search</button>
+            </form>
+            <!-- <form class="form-inline">
+              <div class="form-group mb-2">
+                <label for="staticEmail2" class="sr-only">Email</label>
+                <input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="email@example.com">
+              </div>
+              <div class="form-group mx-sm-3 mb-2">
+                <label for="inputPassword2" class="sr-only">Password</label>
+                <input type="password" class="form-control" id="inputPassword2" placeholder="Password">
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Confirm identity</button>
+            </form> -->
+          </div>
+        </div>
+
         <div class="tab-pane show active mtm" id="login" role="tabpanel" aria-labelledby="login">
 
           <!-- stock info -->
           <div class="card">
-            <div class="card-header">
+            <!-- <div class="card-header">
               <h4 class="text-center">Stock Info</h4>
-            </div>
+            </div> -->
             <div class="card-body">
-              <div class="">
-                Symbol: {{info.symbol}}
+              <div class="mbm">
+                <img src="{{logoUrl}}" height=50px alt="" class="pull-right">
+                <h5>{{info.companyName}}</h5>
               </div>
-              <div class="">
-                companyName: {{info.companyName}}
-              </div>
+
+              <hr>
+
               <div class="">
                 Price: {{info.latestPrice}}
               </div>
