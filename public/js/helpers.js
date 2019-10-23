@@ -17,7 +17,7 @@ $(document).ready(function() {
     } else {
       amount = amount * -1;
       amount = amount.toFixed(2);
-      amounts[i].innerHTML = "-$" + amount + " (credit to be applied to upcoming bill)";
+      amounts[i].innerHTML = "-$" + amount;
     }
   }
 
@@ -44,7 +44,6 @@ $(document).ready(function() {
     $("button", this).attr('disabled', 'disabled');
     return true;
   });
-
 })
 
 // make navbar items active

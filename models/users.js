@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const Schema = mongoose.Schema;
 const PassportLocalMongoose = require('passport-local-mongoose');
 const ERROR = 'user already exists'
@@ -7,18 +6,16 @@ const ERROR = 'user already exists'
 
 let userSchema = new Schema({
   username: String,
-  password: String,
-  stripeCustomerId: String
+  password: String
 });
 
 userSchema.plugin(PassportLocalMongoose);
 
 /**
- * Create new user (db and stripe) and add user to database
+ * Create new user and add user to database
  */
 userSchema.statics.newUser = async function (user) {
   let dbUser;
-  let newStripeUser;
   let username = user.username;
 
   // check if user with submitted name exists
@@ -27,34 +24,10 @@ userSchema.statics.newUser = async function (user) {
     throw new Error(ERROR);
   }
 
-  // create new Stripe customer
-  newStripeUser = await stripe.customers.create({email: user.username});
-
   // add new user to database
   return new Promise((resolve, reject) => {
     User.register(
-      new User({username: user.username, stripeCustomerId: newStripeUser.id}), user.password, function(err, user) {
-      if (err) { reject(err); }
-      else { resolve(user); }
-    });
-  });
-}
-
-/**
- * Delete old stripe customer, create new, update existing db object
- */
-userSchema.statics.refreshStripeId = async function(_id, stripeId, username) {
-  //fetch user
-  dbUser = await User.findOne({stripeCustomerId: stripeId});
-
-  // delete old stripe customer
-  await stripe.customers.del(stripeId);
-
-  // create new Stripe customer
-  newStripeCustomer = await stripe.customers.create({email: username});
-
-  return new Promise((resolve, reject) => {
-    User.findByIdAndUpdate(_id, {stripeCustomerId: newStripeCustomer.id}, {new: true}, function(err, user) {
+      new User({username: user.username}), user.password, function(err, user) {
       if (err) { reject(err); }
       else { resolve(user); }
     });

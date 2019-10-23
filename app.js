@@ -1,6 +1,6 @@
 const express = require('express');
 const favicon = require('serve-favicon');
-const passport = require('passport');
+// const passport = require('passport');
 const mongoose = require('mongoose');
 const path = require('path');
 const exphbs = require('express-handlebars')
@@ -11,7 +11,7 @@ const handlebarsHelpers = require('./public/js/handlebars');
 require('dotenv').config();
 require('express-async-errors');
 
-const strategy = require('./service/passport-local/passportStrategy.js');
+// const strategy = require('./service/passport-local/passportStrategy.js');
 
 // Create a new Express application.
 var app = express();
@@ -33,11 +33,11 @@ app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(require('express-session')({ secret: 'unique-secret', resave: false, saveUninitialized: false }));
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(favicon(path.join(__dirname, 'public', 'img/billing-icon.png')))
+//app.use(favicon(path.join(__dirname, 'public', 'img/favicon-icon.png')))
 
 // Initialize Passport and restore authentication state, if any, from the session.
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 // mongoose connect
 mongoose.connect(process.env.DATABASE_URL, {
@@ -49,18 +49,9 @@ mongoose.connect(process.env.DATABASE_URL, {
 
 // include recurring session metereds to route
 app.use(function(req, res, next) {
-  // initialize configuration obj if empty
-  if(!req.session.config) {
-    req.session.config = {
-      checkout: "custom",
-      customLogo: null
-    }
-  }
   res.locals.user = req.user;
   res.locals.success_message = req.flash('success');
   res.locals.error_message = req.flash('error');
-  res.locals.stripePublishableKey = process.env.STRIPE_PUBLISHABLE_KEY;
-  res.locals.config = req.session.config
   res.locals.layout = false
   next();
 });
