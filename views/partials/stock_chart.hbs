@@ -1,0 +1,53 @@
+<!-- Stock Chart Partial -->
+
+<canvas id="stockChart" height="100"></canvas>
+
+
+<script>
+var ctx = document.getElementById('stockChart').getContext('2d');
+
+$(document).ready(function() {
+  fetch('/historicaldata?symbol={{info.symbol}}', {
+    method: 'GET',
+  }).then(function(result) {
+    result.json().then(function(json) {
+      var myChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: json.dates,
+            datasets: [{
+              label: 'Historical Stock Prices',
+              data: json.prices,
+              backgroundColor: [
+                'rgba(75, 192, 192, 0.2)'
+              ],
+              borderColor: [
+                'rgba(75, 192, 192, 1)'
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              yAxes: [{
+                scaleLabel: {
+                  labelString: "Price ($)",
+                  display: true
+                }
+              }],
+              xAxes: [{
+                // ticks: {
+                //   beginAtZero: true
+                // },
+                scaleLabel: {
+                  labelString: "Date"
+                }
+              }]
+            }
+          }
+      });
+    });
+  });
+});
+
+</script>

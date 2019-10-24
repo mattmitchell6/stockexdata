@@ -16,8 +16,12 @@ h1, h2, h3, h4, h5 {
   text-transform: uppercase;
 }
 
+.badge {
+  font-size: 90%;
+}
+
 .badge-success {
-  background-color: #3ecf8e;
+  /* background-color: #3ecf8e; */
 }
 
 .nav-link.active {
@@ -140,3 +144,5 @@ h1, h2, h3, h4, h5 {
 .alert-warning {
   background-color: #fcf9e9;
 }
+
+/* search bar style */

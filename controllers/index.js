@@ -31,10 +31,13 @@ router.get('/search', async function(req, res) {
   const symbol = req.query.symbol;
 
   try {
-    const info = await IEX.getQuote(symbol)
-    const logoUrl = await IEX.getLogo(symbol)
+    // fetch stock info, logo, etc.
+    const [info, logoUrl] = await Promise.all([
+      IEX.getQuote(symbol),
+      IEX.getLogo(symbol)
+    ]);
 
-    res.render('pages/quote', {
+    res.render('pages/displayStock', {
       info: info,
       logoUrl: logoUrl
     })
@@ -48,6 +51,25 @@ router.get('/search', async function(req, res) {
 
     req.flash('error', errorMessage)
     res.redirect('/')
+  }
+})
+
+router.get('/historicaldata', async function(req, res) {
+  const symbol = req.query.symbol;
+  let prices = [], dates = [];
+
+  try {
+    const result = await IEX.getHistoricalPrices(symbol, 5)
+
+    for(i=0; i < result.length; i++) {
+      dates[i] = result[i].date;
+      prices[i] = result[i].close;
+    }
+
+    res.send({dates: dates, prices: prices});
+  } catch(error) {
+    console.log(error);
+    res.send({status: 500, errorMessage: "Error in loading historical data"});
   }
 })
 
