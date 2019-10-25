@@ -1,5 +1,4 @@
 <!-- Stock Chart Partial -->
-
 <canvas id="stockChart" height="100"></canvas>
 
 
@@ -10,20 +9,19 @@ $(document).ready(function() {
   fetch('/historicaldata?symbol={{info.symbol}}', {
     method: 'GET',
   }).then(function(result) {
+    // const json = result.json();
+
     result.json().then(function(json) {
       var myChart = new Chart(ctx, {
           type: 'line',
           data: {
             labels: json.dates,
             datasets: [{
-              label: 'Historical Stock Prices',
+              // label: 'Historical Stock Prices',
+              lineTension: 0,
               data: json.prices,
-              backgroundColor: [
-                'rgba(75, 192, 192, 0.2)'
-              ],
-              borderColor: [
-                'rgba(75, 192, 192, 1)'
-              ],
+              backgroundColor: ['rgba(75, 192, 192, 0.2)'],
+              borderColor: ['rgba(75, 192, 192, 1)'],
               borderWidth: 1
             }]
           },
@@ -43,6 +41,14 @@ $(document).ready(function() {
                   labelString: "Date"
                 }
               }]
+            },
+            tooltips: {
+              mode: 'index',
+              intersect: false
+            },
+            hover: {
+              mode: 'index',
+              intersect: false
             }
           }
       });

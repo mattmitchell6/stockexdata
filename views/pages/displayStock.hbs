@@ -8,7 +8,6 @@
 
         <div class="row">
           <div class="col col-md-4">
-            <h4>Result for "{{info.symbol}}"</h4>
           </div>
           <div class="col col-md-8">
             <form class="form-inline pull-right">
@@ -29,28 +28,61 @@
               <h4 class="text-center">Stock Info</h4>
             </div> -->
             <div class="card-body">
-              <div class="mbm">
-                <img src="{{logoUrl}}" height=50px alt="" class="pull-right">
-                <h5>{{info.companyName}}</h5>
+              <div class="row mbm">
+                <div class="col col-md-6">
+                  <h3>{{info.symbol}} <span style="font-size: 70%">{{info.companyName}}</span></h3>
+                </div>
+                <div class="col col-md-6">
+                  <img src="{{logoUrl}}" height=50px alt="" class="pull-right">
+                </div>
               </div>
-
               <hr>
 
-              <div class="">
-                Current Price: ${{info.latestPrice}}
-              </div>
-              <div class="">
-                Daily Change:
-                <span class="badge daily-change"
-                  change="{{info.dailyChange.change}}"
-                  change-percent="{{info.dailyChange.changePercent}}">
-                </span>
-              </div>
-              <div class="">
-                52 Week High: ${{info.week52High}}
-              </div>
-              <div class="">
-                52 Week Low: ${{info.week52Low}}
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="row mbm">
+                    <div class="col-md-12">
+                      <h4>
+                        ${{info.latestPrice}}
+                        <span class="badge daily-change" style="font-size: 70%"
+                          change="{{info.dailyChange.change}}"
+                          change-percent="{{info.dailyChange.changePercent}}">
+                        </span>
+                      </h4>
+                      <div class="text-muted">updated <span class="date" data-date="{{info.latestUpdate}}"></span></div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <!-- <div class="col-md-6">
+                      Daily Change
+                    </div>
+                    <div class="col-md-6">
+                      <div class="badge daily-change pull-right bold"
+                        change="{{info.dailyChange.change}}"
+                        change-percent="{{info.dailyChange.changePercent}}">
+                      </div>
+                    </div> -->
+
+                    <div class="col col-md-6">
+                      52 Week Range
+                    </div>
+                    <div class="col col-md-6">
+                      <div class="pull-right bold">
+                        ${{info.week52Low}} - ${{info.week52High}}
+                      </div>
+                    </div>
+
+                    <div class="col col-md-6">
+                      Market Cap
+                    </div>
+                    <div class="col col-md-6">
+                      <div class="pull-right bold">
+                        ${{info.marketCap}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

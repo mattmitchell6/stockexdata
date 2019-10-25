@@ -36,6 +36,7 @@ router.get('/search', async function(req, res) {
       IEX.getQuote(symbol),
       IEX.getLogo(symbol)
     ]);
+    console.log(info);
 
     res.render('pages/displayStock', {
       info: info,
@@ -59,7 +60,7 @@ router.get('/historicaldata', async function(req, res) {
   let prices = [], dates = [];
 
   try {
-    const result = await IEX.getHistoricalPrices(symbol, 5)
+    const result = await IEX.getHistoricalPrices(symbol, 3)
 
     for(i=0; i < result.length; i++) {
       dates[i] = result[i].date;
