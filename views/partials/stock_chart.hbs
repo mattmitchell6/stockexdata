@@ -26,6 +26,14 @@ $(document).ready(function() {
             }]
           },
           options: {
+            legend: {
+              display: false
+            },
+            elements: {
+              point:{
+                radius: 0
+              }
+            },
             scales: {
               yAxes: [{
                 scaleLabel: {
@@ -37,6 +45,11 @@ $(document).ready(function() {
                 // ticks: {
                 //   beginAtZero: true
                 // },
+                time: {
+                  displayFormats: {'day': 'MM/YY'},
+                  tooltipFormat: 'YYYY-MM-DD',
+                  unit: 'month',
+                },
                 scaleLabel: {
                   labelString: "Date"
                 }

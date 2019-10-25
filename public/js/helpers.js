@@ -7,6 +7,8 @@ $(document).ready(function() {
   // var dates = document.getElementsByClassName("date");
   var dailyChange = document.getElementsByClassName("daily-change");
   var dates = document.getElementsByClassName("date");
+  var marketCaps = document.getElementsByClassName("market-cap");
+  var prices = document.getElementsByClassName("price");
   setNavigation();
 
   // iterate through all "amount-usd" elements and convert from cents to formatted USD
@@ -25,14 +27,17 @@ $(document).ready(function() {
   // iterate through daily change amounts
   for (var i = 0; i < dailyChange.length; i++) {
     changePercent = dailyChange[i].getAttribute('change-percent');
-    dailyChange[i].innerHTML = changePercent + "%";
+    change = dailyChange[i].getAttribute('change');
 
     if(changePercent > 0) {
-      dailyChange[i].classList.add('badge-success')
+      dailyChange[i].classList.add('green')
+      dailyChange[i].innerHTML = `+${changePercent}% (+${change})`;
     } else if(changePercent == 0) {
-      dailyChange[i].classList.add('badge-secondary')
+      dailyChange[i].classList.add('neutral')
+      dailyChange[i].innerHTML = changePercent + "%";
     } else {
-      dailyChange[i].classList.add('badge-danger')
+      dailyChange[i].classList.add('red')
+      dailyChange[i].innerHTML = changePercent + "%";
     }
   }
 
@@ -46,6 +51,18 @@ $(document).ready(function() {
   for (var i = 0; i < dates.length; i++) {
     date = dates[i].getAttribute('data-date');
     dates[i].innerHTML = moment.unix(date).format('MM/DD h:mm a');
+  }
+
+  // iterate through all "price" elements and format
+  for (var i = 0; i < dates.length; i++) {
+    price = prices[i].getAttribute('data-price');
+    prices[i].innerHTML = numeral(price).format('$0,0.00');
+  }
+
+  // iterate through all "market-cap" elements and format number
+  for (var i = 0; i < dates.length; i++) {
+    marketCap = marketCaps[i].getAttribute('data-market-cap');
+    marketCaps[i].innerHTML = numeral(marketCap).format('0.00a').toUpperCase()
   }
 
   // button loading state

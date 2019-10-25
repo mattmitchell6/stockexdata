@@ -12,7 +12,7 @@
           <div class="col col-md-8">
             <form class="form-inline pull-right">
               <div class="form-group mb-2 mx-sm-3">
-                <label for="symbol" class="sr-only">Email</label>
+                <!-- <label for="symbol" class="sr-only">Email</label> -->
                 <input type="text" class="form-control" id="symbol" name="symbol" placeholder="BOX, CRM, TEAM, etc.">
               </div>
               <button type="submit" class="btn btn-primary mb-2" data-loading="Searching...">Search</button>
@@ -28,7 +28,7 @@
               <h4 class="text-center">Stock Info</h4>
             </div> -->
             <div class="card-body">
-              <div class="row mbm">
+              <div class="row mbs">
                 <div class="col col-md-6">
                   <h3>{{info.symbol}} <span style="font-size: 70%">{{info.companyName}}</span></h3>
                 </div>
@@ -43,8 +43,8 @@
                   <div class="row mbm">
                     <div class="col-md-12">
                       <h4>
-                        ${{info.latestPrice}}
-                        <span class="badge daily-change" style="font-size: 70%"
+                        <span class="price" data-price="{{info.latestPrice}}"></span>
+                        <span class="daily-change" style="font-size: 80%"
                           change="{{info.dailyChange.change}}"
                           change-percent="{{info.dailyChange.changePercent}}">
                         </span>
@@ -69,7 +69,7 @@
                     </div>
                     <div class="col col-md-6">
                       <div class="pull-right bold">
-                        ${{info.week52Low}} - ${{info.week52High}}
+                        {{info.week52Low}} - {{info.week52High}}
                       </div>
                     </div>
 
@@ -77,8 +77,15 @@
                       Market Cap
                     </div>
                     <div class="col col-md-6">
+                      <div class="pull-right bold market-cap" data-market-cap="{{info.marketCap}}"></div>
+                    </div>
+
+                    <div class="col col-md-6">
+                      PE Ratio
+                    </div>
+                    <div class="col col-md-6">
                       <div class="pull-right bold">
-                        ${{info.marketCap}}
+                        {{info.peRatio}}
                       </div>
                     </div>
                   </div>

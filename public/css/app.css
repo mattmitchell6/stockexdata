@@ -149,4 +149,16 @@ h1, h2, h3, h4, h5 {
   background-color: #fcf9e9;
 }
 
+.green {
+ color: #29A745;
+}
+
+.red {
+  color: #DC3545;
+}
+
+.neutral {
+  color: #6C757D;
+}
+
 /* search bar style */
