@@ -7,9 +7,7 @@
         {{> flash_message }}
 
         <div class="row">
-          <div class="col col-md-4">
-          </div>
-          <div class="col col-md-8">
+          <div class="col-md-12">
             <form class="form-inline pull-right">
               <div class="form-group mb-2 mx-sm-3">
                 <!-- <label for="symbol" class="sr-only">Email</label> -->
@@ -39,7 +37,7 @@
               <hr>
 
               <div class="row">
-                <div class="col-md-4">
+                <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
                   <div class="row mbm">
                     <div class="col-md-12">
                       <h4>
@@ -54,22 +52,22 @@
                   </div>
 
                   <div class="row">
-
-
-                    <div class="col col-md-6">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
                       52 Week Range
                     </div>
-                    <div class="col col-md-6">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
                       <div class="pull-right bold">
                         {{info.week52Low}} - {{info.week52High}}
                       </div>
                     </div>
                     <hr>
+                  </div>
 
-                    <div class="col col-md-6">
+                  <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
                       Market Cap
                     </div>
-                    <div class="col col-md-6">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
                       {{#if info.marketCap}}
                         <div class="pull-right bold market-cap" data-market-cap="{{info.marketCap}}"></div>
                       {{else}}
@@ -77,11 +75,13 @@
                       {{/if}}
                     </div>
                     <hr>
+                  </div>
 
-                    <div class="col col-md-6">
+                  <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
                       PE Ratio
                     </div>
-                    <div class="col col-md-6">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
                       {{#if info.peRatio}}
                         <div class="pull-right bold">{{info.peRatio}}</div>
                       {{else}}
@@ -89,6 +89,7 @@
                       {{/if}}
                     </div>
                   </div>
+
                 </div>
               </div>
             </div>
