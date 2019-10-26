@@ -21,7 +21,6 @@ class IEX {
     // calculate change
     result.dailyChange = dailyChange(result.latestPrice, result.previousClose)
 
-
     return result;
   }
 

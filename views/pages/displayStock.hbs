@@ -54,15 +54,7 @@
                   </div>
 
                   <div class="row">
-                    <!-- <div class="col-md-6">
-                      Daily Change
-                    </div>
-                    <div class="col-md-6">
-                      <div class="badge daily-change pull-right bold"
-                        change="{{info.dailyChange.change}}"
-                        change-percent="{{info.dailyChange.changePercent}}">
-                      </div>
-                    </div> -->
+
 
                     <div class="col col-md-6">
                       52 Week Range
@@ -72,21 +64,29 @@
                         {{info.week52Low}} - {{info.week52High}}
                       </div>
                     </div>
+                    <hr>
 
                     <div class="col col-md-6">
                       Market Cap
                     </div>
                     <div class="col col-md-6">
-                      <div class="pull-right bold market-cap" data-market-cap="{{info.marketCap}}"></div>
+                      {{#if info.marketCap}}
+                        <div class="pull-right bold market-cap" data-market-cap="{{info.marketCap}}"></div>
+                      {{else}}
+                        <div class="pull-right bold">NA</div>
+                      {{/if}}
                     </div>
+                    <hr>
 
                     <div class="col col-md-6">
                       PE Ratio
                     </div>
                     <div class="col col-md-6">
-                      <div class="pull-right bold">
-                        {{info.peRatio}}
-                      </div>
+                      {{#if info.peRatio}}
+                        <div class="pull-right bold">{{info.peRatio}}</div>
+                      {{else}}
+                        <div class="pull-right bold">NA</div>
+                      {{/if}}
                     </div>
                   </div>
                 </div>
@@ -96,11 +96,23 @@
 
           <!-- Historical Stock Performance -->
           <div class="card mtm">
-            <!-- <div class="card-header">
-              <h4 class="text-center">Stock Info</h4>
-            </div> -->
             <div class="card-body">
-              <h5>Historical Performance</h5>
+              <div class="row mbs">
+                <div class="col-md-6">
+                  <h5>Historical Performance</h5>
+                </div>
+                <div class="col-md-6">
+                  <nav class="nav pull-right">
+                    <span class="nav-link inactive">1M</span>
+                    <span class="nav-link inactive">6M</span>
+                    <span class="nav-link active">YTD</span>
+                    <span class="nav-link inactive">1Y</span>
+                    <span class="nav-link inactive">5Y</span>
+                    <span class="nav-link inactive">All Time</span>
+                  </nav>
+                </div>
+
+              </div>
 
               <!-- stock chart partial -->
               {{> stock_chart}}

@@ -3,24 +3,19 @@
 {{#*inline "content-block"}}
   <div class="container mtm">
     <div class="row d-flex justify-content-center">
-      <div class="tab-content col-md-8">
+      <div class="tab-content col-md-6">
         {{> flash_message }}
-        <div class="tab-pane show active mtm" id="login" role="tabpanel" aria-labelledby="login">
-          <!-- log in -->
-          <div class="card">
-            <div class="card-header">
-              <h4 class="text-center">Search by Stock Symbol</h4>
-            </div>
-            <div class="card-body">
-              <form action="/search" method="get" class="">
-                <div class="form-group">
-                  <input type="text" class="form-control" id="ticker" name="symbol" placeholder="BOX, CRM, TEAM, etc.">
-                </div>
-                <button type="submit" class="btn btn-primary btn-lg btn-block" data-loading="Searching...">Search</button>
-              </form>
-            </div>
-          </div>
 
+        <h4 class="text-center">Search by Stock Symbol</h4>
+
+        <!-- search -->
+        <div class="card-body">
+          <form action="/search" method="get" class="">
+            <div class="form-group">
+              <input type="text" class="form-control" id="ticker" name="symbol" placeholder="BOX, CRM, TEAM, etc.">
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg btn-block" data-loading="Searching...">Search</button>
+          </form>
         </div>
 
       </div>

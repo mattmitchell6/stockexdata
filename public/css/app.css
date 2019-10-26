@@ -29,7 +29,17 @@ h1, h2, h3, h4, h5 {
 }
 
 .nav-link.active {
-  background-color: #3ecf8e !important;
+  cursor: pointer;
+  color: #007bff;
+}
+
+.nav-link.inactive {
+  cursor: pointer;
+  color: #6c757d;
+}
+
+.nav-link.inactive:hover {
+  color: #007bff;
 }
 
 .btn {

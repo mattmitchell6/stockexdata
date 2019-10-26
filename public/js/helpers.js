@@ -3,26 +3,11 @@
  */
 
 $(document).ready(function() {
-  // var amounts = document.getElementsByClassName("amount-usd");
-  // var dates = document.getElementsByClassName("date");
   var dailyChange = document.getElementsByClassName("daily-change");
   var dates = document.getElementsByClassName("date");
   var marketCaps = document.getElementsByClassName("market-cap");
   var prices = document.getElementsByClassName("price");
   setNavigation();
-
-  // iterate through all "amount-usd" elements and convert from cents to formatted USD
-  // for (var i = 0; i < amounts.length; i++) {
-  //   amount = amounts[i].getAttribute('data-amount') / 100;
-  //   amount = amount.toFixed(2);
-  //   if(amount >= 0) {
-  //     amounts[i].innerHTML = "$" + amount;
-  //   } else {
-  //     amount = amount * -1;
-  //     amount = amount.toFixed(2);
-  //     amounts[i].innerHTML = "-$" + amount;
-  //   }
-  // }
 
   // iterate through daily change amounts
   for (var i = 0; i < dailyChange.length; i++) {
@@ -40,12 +25,6 @@ $(document).ready(function() {
       dailyChange[i].innerHTML = changePercent + "%";
     }
   }
-
-  // iterate through all "date" elements and convert from unix timestart to human readable
-  // for (var i = 0; i < dates.length; i++) {
-  //   date = dates[i].getAttribute('data-date');
-  //   dates[i].innerHTML = moment.unix(date).format('MMMM Do YYYY');
-  // }
 
   // iterate through all "date" elements and convert from unix timestart to human readable
   for (var i = 0; i < dates.length; i++) {

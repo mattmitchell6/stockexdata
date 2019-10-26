@@ -22,7 +22,7 @@ $(document).ready(function() {
               data: json.prices,
               backgroundColor: ['rgba(75, 192, 192, 0.2)'],
               borderColor: ['rgba(75, 192, 192, 1)'],
-              borderWidth: 1
+              borderWidth: 2
             }]
           },
           options: {
@@ -42,13 +42,14 @@ $(document).ready(function() {
                 }
               }],
               xAxes: [{
-                // ticks: {
-                //   beginAtZero: true
-                // },
+                type: "time",
                 time: {
                   displayFormats: {'day': 'MM/YY'},
-                  tooltipFormat: 'YYYY-MM-DD',
+                  tooltipFormat: 'MMM D, YYYY',
                   unit: 'month',
+                },
+                gridLines: {
+                  display: false
                 },
                 scaleLabel: {
                   labelString: "Date"
