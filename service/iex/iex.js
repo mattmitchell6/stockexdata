@@ -39,8 +39,8 @@ class IEX {
   /**
    * fetch historical prices
    */
-   static async getHistoricalPrices(symbol, interval) {
-     const url = `${baseUrl}/${symbol}/chart/ytd?${token}&chartInterval=${interval}`
+   static async getHistoricalPrices(symbol, range) {
+     const url = `${baseUrl}/${symbol}/chart/${range}?${token}&chartInterval=3`
 
      // make call to fetch daily stock prices ytd
      let result = await axios.get(url);

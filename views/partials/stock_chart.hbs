@@ -3,71 +3,87 @@
 
 
 <script>
-var ctx = document.getElementById('stockChart').getContext('2d');
+let ctx = document.getElementById('stockChart').getContext('2d');
+let chart;
 
+// create chart on page load
 $(document).ready(function() {
-  fetch('/historicaldata?symbol={{info.symbol}}', {
+  fetch('/historicaldata?symbol={{info.symbol}}&range=ytd', {
     method: 'GET',
   }).then(function(result) {
-    // const json = result.json();
-
     result.json().then(function(json) {
-      var myChart = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: json.dates,
-            datasets: [{
-              // label: 'Historical Stock Prices',
-              lineTension: 0,
-              data: json.prices,
-              backgroundColor: ['rgba(75, 192, 192, 0.2)'],
-              borderColor: ['rgba(75, 192, 192, 1)'],
-              borderWidth: 2
-            }]
-          },
-          options: {
-            legend: {
-              display: false
-            },
-            elements: {
-              point:{
-                radius: 0
-              }
-            },
-            scales: {
-              yAxes: [{
-                scaleLabel: {
-                  labelString: "Price ($)",
-                  display: true
-                }
-              }],
-              xAxes: [{
-                type: "time",
-                time: {
-                  displayFormats: {'day': 'MM/YY'},
-                  tooltipFormat: 'MMM D, YYYY',
-                  unit: 'month',
-                },
-                gridLines: {
-                  display: false
-                },
-                scaleLabel: {
-                  labelString: "Date"
-                }
-              }]
-            },
-            tooltips: {
-              mode: 'index',
-              intersect: false
-            },
-            hover: {
-              mode: 'index',
-              intersect: false
-            }
-          }
-      });
+      createChart(json.dates, json.prices);
     });
   });
 });
+
+function createChart(dates, prices) {
+  chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: dates,
+      datasets: [{
+        lineTension: 0,
+        data: prices,
+        backgroundColor: ['rgba(75, 192, 192, 0.2)'],
+        borderColor: ['rgba(75, 192, 192, 1)'],
+        borderWidth: 2
+      }]
+    },
+    options: {
+      legend: {
+        display: false
+      },
+      elements: {
+        point:{
+          radius: 0
+        }
+      },
+      scales: {
+        yAxes: [{
+          scaleLabel: {
+            labelString: "Price ($)",
+            display: true
+          }
+        }],
+        xAxes: [{
+          type: "time",
+          time: {
+            displayFormats: {'day': 'MM/YY'},
+            tooltipFormat: 'MMM D, YYYY',
+            unit: 'month',
+          },
+          gridLines: {
+            display: false
+          },
+          scaleLabel: {
+            labelString: "Date"
+          }
+        }]
+      },
+      tooltips: {
+        mode: 'index',
+        intersect: false
+      },
+      hover: {
+        mode: 'index',
+        intersect: false
+      }
+    }
+  });
+}
+
+function updateDateRange(range) {
+  fetch('/historicaldata?symbol={{info.symbol}}&range=' + range, {
+    method: 'GET',
+  }).then(function(result) {
+    result.json().then(function(json) {
+      // update charge
+      chart.destroy();
+      // chart.update();
+      createChart(json.dates, json.prices);
+    });
+  });
+}
 
 </script>
