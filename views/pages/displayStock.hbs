@@ -51,44 +51,30 @@
                     </div>
                   </div>
 
-                  <div class="row">
-                    <div class="col-md-6 col-sm-6 col-xs-6">
-                      52 Week Range
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-xs-6">
-                      <div class="pull-right bold">
-                        {{info.week52Low}} - {{info.week52High}}
-                      </div>
-                    </div>
-                    <hr>
+                  <div>
+                    52 Week Range <span class="pull-right bold">{{info.week52Low}} - {{info.week52High}}</span>
                   </div>
+                  <hr>
 
-                  <div class="row">
-                    <div class="col-md-6 col-sm-6 col-xs-6">
-                      Market Cap
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-xs-6">
-                      {{#if info.marketCap}}
-                        <div class="pull-right bold market-cap" data-market-cap="{{info.marketCap}}"></div>
-                      {{else}}
-                        <div class="pull-right bold">NA</div>
-                      {{/if}}
-                    </div>
-                    <hr>
+                  <div class="">
+                    Market Cap
+                    {{#if info.marketCap}}
+                      <span class="pull-right bold market-cap" data-market-cap="{{info.marketCap}}"></span>
+                    {{else}}
+                      <span class="pull-right bold">NA</span>
+                    {{/if}}
                   </div>
+                  <hr>
 
-                  <div class="row">
-                    <div class="col-md-6 col-sm-6 col-xs-6">
-                      PE Ratio
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-xs-6">
-                      {{#if info.peRatio}}
-                        <div class="pull-right bold">{{info.peRatio}}</div>
-                      {{else}}
-                        <div class="pull-right bold">NA</div>
-                      {{/if}}
-                    </div>
+                  <div class="">
+                    PE Ratio
+                    {{#if info.peRatio}}
+                      <span class="pull-right bold">{{info.peRatio}}</span>
+                    {{else}}
+                      <span class="pull-right bold">NA</span>
+                    {{/if}}
                   </div>
+                  <!-- <hr> -->
 
                 </div>
               </div>
