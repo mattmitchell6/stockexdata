@@ -29,16 +29,15 @@ h1, h2, h3, h4, h5 {
 }
 
 .nav-link.active {
-  cursor: pointer;
-  color: #007bff;
+  color: #007bff !important;
 }
 
-.nav-link.inactive {
+.nav-link.range {
   cursor: pointer;
   color: #6c757d;
 }
 
-.nav-link.inactive:hover {
+.nav-link.range:hover {
   color: #007bff;
 }
 

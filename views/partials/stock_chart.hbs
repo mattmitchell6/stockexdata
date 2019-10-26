@@ -73,7 +73,12 @@ function createChart(dates, prices) {
   });
 }
 
-function updateDateRange(range) {
+function updateDateRange(event, range) {
+  var prevRange = document.getElementsByClassName('nav-link active');
+  $(prevRange[0]).removeClass('active')
+
+  $(event).addClass('active');
+
   fetch('/historicaldata?symbol={{info.symbol}}&range=' + range, {
     method: 'GET',
   }).then(function(result) {
