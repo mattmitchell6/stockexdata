@@ -5,6 +5,7 @@
 $(document).ready(function() {
   var dailyChange = document.getElementsByClassName("daily-change");
   var dates = document.getElementsByClassName("date");
+  var newsDates = document.getElementsByClassName("news-date");
   var marketCaps = document.getElementsByClassName("market-cap");
   var prices = document.getElementsByClassName("price");
   setNavigation();
@@ -30,6 +31,10 @@ $(document).ready(function() {
   for (var i = 0; i < dates.length; i++) {
     date = dates[i].getAttribute('data-date');
     dates[i].innerHTML = moment.unix(date).format('MM/DD h:mm a');
+  }
+  for (var i = 0; i < newsDates.length; i++) {
+    date = newsDates[i].getAttribute('data-date');
+    newsDates[i].innerHTML = moment.unix(date).format('MMM DD, YY');
   }
 
   // iterate through all "price" elements and format

@@ -34,14 +34,18 @@ router.get('/search', async function(req, res) {
 
   try {
     // fetch stock info, logo, etc.
-    const [info, logoUrl] = await Promise.all([
+    const [info, logoUrl, news] = await Promise.all([
       IEX.getQuote(symbol),
-      IEX.getLogo(symbol)
+      IEX.getLogo(symbol),
+      IEX.getNews(symbol)
     ]);
+    const stock = IEX.getStockData(symbol)
 
     res.render('pages/displayStock', {
-      info: info,
-      logoUrl: logoUrl
+      info: stock.quote.data,
+      logoUrl: stock.logoUrl,
+      history: stock.history.data,
+      news: stock.news.data
     })
   } catch(error) {
     let errorMessage;

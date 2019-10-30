@@ -94,8 +94,8 @@
                     <span class="nav-link range" onclick="updateDateRange(this,'6m')">6M</span>
                     <span class="nav-link range active" onclick="updateDateRange(this,'ytd')">YTD</span>
                     <span class="nav-link range" onclick="updateDateRange(this,'1y')">1Y</span>
-                    <span class="nav-link range" onclick="updateDateRange(this,'5y')">5Y</span>
-                    <span class="nav-link range" onclick="updateDateRange(this,'max')">All Time</span>
+                    <!-- <span class="nav-link range" onclick="updateDateRange(this,'5y')">5Y</span>
+                    <span class="nav-link range" onclick="updateDateRange(this,'max')">All Time</span> -->
                   </nav>
                 </div>
               </div>
@@ -105,8 +105,38 @@
             </div>
           </div>
 
-        </div>
+          <!-- Company News -->
+          <div class="card mtm">
+            <div class="card-body">
+              <h5 class="mbm">News</h5>
 
+                {{#each news}}
+                <div class="row mbs">
+                    <div class="col-md-8">
+                      <a href="{{this.url}}">{{this.headline}}</a>
+                      <div class="text-muted news">
+                        {{this.summary}}
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="pull-right">
+                        {{this.source}}
+                      </div>
+                      <br>
+                      <div class="pull-right">
+                        <div class="text-muted">
+                          <span class="news-date" data-date="{{this.datetime}}"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <hr>
+                {{/each}}
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
   </div>
