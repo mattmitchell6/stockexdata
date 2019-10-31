@@ -22,7 +22,7 @@ class IEX {
 
     // does db entry for stock exist?
     if(stock) {
-      console.log('entry found...');
+      console.log(`entry found for ${symbol}...`);
 
       // update news once a day
       if(currentTime.diff(stock.news.lastUpdated, 'days') >= 1) {
@@ -52,7 +52,7 @@ class IEX {
       }
     // no entry exists for this stock, create a new one
     } else {
-      console.log('entry not found...');
+      console.log(`entry not found for ${symbol}...`);
 
       // fetch stock info, logo, etc.
       [quote, logoUrl, news, history] = await Promise.all([

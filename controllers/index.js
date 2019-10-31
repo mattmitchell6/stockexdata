@@ -64,8 +64,10 @@ router.get('/historicaldata', async function(req, res) {
   const symbol = req.query.symbol;
   const range = req.query.range;
   let dateLimit;
+  let prices = [], dates = [];
+
   let stock = await Stock.findOne({'symbol': symbol.toUpperCase()});
-  let history = stock.history.data;
+  let history = JSON.parse(stock.history.data);
   const currentTime = moment();
 
   switch(range) {
@@ -76,27 +78,25 @@ router.get('/historicaldata', async function(req, res) {
       dateLimit = currentTime.subtract({'months': 6})
       break;
     case '1y':
-      dateLimit = currentTime.subtract({'year': 1})
+      dateLimit = currentTime.subtract({'years': 1})
       break;
     case '5y':
-      dateLimit = currentTime.subtract({'months': 5})
+      dateLimit = currentTime.subtract({'years': 5})
       break;
     case 'ytd':
-      dateLimit = moment().startOf('year')
+      dateLimit = moment().startOf('year');
       break;
     default:
       dateLimit = moment().startOf('year')
   }
-  console.log(dateLimit.toDate());
-
-  let prices = [], dates = [];
 
   try {
 
+    // return appropriate date range values
     for(i=0; i < history.length; i++) {
       if(dateLimit.isSameOrBefore(history[i].date, 'day')) {
-        dates[i] = history[i].date;
-        prices[i] = history[i].close;
+        dates.push(history[i].date);
+        prices.push(history[i].close);
       }
     }
 
