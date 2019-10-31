@@ -48,7 +48,7 @@ class IEX {
       if(!isEmpty(updates)) {
         console.log("updating stock db entry...");
         await Stock.updateOne({'symbol': symbol}, updates);
-        stock = await Stock.findOne({'symbol': symbol});
+        stock = await Stock.findOne({'symbol': symbol.toUpperCase()});
       }
     // no entry exists for this stock, create a new one
     } else {

@@ -63,13 +63,13 @@ router.get('/search', async function(req, res) {
 router.get('/historicaldata', async function(req, res) {
   const symbol = req.query.symbol;
   const range = req.query.range;
-  let dateLimit;
-  let prices = [], dates = [];
-
-  let stock = await Stock.findOne({'symbol': symbol.toUpperCase()});
-  let history = JSON.parse(stock.history.data);
+  let prices = [], dates = [], dateLimit;
   const currentTime = moment();
 
+  let stock = await Stock.findOne({'symbol': symbol.toUpperCase()});
+  const history = JSON.parse(stock.history.data);
+
+  // fetch date limit
   switch(range) {
     case '1m':
       dateLimit = currentTime.subtract({'months': 1})
