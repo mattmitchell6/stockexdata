@@ -24,18 +24,45 @@ class IEX {
    */
   static async getStockData(symbol) {
     let quote, logoUrl, news, history;
-    let stock = await Stock.findOne({'symbol': symbol});
+    let updates = {};
     const currentTime = moment();
-    console.log(stock);
-    console.log(currentTime);
+    let stock = await Stock.findOne({'symbol': symbol});
 
+    // does db entry for stock exist?
     if(stock) {
       console.log('entry found...');
 
       // update news once a day
-      // if(stock.news.lastUpdated)
+      if(currentTime.diff(stock.news.lastUpdated, 'days') >= 0) {
+        console.log("diff in news updated...");
+        console.log(currentTime.diff(stock.news.lastUpdated, 'days'));
 
-    // no entry exists for this symbol, create a new one
+        news = await getNews(symbol)
+        updates.news = {data: news, lastUpdated: currentTime}
+      }
+
+      // update quote once every 30 minutes
+      if(currentTime.diff(stock.quote.lastUpdated, 'minutes') > 30) {
+        console.log("diff in quote updated...");
+        console.log(currentTime.diff(stock.quote.lastUpdated, 'minutes'));
+
+        quote = await getQuote(symbol)
+        updates.quote = {data: quote, lastUpdated: currentTime}
+      }
+
+      // update history once a day
+      if(currentTime.diff(stock.history.lastUpdated, 'days') >= 1) {
+        console.log("diff in history updated...");
+        console.log(currentTime.diff(stock.history.lastUpdated, 'days'));
+      }
+
+      // if updates exist, save updates to db
+      if(!isEmpty(updates)) {
+        console.log("updating stock db entry...");
+        await Stock.updateOne({'symbol': symbol}, updates);
+        stock = await Stock.findOne({'symbol': symbol});
+      }
+    // no entry exists for this stock, create a new one
     } else {
       // fetch stock info, logo, etc.
       [quote, logoUrl, news, history] = await Promise.all([
@@ -55,9 +82,10 @@ class IEX {
       })
       await stock.save()
     }
-    return stock;
-  }
 
+
+    return unStringify(stock);
+  }
 }
 
 /**
@@ -123,6 +151,29 @@ function dailyChange(latestPrice, previousClose) {
     changePercent: changePercent,
     change: change
   }
+}
+
+function unStringify(stock) {
+  return {
+    symbol: stock.symbol,
+    logoUrl: stock.logoUrl,
+    quote: {
+      data: JSON.parse(stock.quote.data),
+      lastUpdated: stock.quote.lastUpdated
+    },
+    news: {
+      data: JSON.parse(stock.news.data),
+      lastUpdated: stock.news.lastUpdated
+    },
+    history: {
+      data: JSON.parse(stock.history.data),
+      lastUpdated: stock.history.lastUpdated
+    }
+  }
+}
+
+function isEmpty(obj) {
+  return Object.getOwnPropertyNames(obj).length === 0;
 }
 
 module.exports = IEX;
