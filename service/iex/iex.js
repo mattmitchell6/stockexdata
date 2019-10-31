@@ -8,14 +8,6 @@ const Stock = require('../../models/stocks');
 
 const baseUrl = "https://cloud.iexapis.com/stable/stock/"
 const token = `token=${process.env.IEX_TOKEN}`;
-const rangeInterval = {
-  '1m': 1,
-  '6m': 1,
-  'ytd': 1,
-  '1y': 1,
-  '5y': 7
-  // 'max': 7
-}
 
 class IEX {
 
@@ -26,34 +18,30 @@ class IEX {
     let quote, logoUrl, news, history;
     let updates = {};
     const currentTime = moment();
-    let stock = await Stock.findOne({'symbol': symbol});
+    let stock = await Stock.findOne({'symbol': symbol.toUpperCase()});
 
     // does db entry for stock exist?
     if(stock) {
       console.log('entry found...');
 
       // update news once a day
-      if(currentTime.diff(stock.news.lastUpdated, 'days') >= 0) {
-        console.log("diff in news updated...");
-        console.log(currentTime.diff(stock.news.lastUpdated, 'days'));
-
+      if(currentTime.diff(stock.news.lastUpdated, 'days') >= 1) {
+        console.log("updating news...");
         news = await getNews(symbol)
         updates.news = {data: news, lastUpdated: currentTime}
       }
 
       // update quote once every 30 minutes
       if(currentTime.diff(stock.quote.lastUpdated, 'minutes') > 30) {
-        console.log("diff in quote updated...");
-        console.log(currentTime.diff(stock.quote.lastUpdated, 'minutes'));
-
+        console.log("updating stock quote...");
         quote = await getQuote(symbol)
         updates.quote = {data: quote, lastUpdated: currentTime}
       }
 
       // update history once a day
       if(currentTime.diff(stock.history.lastUpdated, 'days') >= 1) {
-        console.log("diff in history updated...");
-        console.log(currentTime.diff(stock.history.lastUpdated, 'days'));
+        // TODO: update history
+        console.log("updating history...");
       }
 
       // if updates exist, save updates to db
@@ -64,17 +52,19 @@ class IEX {
       }
     // no entry exists for this stock, create a new one
     } else {
+      console.log('entry not found...');
+
       // fetch stock info, logo, etc.
       [quote, logoUrl, news, history] = await Promise.all([
         getQuote(symbol),
         getLogo(symbol),
         getNews(symbol),
-        getHistoricalPrices(symbol)
+        getHistoricalPrices(symbol, '5y')
       ]);
 
-      // store stock information
+      // add new stock to db
       stock = new Stock({
-        symbol: symbol,
+        symbol: symbol.toUpperCase(),
         quote: {data: quote, lastUpdated: currentTime},
         logoUrl: logoUrl,
         history: {data: history, lastUpdated: currentTime},
@@ -82,7 +72,6 @@ class IEX {
       })
       await stock.save()
     }
-
 
     return unStringify(stock);
   }
@@ -100,7 +89,6 @@ async function getQuote(symbol) {
 
   // calculate change
   result.dailyChange = dailyChange(result.latestPrice, result.previousClose)
-
   return JSON.stringify(result);
 }
 
@@ -112,7 +100,6 @@ async function getLogo(symbol) {
 
   // make call to fetch logo
   let result = await axios.get(url);
-
   return result.data.url;
 }
 
@@ -120,11 +107,10 @@ async function getLogo(symbol) {
  * fetch historical prices
  */
 async function getHistoricalPrices(symbol, range) {
-  const url = `${baseUrl}/${symbol}/chart/1m?${token}&chartInterval=1&chartCloseOnly=true`
+  const url = `${baseUrl}/${symbol}/chart/${range}?${token}&chartInterval=1&chartCloseOnly=true`
 
-  // make call to fetch daily stock prices ytd
+  // fetch daily stock prices ytd
   let result = await axios.get(url);
-
   return JSON.stringify(result.data)
 }
 
@@ -134,9 +120,8 @@ async function getHistoricalPrices(symbol, range) {
 async function getNews(symbol) {
   const url = `${baseUrl}/${symbol}/news/last?${token}`
 
-  // make call to fetch last 10 news articles
+  // fetch last 10 news articles
   let result = await axios.get(url);
-
   return JSON.stringify(result.data)
 }
 
@@ -153,6 +138,9 @@ function dailyChange(latestPrice, previousClose) {
   }
 }
 
+/**
+ * convert all stringified data entries to json
+ */
 function unStringify(stock) {
   return {
     symbol: stock.symbol,
@@ -172,6 +160,9 @@ function unStringify(stock) {
   }
 }
 
+/**
+ * is the object empty?
+ */
 function isEmpty(obj) {
   return Object.getOwnPropertyNames(obj).length === 0;
 }

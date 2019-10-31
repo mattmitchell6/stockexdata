@@ -38,7 +38,7 @@ $(document).ready(function() {
   }
 
   // iterate through all "price" elements and format
-  for (var i = 0; i < dates.length; i++) {
+  for (var i = 0; i < prices.length; i++) {
     price = prices[i].getAttribute('data-price');
     prices[i].innerHTML = numeral(price).format('$0,0.00');
   }

@@ -6,6 +6,7 @@ const router = express.Router();
 const moment = require('moment');
 
 const IEX = require('../service/iex/iex');
+const Stock = require('../models/stocks');
 // const passport = require('passport');
 // const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn('/');
 
@@ -33,18 +34,17 @@ router.get('/search', async function(req, res) {
   const symbol = req.query.symbol;
 
   try {
-    // fetch stock info, logo, etc.
-    const [info, logoUrl, news] = await Promise.all([
-      IEX.getQuote(symbol),
-      IEX.getLogo(symbol),
-      IEX.getNews(symbol)
-    ]);
-    const stock = IEX.getStockData(symbol)
+    // fetch data
+    const stock = await IEX.getStockData(symbol);
+    // console.log(stock.quote.lastUpdated);
+    // .unix()
+    // console.log(stock.quote.data.latestUpdate.unix());
 
     res.render('pages/displayStock', {
       info: stock.quote.data,
+      quoteLastUpdated: stock.quote.lastUpdated,
       logoUrl: stock.logoUrl,
-      history: stock.history.data,
+      // history: stock.history.data,
       news: stock.news.data
     })
   } catch(error) {
@@ -62,16 +62,42 @@ router.get('/search', async function(req, res) {
 
 router.get('/historicaldata', async function(req, res) {
   const symbol = req.query.symbol;
-  const range = req.query.range
+  const range = req.query.range;
+  let dateLimit;
+  let stock = await Stock.findOne({'symbol': symbol.toUpperCase()});
+  let history = stock.history.data;
+  const currentTime = moment();
+
+  switch(range) {
+    case '1m':
+      dateLimit = currentTime.subtract({'months': 1})
+      break;
+    case '6m':
+      dateLimit = currentTime.subtract({'months': 6})
+      break;
+    case '1y':
+      dateLimit = currentTime.subtract({'year': 1})
+      break;
+    case '5y':
+      dateLimit = currentTime.subtract({'months': 5})
+      break;
+    case 'ytd':
+      dateLimit = moment().startOf('year')
+      break;
+    default:
+      dateLimit = moment().startOf('year')
+  }
+  console.log(dateLimit.toDate());
 
   let prices = [], dates = [];
 
   try {
-    const result = await IEX.getHistoricalPrices(symbol, range)
 
-    for(i=0; i < result.length; i++) {
-      dates[i] = result[i].date;
-      prices[i] = result[i].close;
+    for(i=0; i < history.length; i++) {
+      if(dateLimit.isSameOrBefore(history[i].date, 'day')) {
+        dates[i] = history[i].date;
+        prices[i] = history[i].close;
+      }
     }
 
     res.send({dates: dates, prices: prices});

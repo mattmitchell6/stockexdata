@@ -40,11 +40,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 // app.use(passport.session());
 
 // mongoose connect
-// mongoose.connect(process.env.DATABASE_URL, {
-//   useNewUrlParser: true,
-//   reconnectTries: Number.MAX_VALUE,
-//   reconnectInterval: 1000
-//  });
+mongoose.connect(process.env.DATABASE_URL, {
+  useNewUrlParser: true,
+  reconnectTries: Number.MAX_VALUE,
+  reconnectInterval: 1000
+ });
 
 
 // include recurring session metereds to route
