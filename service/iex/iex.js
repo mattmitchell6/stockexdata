@@ -25,7 +25,7 @@ class IEX {
       console.log(`entry found for ${symbol}...`);
 
       // update news once a day
-      if(currentTime.diff(stock.news.lastUpdated, 'days') >= 1) {
+      if(currentTime.isAfter(stock.news.lastUpdated, 'day')) {
         console.log("updating news...");
         news = await getNews(symbol)
         updates.news = {data: news, lastUpdated: currentTime}
@@ -39,8 +39,7 @@ class IEX {
       }
 
       // update history once a day
-      if(currentTime.diff(stock.history.lastUpdated, 'days') >= 1) {
-        // TODO: update history
+      if(currentTime.isAfter(stock.history.lastUpdated, 'day')) {
         console.log("updating historical quotes...");
         history = await updateHistoricalPrices(symbol, currentTime, stock.history.lastUpdated, stock.history.data)
         updates.history = {data: history, lastUpdated: currentTime}
