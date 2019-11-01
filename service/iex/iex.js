@@ -91,7 +91,6 @@ async function getQuote(symbol) {
 
   // calculate change
   result.dailyChange = dailyChange(result.latestPrice, result.previousClose)
-  console.log(result);
   return JSON.stringify(result);
 }
 
@@ -120,22 +119,22 @@ async function getHistoricalPrices(symbol, range) {
 /**
  * update historical prices
  */
-async function updateHistoricalPrices(symbol, currentTime, lastUpdatedTime, previousHistory) {
+async function updateHistoricalPrices(symbol, currentTime, lastUpdated, previousHistory) {
   let history = JSON.parse(previousHistory);
   let range;
 
   // see how many historical stock quotes we've missed
-  if(currentTime.diff(lastUpdatedTime, 'days') <= 5) {
+  if(currentTime.diff(lastUpdated, 'days') <= 5) {
     range = '5d';
-  } else if(currentTime.diff(lastUpdatedTime, 'months') <= 1) {
+  } else if(currentTime.diff(lastUpdated, 'months') <= 1) {
     range = '1m';
-  } else if(currentTime.diff(lastUpdatedTime, 'months') <= 3) {
+  } else if(currentTime.diff(lastUpdated, 'months') <= 3) {
     range = '3m';
-  } else if(currentTime.diff(lastUpdatedTime, 'months') <= 6) {
+  } else if(currentTime.diff(lastUpdated, 'months') <= 6) {
     range = '6m';
-  } else if(currentTime.diff(lastUpdatedTime, 'years') <= 1) {
+  } else if(currentTime.diff(lastUpdated, 'years') <= 1) {
     range = '1y';
-  } else if(currentTime.diff(lastUpdatedTime, 'years') <= 2) {
+  } else if(currentTime.diff(lastUpdated, 'years') <= 2) {
     range = '2y';
   } else {
     range = '5y';
@@ -147,8 +146,9 @@ async function updateHistoricalPrices(symbol, currentTime, lastUpdatedTime, prev
 
   // fill in daily price gaps
   let toAddDates = result.data.filter(function(day, index, arr) {
-    return moment(day.date).isAfter(lastUpdatedTime, 'day')
+    return moment(day.date).isAfter(lastUpdated, 'day')
   });
+  console.log(toAddDates);
 
   history = history.concat(toAddDates)
 
