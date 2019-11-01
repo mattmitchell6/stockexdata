@@ -43,7 +43,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 mongoose.connect(process.env.DATABASE_URL, {
   useNewUrlParser: true,
   reconnectTries: Number.MAX_VALUE,
-  reconnectInterval: 1000
+  reconnectInterval: 1000,
+  useUnifiedTopology: true
  });
 
 

@@ -33,6 +33,10 @@ h1, h2, h3, h4, h5 {
   max-width: 100ch;
 }
 
+.nav-link {
+  padding: 0rem 1rem !important;
+}
+
 .nav-link.active {
   color: #007bff !important;
 }

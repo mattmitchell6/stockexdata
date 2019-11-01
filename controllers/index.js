@@ -95,8 +95,13 @@ router.get('/historicaldata', async function(req, res) {
     // return appropriate date range values
     for(i=0; i < history.length; i++) {
       if(dateLimit.isSameOrBefore(history[i].date, 'day')) {
-        dates.push(history[i].date);
-        prices.push(history[i].close);
+        if(range != '5y') {
+          dates.push(history[i].date);
+          prices.push(history[i].close);
+        } else if(!(i % 5)) {
+          dates.push(history[i].date);
+          prices.push(history[i].close);
+        }
       }
     }
 

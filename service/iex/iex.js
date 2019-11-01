@@ -32,7 +32,7 @@ class IEX {
       }
 
       // update quote once every 30 minutes
-      if(currentTime.diff(stock.quote.lastUpdated, 'minutes') > 30) {
+      if(currentTime.diff(stock.quote.lastUpdated, 'minutes') > 10) {
         console.log("updating stock quote...");
         quote = await getQuote(symbol)
         updates.quote = {data: quote, lastUpdated: currentTime}
@@ -41,13 +41,15 @@ class IEX {
       // update history once a day
       if(currentTime.diff(stock.history.lastUpdated, 'days') >= 1) {
         // TODO: update history
-        console.log("updating history...");
+        console.log("updating historical quotes...");
+        history = await updateHistoricalPrices(symbol, currentTime, stock.history.lastUpdated, stock.history.data)
+        updates.history = {data: history, lastUpdated: currentTime}
       }
 
       // if updates exist, save updates to db
       if(!isEmpty(updates)) {
         console.log("updating stock db entry...");
-        await Stock.updateOne({'symbol': symbol}, updates);
+        await Stock.updateOne({'symbol': symbol.toUpperCase()}, updates);
         stock = await Stock.findOne({'symbol': symbol.toUpperCase()});
       }
     // no entry exists for this stock, create a new one
@@ -89,6 +91,7 @@ async function getQuote(symbol) {
 
   // calculate change
   result.dailyChange = dailyChange(result.latestPrice, result.previousClose)
+  console.log(result);
   return JSON.stringify(result);
 }
 
@@ -112,6 +115,44 @@ async function getHistoricalPrices(symbol, range) {
   // fetch daily stock prices ytd
   let result = await axios.get(url);
   return JSON.stringify(result.data)
+}
+
+/**
+ * update historical prices
+ */
+async function updateHistoricalPrices(symbol, currentTime, lastUpdatedTime, previousHistory) {
+  let history = JSON.parse(previousHistory);
+  let range;
+
+  // see how many historical stock quotes we've missed
+  if(currentTime.diff(lastUpdatedTime, 'days') <= 5) {
+    range = '5d';
+  } else if(currentTime.diff(lastUpdatedTime, 'months') <= 1) {
+    range = '1m';
+  } else if(currentTime.diff(lastUpdatedTime, 'months') <= 3) {
+    range = '3m';
+  } else if(currentTime.diff(lastUpdatedTime, 'months') <= 6) {
+    range = '6m';
+  } else if(currentTime.diff(lastUpdatedTime, 'years') <= 1) {
+    range = '1y';
+  } else if(currentTime.diff(lastUpdatedTime, 'years') <= 2) {
+    range = '2y';
+  } else {
+    range = '5y';
+  }
+
+  // fetch daily stock prices based on calculated range above
+  const url = `${baseUrl}/${symbol}/chart/${range}?${token}&chartInterval=1&chartCloseOnly=true`
+  let result = await axios.get(url);
+
+  // fill in daily price gaps
+  let toAddDates = result.data.filter(function(day, index, arr) {
+    return moment(day.date).isAfter(lastUpdatedTime, 'day')
+  });
+
+  history = history.concat(toAddDates)
+
+  return JSON.stringify(history);
 }
 
  /**
