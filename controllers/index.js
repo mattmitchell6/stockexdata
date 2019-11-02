@@ -65,6 +65,7 @@ router.get('/historicaldata', async function(req, res) {
 
   let stock = await Stock.findOne({'symbol': symbol.toUpperCase()});
   const history = JSON.parse(stock.history.data);
+  const latestQuote = JSON.parse(stock.quote.data);
 
   // fetch date limit
   switch(range) {
@@ -100,6 +101,12 @@ router.get('/historicaldata', async function(req, res) {
           prices.push(history[i].close);
         }
       }
+    }
+
+    // append most recent quote price
+    if(moment(latestQuote.latestUpdate).isAfter(history[history.length - 1].date, 'day')) {
+      dates.push(moment(latestQuote.latestUpdate).format("YYYY-MM-DD"))
+      prices.push(latestQuote.latestPrice)
     }
 
     res.send({dates: dates, prices: prices});

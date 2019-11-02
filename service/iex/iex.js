@@ -147,7 +147,6 @@ async function updateHistoricalPrices(symbol, currentTime, lastUpdated, previous
   let toAddDates = result.data.filter(function(day, index, arr) {
     return moment(day.date).isAfter(lastUpdated, 'day')
   });
-  console.log(toAddDates);
 
   history = history.concat(toAddDates)
 

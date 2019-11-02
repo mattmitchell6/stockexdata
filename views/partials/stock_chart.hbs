@@ -8,7 +8,7 @@ let chart;
 
 // create chart on page load
 $(document).ready(function() {
-  fetch('/historicaldata?symbol={{info.symbol}}&range=ytd', {
+  fetch('/historicaldata?symbol={{info.symbol}}&range=1y', {
     method: 'GET',
   }).then(function(result) {
     result.json().then(function(json) {
@@ -44,6 +44,9 @@ function createChart(dates, prices) {
           scaleLabel: {
             labelString: "Price ($)",
             display: true
+          },
+          gridLines: {
+            borderDash: [8, 4]
           }
         }],
         xAxes: [{
