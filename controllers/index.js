@@ -124,13 +124,11 @@ router.get('/incomedata', async function(req, res) {
   let stock = await Stock.findOne({'symbol': symbol.toUpperCase()});
   const incomeData = JSON.parse(stock.quarterlyResults.incomeData);
   const earningsData = JSON.parse(stock.quarterlyResults.earningsData);
-  // console.log(earningsData);
-  // console.log(incomeData);
-
+  
   try {
 
     // return appropriate date range values
-    for(i=0; i < incomeData.length; i++) {
+    for(i=0; i < earningsData.length; i++) {
       fiscalPeriods.push(earningsData[i].fiscalPeriod);
       totalRevenueData.push(incomeData[i].totalRevenue);
       netIncomeData.push(incomeData[i].netIncome);

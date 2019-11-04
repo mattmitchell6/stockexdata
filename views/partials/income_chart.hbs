@@ -1,5 +1,5 @@
 <!-- Income Chart Partial -->
-<canvas id="incomeChart" height="200"></canvas>
+<canvas id="incomeChart" height="224"></canvas>
 
 
 <script>
@@ -24,14 +24,14 @@ function createIncomeChart(fiscalPeriods, totalRevenueData, earningsData) {
       labels: fiscalPeriods,
       datasets: [{
         data: totalRevenueData,
-        backgroundColor: ['rgba(0, 192, 192, 0.2)'],
-        borderColor: ['rgba(75, 192, 192, 1)'],
-        borderWidth: 2
+        backgroundColor: 'rgba(130, 205, 255, 0.2)',
+        borderColor: '#2BAAFF',
+        borderWidth: 1
       }, {
         data: earningsData,
-        backgroundColor: ['rgba(255, 208, 227, 0.2)'],
-        borderColor: ['rgba(255, 99, 132, 1)'],
-        borderWidth: 2
+        backgroundColor: 'rgba(255, 208, 227, 0.2)',
+        borderColor: 'rgba(255, 99, 132, 1)',
+        borderWidth: 1
       }]
     },
     options: {
@@ -47,6 +47,12 @@ function createIncomeChart(fiscalPeriods, totalRevenueData, earningsData) {
         yAxes: [{
           gridLines: {
             borderDash: [8, 4]
+          },
+          ticks: {
+            // Abbreviate the millions
+            callback: function(value, index, values) {
+              return numeral(value).format('0.00a').toUpperCase()
+            }
           }
         }],
         xAxes: [{
@@ -57,7 +63,12 @@ function createIncomeChart(fiscalPeriods, totalRevenueData, earningsData) {
       },
       tooltips: {
         mode: 'index',
-        intersect: false
+        intersect: false,
+        callbacks: {
+          label: function(tooltipItem, data) {
+            return numeral(tooltipItem.value).format('0.00a').toUpperCase()
+          }
+        }
       },
       hover: {
         mode: 'index',
