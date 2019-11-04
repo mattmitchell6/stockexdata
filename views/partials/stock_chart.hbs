@@ -8,7 +8,7 @@ let chart;
 
 // create chart on page load
 $(document).ready(function() {
-  fetch('/historicaldata?symbol={{info.symbol}}&range=ytd', {
+  fetch('/historicaldata?symbol={{info.symbol}}&range=1y', {
     method: 'GET',
   }).then(function(result) {
     result.json().then(function(json) {
@@ -25,9 +25,17 @@ function createChart(dates, prices) {
       datasets: [{
         lineTension: 0,
         data: prices,
-        backgroundColor: ['rgba(75, 192, 192, 0.2)'],
+        backgroundColor: ['rgba(0, 192, 192, 0.2)'],
         borderColor: ['rgba(75, 192, 192, 1)'],
         borderWidth: 2
+      },
+      {
+        // lineTension: 0,
+        // data: prices,
+        // showLine: false
+        // backgroundColor: ['rgba(75, 192, 192, 0.2)'],
+        // borderColor: ['rgba(75, 192, 192, 1)'],
+        // borderWidth: 2
       }]
     },
     options: {
@@ -42,8 +50,11 @@ function createChart(dates, prices) {
       scales: {
         yAxes: [{
           scaleLabel: {
-            labelString: "Price ($)",
+            labelString: "Price",
             display: true
+          },
+          gridLines: {
+            borderDash: [8, 4]
           }
         }],
         xAxes: [{
@@ -83,9 +94,8 @@ function updateDateRange(event, range) {
     method: 'GET',
   }).then(function(result) {
     result.json().then(function(json) {
-      // update charge
+      // update chart
       chart.destroy();
-      // chart.update();
       createChart(json.dates, json.prices);
     });
   });

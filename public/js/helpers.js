@@ -30,15 +30,15 @@ $(document).ready(function() {
   // iterate through all "date" elements and convert from unix timestart to human readable
   for (var i = 0; i < dates.length; i++) {
     date = dates[i].getAttribute('data-date');
-    dates[i].innerHTML = moment.unix(date).format('MM/DD h:mm a');
+    dates[i].innerHTML = moment.unix(date / 1000).format('MM/DD h:mm a z');
   }
   for (var i = 0; i < newsDates.length; i++) {
     date = newsDates[i].getAttribute('data-date');
-    newsDates[i].innerHTML = moment.unix(date).format('MMM DD, YY');
+    newsDates[i].innerHTML = moment.unix(date / 1000).format('MMM DD, YYYY');
   }
 
   // iterate through all "price" elements and format
-  for (var i = 0; i < dates.length; i++) {
+  for (var i = 0; i < prices.length; i++) {
     price = prices[i].getAttribute('data-price');
     prices[i].innerHTML = numeral(price).format('$0,0.00');
   }

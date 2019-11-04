@@ -81,29 +81,53 @@
             </div>
           </div>
 
-          <!-- Historical Stock Performance -->
-          <div class="card mtm">
-            <div class="card-body">
-              <div class="row mbs">
-                <div class="col-md-6">
-                  <h5>Historical Performance</h5>
-                </div>
-                <div class="col-md-6">
-                  <nav class="nav pull-right">
-                    <span class="nav-link range" onclick="updateDateRange(this,'1m')">1M</span>
-                    <span class="nav-link range" onclick="updateDateRange(this,'6m')">6M</span>
-                    <span class="nav-link range active" onclick="updateDateRange(this,'ytd')">YTD</span>
-                    <span class="nav-link range" onclick="updateDateRange(this,'1y')">1Y</span>
-                    <!-- <span class="nav-link range" onclick="updateDateRange(this,'5y')">5Y</span>
-                    <span class="nav-link range" onclick="updateDateRange(this,'max')">All Time</span> -->
-                  </nav>
+          <div class="row mtm">
+            <div class="col-md-8">
+
+              <!-- Historical Stock Performance -->
+              <div class="card">
+                <div class="card-body">
+                  <div class="row mbm">
+                    <div class="col-md-6">
+                      <h5>Historical Performance</h5>
+                    </div>
+                    <div class="col-md-6">
+                      <nav class="nav pull-right">
+                        <!-- <span class="nav-link range" onclick="updateDateRange(this,'1m')">1M</span> -->
+                        <span class="nav-link range" onclick="updateDateRange(this,'6m')">6M</span>
+                        <span class="nav-link range" onclick="updateDateRange(this,'ytd')">YTD</span>
+                        <span class="nav-link range active" onclick="updateDateRange(this,'1y')">1Y</span>
+                        <span class="nav-link range" onclick="updateDateRange(this,'5y')">5Y</span>
+                        <!-- <span class="nav-link range" onclick="updateDateRange(this,'max')">All Time</span> -->
+                      </nav>
+                    </div>
+                  </div>
+
+                  <!-- stock chart partial -->
+                  {{> stock_chart}}
                 </div>
               </div>
-
-              <!-- stock chart partial -->
-              {{> stock_chart}}
             </div>
+
+            <!-- Financials -->
+            <div class="col-md-4">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row mbm">
+                    <div class="col-md-6">
+                      <h5>Financials</h5>
+                    </div>
+                  </div>
+
+                  <!-- add financials chart -->
+                  {{> income_chart}}
+                </div>
+              </div>
+            </div>
+            </div>
+
           </div>
+
 
           <!-- Company News -->
           <div class="card mtm">

@@ -1,0 +1,73 @@
+<!-- Income Chart Partial -->
+<canvas id="incomeChart" height="200"></canvas>
+
+
+<script>
+let ctxIncome = document.getElementById('incomeChart').getContext('2d');
+let incomeChart;
+
+// create chart on page load
+$(document).ready(function() {
+  fetch('/incomedata?symbol={{info.symbol}}', {
+    method: 'GET',
+  }).then(function(result) {
+    result.json().then(function(json) {
+      createIncomeChart(json.fiscalPeriods, json.totalRevenueData, json.earningsData);
+    });
+  });
+});
+
+function createIncomeChart(fiscalPeriods, totalRevenueData, earningsData) {
+  incomeChart = new Chart(ctxIncome, {
+    type: 'bar',
+    data: {
+      labels: fiscalPeriods,
+      datasets: [{
+        data: totalRevenueData,
+        backgroundColor: ['rgba(0, 192, 192, 0.2)'],
+        borderColor: ['rgba(75, 192, 192, 1)'],
+        borderWidth: 2
+      }, {
+        data: earningsData,
+        backgroundColor: ['rgba(255, 208, 227, 0.2)'],
+        borderColor: ['rgba(255, 99, 132, 1)'],
+        borderWidth: 2
+      }]
+    },
+    options: {
+      legend: {
+        display: false
+      },
+      elements: {
+        point:{
+          radius: 0
+        }
+      },
+      scales: {
+        yAxes: [{
+          gridLines: {
+            borderDash: [8, 4]
+          }
+        }],
+        xAxes: [{
+          gridLines: {
+            display: false
+          }
+        }]
+      },
+      tooltips: {
+        mode: 'index',
+        intersect: false
+      },
+      hover: {
+        mode: 'index',
+        intersect: false
+      }
+    }
+  });
+}
+
+// function updateDateRange(event, range) {
+// }
+
+</script>

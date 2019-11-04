@@ -8,14 +8,6 @@ const Stock = require('../../models/stocks');
 
 const baseUrl = "https://cloud.iexapis.com/stable/stock/"
 const token = `token=${process.env.IEX_TOKEN}`;
-const rangeInterval = {
-  '1m': 1,
-  '6m': 1,
-  'ytd': 1,
-  '1y': 1,
-  '5y': 7
-  // 'max': 7
-}
 
 class IEX {
 
@@ -23,70 +15,81 @@ class IEX {
    * fetch all stock data
    */
   static async getStockData(symbol) {
-    let quote, logoUrl, news, history;
+    let quote, logoUrl, news, history, quarterlyResults;
     let updates = {};
     const currentTime = moment();
-    let stock = await Stock.findOne({'symbol': symbol});
+    let stock = await Stock.findOne({'symbol': symbol.toUpperCase()});
 
     // does db entry for stock exist?
     if(stock) {
-      console.log('entry found...');
+      console.log(`entry found for ${symbol}...`);
 
       // update news once a day
-      if(currentTime.diff(stock.news.lastUpdated, 'days') >= 0) {
-        console.log("diff in news updated...");
-        console.log(currentTime.diff(stock.news.lastUpdated, 'days'));
-
+      if(currentTime.isAfter(stock.news.lastUpdated, 'day')) {
+        console.log("updating news...");
         news = await getNews(symbol)
         updates.news = {data: news, lastUpdated: currentTime}
       }
 
       // update quote once every 30 minutes
-      if(currentTime.diff(stock.quote.lastUpdated, 'minutes') > 30) {
-        console.log("diff in quote updated...");
-        console.log(currentTime.diff(stock.quote.lastUpdated, 'minutes'));
-
+      if(currentTime.diff(stock.quote.lastUpdated, 'minutes') > 10) {
+        console.log("updating stock quote...");
         quote = await getQuote(symbol)
         updates.quote = {data: quote, lastUpdated: currentTime}
       }
 
       // update history once a day
-      if(currentTime.diff(stock.history.lastUpdated, 'days') >= 1) {
-        console.log("diff in history updated...");
-        console.log(currentTime.diff(stock.history.lastUpdated, 'days'));
+      if(currentTime.isAfter(stock.history.lastUpdated, 'day')) {
+        console.log("updating historical quotes...");
+        history = await updateHistoricalPrices(symbol, currentTime, stock.history.lastUpdated, stock.history.data)
+        updates.history = {data: history, lastUpdated: currentTime}
+      }
+
+      // update quarterly results roughly once a quarter
+      if(currentTime.diff(stock.quarterlyResults.lastReported, 'months') >= 3) {
+        console.log("updating quarterly data...");
+        quarterlyResults = await getQuarterlyResults(symbol);
+        updates.quarterlyData = {
+          incomeData: quarterlyResults.incomeData,
+          earningsData: quarterlyResults.earningsData,
+          lastReported: quarterlyResults.lastReported
+        }
       }
 
       // if updates exist, save updates to db
       if(!isEmpty(updates)) {
         console.log("updating stock db entry...");
-        await Stock.updateOne({'symbol': symbol}, updates);
-        stock = await Stock.findOne({'symbol': symbol});
+        await Stock.updateOne({'symbol': symbol.toUpperCase()}, updates);
+        stock = await Stock.findOne({'symbol': symbol.toUpperCase()});
       }
     // no entry exists for this stock, create a new one
     } else {
-      // fetch stock info, logo, etc.
-      [quote, logoUrl, news, history] = await Promise.all([
-      // [quote, logoUrl, news, history, quarterlyIncome, annualIncome] = await Promise.all([
+      console.log(`entry not found for ${symbol}...`);
+
+      // fetch stock info, logo, quarterly data, etc.
+      [quote, logoUrl, news, history, quarterlyResults] = await Promise.all([
         getQuote(symbol),
         getLogo(symbol),
         getNews(symbol),
-        getHistoricalPrices(symbol)
-        // getIncomeStatement(symbol, 'quarterly'),
-        // getIncomeStatement(symbol, 'annual')
+        getHistoricalPrices(symbol, '5y'),
+        getQuarterlyResults(symbol)
       ]);
 
-      // store stock information
+      // add new stock to db
       stock = new Stock({
-        symbol: symbol,
+        symbol: symbol.toUpperCase(),
         quote: {data: quote, lastUpdated: currentTime},
         logoUrl: logoUrl,
         history: {data: history, lastUpdated: currentTime},
         news: {data: news, lastUpdated: currentTime},
-        quarterlyIncome: {data: quarterlyIncome, lastUpdated: }
+        quarterlyResults: {
+          incomeData: quarterlyResults.incomeData,
+          earningsData: quarterlyResults.earningsData,
+          lastReported: quarterlyResults.lastReported
+        }
       })
       await stock.save()
     }
-
 
     return unStringify(stock);
   }
@@ -104,7 +107,6 @@ async function getQuote(symbol) {
 
   // calculate change
   result.dailyChange = dailyChange(result.latestPrice, result.previousClose)
-
   return JSON.stringify(result);
 }
 
@@ -116,7 +118,6 @@ async function getLogo(symbol) {
 
   // make call to fetch logo
   let result = await axios.get(url);
-
   return result.data.url;
 }
 
@@ -124,12 +125,49 @@ async function getLogo(symbol) {
  * fetch historical prices
  */
 async function getHistoricalPrices(symbol, range) {
-  const url = `${baseUrl}/${symbol}/chart/1m?${token}&chartInterval=1&chartCloseOnly=true`
+  const url = `${baseUrl}/${symbol}/chart/${range}?${token}&chartInterval=1&chartCloseOnly=true`
 
-  // make call to fetch daily stock prices ytd
+  // fetch daily stock prices ytd
+  let result = await axios.get(url);
+  return JSON.stringify(result.data)
+}
+
+/**
+ * update historical prices
+ */
+async function updateHistoricalPrices(symbol, currentTime, lastUpdated, previousHistory) {
+  let history = JSON.parse(previousHistory);
+  let range;
+
+  // see how many historical stock quotes we've missed
+  if(currentTime.diff(lastUpdated, 'days') <= 5) {
+    range = '5d';
+  } else if(currentTime.diff(lastUpdated, 'months') <= 1) {
+    range = '1m';
+  } else if(currentTime.diff(lastUpdated, 'months') <= 3) {
+    range = '3m';
+  } else if(currentTime.diff(lastUpdated, 'months') <= 6) {
+    range = '6m';
+  } else if(currentTime.diff(lastUpdated, 'years') <= 1) {
+    range = '1y';
+  } else if(currentTime.diff(lastUpdated, 'years') <= 2) {
+    range = '2y';
+  } else {
+    range = '5y';
+  }
+
+  // fetch daily stock prices based on calculated range above
+  const url = `${baseUrl}/${symbol}/chart/${range}?${token}&chartInterval=1&chartCloseOnly=true`
   let result = await axios.get(url);
 
-  return JSON.stringify(result.data)
+  // fill in daily price gaps
+  let toAddDates = result.data.filter(function(day, index, arr) {
+    return moment(day.date).isAfter(lastUpdated, 'day')
+  });
+
+  history = history.concat(toAddDates)
+
+  return JSON.stringify(history);
 }
 
  /**
@@ -138,22 +176,29 @@ async function getHistoricalPrices(symbol, range) {
 async function getNews(symbol) {
   const url = `${baseUrl}/${symbol}/news/last?${token}`
 
-  // make call to fetch last 10 news articles
+  // fetch last 10 news articles
   let result = await axios.get(url);
-
   return JSON.stringify(result.data)
 }
 
 /**
- * fetch income statements
+ * fetch quarterly results
  */
-async function getIncomeStatement(symbol, period) {
- const url = `${baseUrl}/${symbol}/income/period?period=${period}&${token}`
+async function getQuarterlyResults(symbol) {
+ const incomeUrl = `${baseUrl}/${symbol}/income?last=4&period=quarter&${token}`
+ const earningsUrl = `${baseUrl}/${symbol}/earnings?last=4&${token}`
 
- // make call to fetch last for quarters or years of income statements
- let result = await axios.get(url);
+ // make calls to fetch last 4 four quarters of income / earnings statements
+ let incomeResult = await axios.get(incomeUrl);
+ let earningsResult = await axios.get(earningsUrl);
+ incomeResult = incomeResult.data.income.reverse();
+ earningsResult = earningsResult.data.earnings.reverse();
 
- return JSON.stringify(result.data)
+ return {
+  incomeData: JSON.stringify(incomeResult),
+  earningsData: JSON.stringify(earningsResult),
+  lastReported: earningsResult[earningsResult.length - 1].EPSReportDate
+ }
 }
 
 function dailyChange(latestPrice, previousClose) {
@@ -169,6 +214,9 @@ function dailyChange(latestPrice, previousClose) {
   }
 }
 
+/**
+ * convert all stringified data entries to json
+ */
 function unStringify(stock) {
   return {
     symbol: stock.symbol,
@@ -188,6 +236,9 @@ function unStringify(stock) {
   }
 }
 
+/**
+ * is the object empty?
+ */
 function isEmpty(obj) {
   return Object.getOwnPropertyNames(obj).length === 0;
 }
