@@ -118,20 +118,32 @@ router.get('/historicaldata', async function(req, res) {
 
 router.get('/incomedata', async function(req, res) {
   const symbol = req.query.symbol;
+  const type = req.query.type;
   let totalRevenueData = [], fiscalPeriods = [], netIncomeData = [];
   const currentTime = moment();
 
   let stock = await Stock.findOne({'symbol': symbol.toUpperCase()});
   const incomeData = JSON.parse(stock.quarterlyResults.incomeData);
   const earningsData = JSON.parse(stock.quarterlyResults.earningsData);
-  
+  const annualIncomeData = JSON.parse(stock.annualResults.incomeData);
+
   try {
 
     // return appropriate date range values
-    for(i=0; i < earningsData.length; i++) {
-      fiscalPeriods.push(earningsData[i].fiscalPeriod);
-      totalRevenueData.push(incomeData[i].totalRevenue);
-      netIncomeData.push(incomeData[i].netIncome);
+    if(type == 'quarterly') {
+      for(i=0; i < earningsData.length; i++) {
+        fiscalPeriods.push(earningsData[i].fiscalPeriod);
+        totalRevenueData.push(incomeData[i].totalRevenue);
+        netIncomeData.push(incomeData[i].netIncome);
+      }
+    } else if(type == 'annual') {
+      for(i=0; i < annualIncomeData.length; i++) {
+        fiscalPeriods.push(annualIncomeData[i].reportDate);
+        totalRevenueData.push(annualIncomeData[i].totalRevenue);
+        netIncomeData.push(annualIncomeData[i].netIncome);
+      }
+    } else {
+      throw new Error('Range type mismatch')
     }
 
     res.send({

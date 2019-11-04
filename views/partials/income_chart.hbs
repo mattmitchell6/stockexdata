@@ -8,7 +8,7 @@ let incomeChart;
 
 // create chart on page load
 $(document).ready(function() {
-  fetch('/incomedata?symbol={{info.symbol}}', {
+  fetch('/incomedata?symbol={{info.symbol}}&type=quarterly', {
     method: 'GET',
   }).then(function(result) {
     result.json().then(function(json) {
@@ -23,11 +23,13 @@ function createIncomeChart(fiscalPeriods, totalRevenueData, earningsData) {
     data: {
       labels: fiscalPeriods,
       datasets: [{
+        label: "Revenue",
         data: totalRevenueData,
         backgroundColor: 'rgba(130, 205, 255, 0.2)',
         borderColor: '#2BAAFF',
         borderWidth: 1
       }, {
+        label: "Earnings",
         data: earningsData,
         backgroundColor: 'rgba(255, 208, 227, 0.2)',
         borderColor: 'rgba(255, 99, 132, 1)',
@@ -36,7 +38,7 @@ function createIncomeChart(fiscalPeriods, totalRevenueData, earningsData) {
     },
     options: {
       legend: {
-        display: false
+        display: true
       },
       elements: {
         point:{
@@ -49,7 +51,6 @@ function createIncomeChart(fiscalPeriods, totalRevenueData, earningsData) {
             borderDash: [8, 4]
           },
           ticks: {
-            // Abbreviate the millions
             callback: function(value, index, values) {
               return numeral(value).format('0.00a').toUpperCase()
             }
@@ -66,7 +67,8 @@ function createIncomeChart(fiscalPeriods, totalRevenueData, earningsData) {
         intersect: false,
         callbacks: {
           label: function(tooltipItem, data) {
-            return numeral(tooltipItem.value).format('0.00a').toUpperCase()
+            return data.datasets[tooltipItem.datasetIndex].label + ": " +
+              numeral(tooltipItem.value).format('0.00a').toUpperCase()
           }
         }
       },
@@ -78,7 +80,21 @@ function createIncomeChart(fiscalPeriods, totalRevenueData, earningsData) {
   });
 }
 
-// function updateDateRange(event, range) {
-// }
+function updateFinancialsRange(event, type) {
+  var prevRange = document.getElementsByClassName('financials nav-link active');
+  $(prevRange[0]).removeClass('active')
+
+  $(event).addClass('active');
+
+  fetch('/incomedata?symbol={{info.symbol}}&type=' + type, {
+    method: 'GET',
+  }).then(function(result) {
+    result.json().then(function(json) {
+      // update chart
+      incomeChart.destroy();
+      createIncomeChart(json.fiscalPeriods, json.totalRevenueData, json.earningsData);
+    });
+  });
+}
 
 </script>

@@ -114,8 +114,14 @@
               <div class="card">
                 <div class="card-body">
                   <div class="row mbm">
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                       <h5>Financials</h5>
+                    </div>
+                    <div class="col-md-7">
+                      <nav class="nav pull-right">
+                        <span class="nav-link financials range active" onclick="updateFinancialsRange(this,'quarterly')">Quarterly</span>
+                        <span class="nav-link financials range" onclick="updateFinancialsRange(this,'annual')">Annual</span>
+                      </nav>
                     </div>
                   </div>
 

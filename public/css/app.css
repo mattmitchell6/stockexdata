@@ -34,7 +34,7 @@ h1, h2, h3, h4, h5 {
 }
 
 .nav-link {
-  padding: 0rem 1rem !important;
+  padding: 0rem 0.8rem !important;
 }
 
 .nav-link.active {
