@@ -66,10 +66,13 @@ class IEX {
     } else {
       // fetch stock info, logo, etc.
       [quote, logoUrl, news, history] = await Promise.all([
+      // [quote, logoUrl, news, history, quarterlyIncome, annualIncome] = await Promise.all([
         getQuote(symbol),
         getLogo(symbol),
         getNews(symbol),
         getHistoricalPrices(symbol)
+        // getIncomeStatement(symbol, 'quarterly'),
+        // getIncomeStatement(symbol, 'annual')
       ]);
 
       // store stock information
@@ -78,7 +81,8 @@ class IEX {
         quote: {data: quote, lastUpdated: currentTime},
         logoUrl: logoUrl,
         history: {data: history, lastUpdated: currentTime},
-        news: {data: news, lastUpdated: currentTime}
+        news: {data: news, lastUpdated: currentTime},
+        quarterlyIncome: {data: quarterlyIncome, lastUpdated: }
       })
       await stock.save()
     }
@@ -138,6 +142,18 @@ async function getNews(symbol) {
   let result = await axios.get(url);
 
   return JSON.stringify(result.data)
+}
+
+/**
+ * fetch income statements
+ */
+async function getIncomeStatement(symbol, period) {
+ const url = `${baseUrl}/${symbol}/income/period?period=${period}&${token}`
+
+ // make call to fetch last for quarters or years of income statements
+ let result = await axios.get(url);
+
+ return JSON.stringify(result.data)
 }
 
 function dailyChange(latestPrice, previousClose) {
