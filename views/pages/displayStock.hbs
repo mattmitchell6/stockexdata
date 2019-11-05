@@ -107,6 +107,36 @@
                   {{> stock_chart}}
                 </div>
               </div>
+
+              <!-- Company News -->
+              <div class="card mtm">
+                <div class="card-body">
+                  <h5 class="mbm">News</h5>
+
+                  {{#each news}}
+                    <div class="row mbs">
+                      <div class="col-md-8">
+                        <a href="{{this.url}}">{{this.headline}}</a>
+                        <div class="text-muted news">
+                          {{this.summary}}
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="pull-right">
+                          {{this.source}}
+                        </div>
+                        <br>
+                        <div class="pull-right">
+                          <div class="text-muted">
+                            <span class="news-date" data-date="{{this.datetime}}"></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <hr>
+                  {{/each}}
+                </div>
+              </div>
             </div>
 
             <!-- Financials -->
@@ -129,41 +159,20 @@
                   {{> income_chart}}
                 </div>
               </div>
-            </div>
-            </div>
 
-          </div>
-
-
-          <!-- Company News -->
-          <div class="card mtm">
-            <div class="card-body">
-              <h5 class="mbm">News</h5>
-
-                {{#each news}}
-                <div class="row mbs">
-                    <div class="col-md-8">
-                      <a href="{{this.url}}">{{this.headline}}</a>
-                      <div class="text-muted news">
-                        {{this.summary}}
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="pull-right">
-                        {{this.source}}
-                      </div>
-                      <br>
-                      <div class="pull-right">
-                        <div class="text-muted">
-                          <span class="news-date" data-date="{{this.datetime}}"></span>
-                        </div>
-                      </div>
+              <!-- Earnings -->
+              <!-- <div class="card mtm">
+                <div class="card-body">
+                  <div class="row mbm">
+                    <div class="col-md-5">
+                      <h5>Earnings</h5>
                     </div>
                   </div>
-                  <hr>
-                {{/each}}
-              </div>
+
+                </div>
+              </div> -->
             </div>
+
           </div>
 
         </div>
