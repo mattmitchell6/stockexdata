@@ -24,11 +24,16 @@
         </button> -->
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <!-- <ul class="nav navbar-nav">
+          <ul class="nav navbar-nav">
             <li class="nav-item">
-              <a class="nav-link" href="#about">About</a>
+              <form action="/search" method="get" class="form-inline pull-right">
+                <div class="form-group mb-2 mx-sm-3">
+                  <input type="text" style="margin-bottom: -7px;" class="form-control form-control-sm" id="symbol" name="symbol" placeholder="Stock Lookup">
+                </div>
+                <!-- <button type="submit" class="btn btn-primary mb-2" data-loading="Searching...">Search</button> -->
+              </form>
             </li>
-          </ul> -->
+          </ul>
         </div>
       </div>
     </nav>

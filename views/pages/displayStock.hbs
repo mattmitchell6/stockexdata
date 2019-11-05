@@ -6,19 +6,18 @@
       <div class="tab-content col-md-12">
         {{> flash_message }}
 
-        <div class="row">
+        <!-- <div class="row">
           <div class="col-md-12">
             <form class="form-inline pull-right">
               <div class="form-group mb-2 mx-sm-3">
-                <!-- <label for="symbol" class="sr-only">Email</label> -->
                 <input type="text" class="form-control" id="symbol" name="symbol" placeholder="BOX, CRM, TEAM, etc.">
               </div>
               <button type="submit" class="btn btn-primary mb-2" data-loading="Searching...">Search</button>
             </form>
           </div>
-        </div>
+        </div> -->
 
-        <div class="tab-pane show active mtm" id="login" role="tabpanel" aria-labelledby="login">
+        <div class="tab-pane show active" id="login" role="tabpanel" aria-labelledby="login">
 
           <!-- general stock info -->
           <div class="card">
@@ -161,7 +160,7 @@
               </div>
 
               <!-- Earnings -->
-              <!-- <div class="card mtm">
+              <div class="card mtm">
                 <div class="card-body">
                   <div class="row mbm">
                     <div class="col-md-5">
@@ -169,8 +168,10 @@
                     </div>
                   </div>
 
+                  <!-- add earnings chart -->
+                  {{> earnings_chart}}
                 </div>
-              </div> -->
+              </div>
             </div>
 
           </div>

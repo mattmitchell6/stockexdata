@@ -1,0 +1,83 @@
+<!-- Income Chart Partial -->
+<canvas id="earningsChart" height="224"></canvas>
+
+
+<script>
+let ctxEarnings = document.getElementById('earningsChart').getContext('2d');
+let earningsChart;
+
+// create chart on page load
+$(document).ready(function() {
+  fetch('/earningsdata?symbol={{info.symbol}}', {
+    method: 'GET',
+  }).then(function(result) {
+    result.json().then(function(json) {
+      createEarningsChart(json.fiscalPeriods, json.earningsActual, json.earningsEstimate);
+    });
+  });
+});
+
+function createEarningsChart(fiscalPeriods, earningsActual, earningsEstimate) {
+  earningsChart = new Chart(ctxEarnings, {
+    type: 'line',
+    data: {
+      labels: fiscalPeriods,
+      datasets: [{
+        label: "Actual",
+        data: earningsActual,
+        backgroundColor: '#2BAAFF',
+        borderColor: '#2BAAFF',
+        borderWidth: 1,
+        fill: false,
+        showLine: false
+      }, {
+        label: "Estimate",
+        data: earningsEstimate,
+        backgroundColor: 'rgba(255, 208, 227, 0.2)',
+        borderColor: 'rgba(255, 99, 132, 1)',
+        borderWidth: 1,
+        fill: false,
+        showLine: false
+      }]
+    },
+    options: {
+      legend: {
+        display: true
+      },
+      elements: {
+        point:{
+          radius: 8
+        }
+      },
+      scales: {
+        yAxes: [{
+          gridLines: {
+            borderDash: [8, 4]
+          }
+          // ticks: {
+          //   callback: function(value, index, values) {
+          //     return numeral(value).format('0.00a').toUpperCase()
+          //   }
+          // }
+        }],
+        xAxes: [{
+          gridLines: {
+            display: false
+          }
+        }]
+      },
+      tooltips: {
+        mode: 'index',
+        intersect: false
+        // callbacks: {
+        //   label: function(tooltipItem, data) {
+        //     return data.datasets[tooltipItem.datasetIndex].label + ": " +
+        //       numeral(tooltipItem.value).format('0.00a').toUpperCase()
+        //   }
+        // }
+      }
+    }
+  });
+}
+
+</script>

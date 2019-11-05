@@ -157,6 +157,34 @@ router.get('/incomedata', async function(req, res) {
   }
 })
 
+router.get('/earningsdata', async function(req, res) {
+  const symbol = req.query.symbol;
+  let earningsActual = [], fiscalPeriods = [], earningsEstimate = [];
+  const currentTime = moment();
+
+  let stock = await Stock.findOne({'symbol': symbol.toUpperCase()});
+  const earningsData = JSON.parse(stock.quarterlyResults.earningsData);
+
+  try {
+
+    // return appropriate date range values
+    for(i=0; i < earningsData.length; i++) {
+      fiscalPeriods.push(earningsData[i].fiscalPeriod);
+      earningsActual.push(earningsData[i].actualEPS);
+      earningsEstimate.push(earningsData[i].consensusEPS);
+    }
+
+    res.send({
+      fiscalPeriods: fiscalPeriods,
+      earningsActual: earningsActual,
+      earningsEstimate: earningsEstimate
+    });
+  } catch(error) {
+    console.log(error);
+    res.send({status: 500, errorMessage: "Error in loading earnings data"});
+  }
+})
+
 /**
  * log in
  */
