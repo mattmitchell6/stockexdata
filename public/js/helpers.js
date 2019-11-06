@@ -24,10 +24,10 @@ $(document).ready(function() {
       dailyChange[i].innerHTML = `+${changePercent}% (+${change})`;
     } else if(changePercent == 0) {
       dailyChange[i].classList.add('neutral')
-      dailyChange[i].innerHTML = changePercent + "%";
+      dailyChange[i].innerHTML = `${changePercent}% (${change})`;
     } else {
       dailyChange[i].classList.add('red')
-      dailyChange[i].innerHTML = changePercent + "%";
+      dailyChange[i].innerHTML = `${changePercent}% (${change})`;
     }
   }
 
@@ -53,7 +53,7 @@ $(document).ready(function() {
 
   for (var i = 0; i < percentages.length; i++) {
     percentage = percentages[i].getAttribute('data');
-    percentages[i].innerHTML = numeral(percentage).format('0.00%')
+    percentages[i].innerHTML = numeral(percentage).format('+0.00%')
   }
 
   // iterate through all "price" elements and format
@@ -63,7 +63,7 @@ $(document).ready(function() {
   }
 
   // iterate through all "market-cap" elements and format number
-  for (var i = 0; i < dates.length; i++) {
+  for (var i = 0; i < marketCaps.length; i++) {
     marketCap = marketCaps[i].getAttribute('data-market-cap');
     marketCaps[i].innerHTML = numeral(marketCap).format('0.00a').toUpperCase()
   }
