@@ -6,8 +6,12 @@ $(document).ready(function() {
   var dailyChange = document.getElementsByClassName("daily-change");
   var dates = document.getElementsByClassName("date");
   var newsDates = document.getElementsByClassName("news-date");
+  var earningsDates = document.getElementsByClassName("earnings-date");
   var marketCaps = document.getElementsByClassName("market-cap");
   var prices = document.getElementsByClassName("price");
+  var twoDecimals = document.getElementsByClassName("two-deciamals");
+  var percentages = document.getElementsByClassName("percentage");
+  var employees = document.getElementsByClassName("employees");
   setNavigation();
 
   // iterate through daily change amounts
@@ -37,6 +41,21 @@ $(document).ready(function() {
     newsDates[i].innerHTML = moment.unix(date / 1000).format('MMM DD, YYYY');
   }
 
+  for (var i = 0; i < earningsDates.length; i++) {
+    date = earningsDates[i].getAttribute('data-date');
+    earningsDates[i].innerHTML = moment(date).format('MMM DD, YYYY');
+  }
+
+  for (var i = 0; i < twoDecimals.length; i++) {
+    number = twoDecimals[i].getAttribute('data');
+    twoDecimals[i].innerHTML = numeral(number).format('0.00')
+  }
+
+  for (var i = 0; i < percentages.length; i++) {
+    percentage = percentages[i].getAttribute('data');
+    percentages[i].innerHTML = numeral(percentage).format('0.00%')
+  }
+
   // iterate through all "price" elements and format
   for (var i = 0; i < prices.length; i++) {
     price = prices[i].getAttribute('data-price');
@@ -47,6 +66,11 @@ $(document).ready(function() {
   for (var i = 0; i < dates.length; i++) {
     marketCap = marketCaps[i].getAttribute('data-market-cap');
     marketCaps[i].innerHTML = numeral(marketCap).format('0.00a').toUpperCase()
+  }
+
+  for (var i = 0; i < employees.length; i++) {
+    employee = employees[i].getAttribute('data');
+    employees[i].innerHTML = numeral(employee).format('0,0')
   }
 
   // button loading state

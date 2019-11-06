@@ -15,7 +15,7 @@ class IEX {
    * fetch all stock data
    */
   static async getStockData(symbol) {
-    let quote, logoUrl, news, history, quarterlyResults, annualResults;
+    let quote, logoUrl, news, history, quarterlyResults, annualResults, keyStats;
     let updates = {};
     const currentTime = moment();
     let stock = await Stock.findOne({'symbol': symbol.toUpperCase()});
@@ -67,6 +67,13 @@ class IEX {
         }
       }
 
+      // update key stats once a day
+      if(!stock.keyStats || !stock.keyStats.data || currentTime.isAfter(stock.keyStats.lastUpdated, 'day')) {
+        console.log("updating key stats...");
+        keyStats = await getKeyStats(symbol);
+        updates.keyStats = {data: keyStats, lastReported: currentTime}
+      }
+
       // if updates exist, save updates to db
       if(!isEmpty(updates)) {
         console.log("updating stock db entry...");
@@ -78,19 +85,21 @@ class IEX {
       console.log(`entry not found for ${symbol}...`);
 
       // fetch stock info, logo, quarterly data, etc.
-      [quote, logoUrl, news, history, quarterlyResults, annualResults] = await Promise.all([
+      [quote, logoUrl, news, history, quarterlyResults, annualResults, keyStats] = await Promise.all([
         getQuote(symbol),
         getLogo(symbol),
         getNews(symbol),
         getHistoricalPrices(symbol, '5y'),
         getQuarterlyResults(symbol),
-        getAnnualResults(symbol)
+        getAnnualResults(symbol),
+        getKeyStats(symbol)
       ]);
 
       // add new stock to db
       stock = new Stock({
         symbol: symbol.toUpperCase(),
         quote: {data: quote, lastUpdated: currentTime},
+        keyStats: {data: keyStats, lastUpdated: currentTime},
         logoUrl: logoUrl,
         history: {data: history, lastUpdated: currentTime},
         news: {data: news, lastUpdated: currentTime},
@@ -198,6 +207,17 @@ async function getNews(symbol) {
 }
 
 /**
+ * fetch key stats
+ */
+async function getKeyStats(symbol) {
+ const url = `${baseUrl}/${symbol}/stats?${token}`
+
+ // fetch key stats
+ let result = await axios.get(url);
+ return JSON.stringify(result.data)
+}
+
+/**
  * fetch quarterly results
  */
 async function getQuarterlyResults(symbol) {
@@ -253,6 +273,10 @@ function unStringify(stock) {
   return {
     symbol: stock.symbol,
     logoUrl: stock.logoUrl,
+    keyStats: {
+      data: JSON.parse(stock.keyStats.data),
+      lastUpdated: stock.keyStats.lastUpdated
+    },
     quote: {
       data: JSON.parse(stock.quote.data),
       lastUpdated: stock.quote.lastUpdated

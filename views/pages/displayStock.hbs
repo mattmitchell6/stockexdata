@@ -36,20 +36,18 @@
               <hr>
 
               <div class="row">
-                <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
-                  <div class="row mbm">
-                    <div class="col-md-12">
-                      <h4>
-                        <span class="price" data-price="{{info.latestPrice}}"></span>
-                        <span class="daily-change" style="font-size: 80%"
-                          change="{{info.dailyChange.change}}"
-                          change-percent="{{info.dailyChange.changePercent}}">
-                        </span>
-                      </h4>
-                      <div class="text-muted">updated <span class="date" data-date="{{info.latestUpdate}}"></span></div>
-                    </div>
-                  </div>
+                <div class="col-md-12 mbm">
+                  <h4>
+                    <span class="price" data-price="{{info.latestPrice}}"></span>
+                    <span class="daily-change" style="font-size: 80%"
+                      change="{{info.dailyChange.change}}"
+                      change-percent="{{info.dailyChange.changePercent}}">
+                    </span>
+                  </h4>
+                  <div class="text-muted">updated <span class="date" data-date="{{info.latestUpdate}}"></span></div>
+                </div>
 
+                <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
                   <div>
                     52 Week Range <span class="pull-right bold">{{info.week52Low}} - {{info.week52High}}</span>
                   </div>
@@ -76,6 +74,70 @@
                   <!-- <hr> -->
 
                 </div>
+
+                <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+                  <div class="">
+                    Earnings Date
+                    {{#if keyStats.nextEarningsDate}}
+                      <span class="pull-right bold earnings-date" data-date="{{keyStats.nextEarningsDate}}"></span>
+                    {{else}}
+                      <span class="pull-right bold">NA</span>
+                    {{/if}}
+                  </div>
+                  <hr>
+
+                  <div class="">
+                    EPS (ttm)
+                    {{#if keyStats.ttmEPS}}
+                      <span class="pull-right bold two-deciamals" data="{{keyStats.ttmEPS}}"></span>
+                    {{else}}
+                      <span class="pull-right bold">NA</span>
+                    {{/if}}
+                  </div>
+                  <hr>
+
+                  <div class="">
+                    Dividend Yield
+                    {{#if keyStats.dividendYield}}
+                      <span class="pull-right bold percentage" data="{{keyStats.dividendYield}}"></span>
+                    {{else}}
+                      <span class="pull-right bold">NA</span>
+                    {{/if}}
+                  </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+                  <div class="">
+                    Employees
+                    {{#if keyStats.employees}}
+                      <span class="pull-right bold employees" data="{{keyStats.employees}}"></span>
+                    {{else}}
+                      <span class="pull-right bold">NA</span>
+                    {{/if}}
+                  </div>
+                  <hr>
+
+                  <div class="">
+                    5 Year Price Change
+                    {{#if keyStats.ytdChangePercent}}
+                      <span class="pull-right bold percentage" data="{{keyStats.year5ChangePercent}}"></span>
+                    {{else}}
+                      <span class="pull-right bold">NA</span>
+                    {{/if}}
+                  </div>
+                  <hr>
+
+                  <div class="">
+                    YTD Price Change
+                    {{#if keyStats.ytdChangePercent}}
+                      <span class="pull-right bold percentage" data="{{keyStats.ytdChangePercent}}"></span>
+                    {{else}}
+                      <span class="pull-right bold">NA</span>
+                    {{/if}}
+                  </div>
+
+                </div>
+
               </div>
             </div>
           </div>

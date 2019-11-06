@@ -41,6 +41,7 @@ router.get('/search', async function(req, res) {
       info: stock.quote.data,
       quoteLastUpdated: stock.quote.lastUpdated,
       logoUrl: stock.logoUrl,
+      keyStats: stock.keyStats.data,
       // history: stock.history.data,
       news: stock.news.data
     })
