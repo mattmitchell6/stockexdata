@@ -28,7 +28,11 @@
             <li class="nav-item">
               <form action="/search" method="get" class="form-inline pull-right">
                 <div class="form-group mb-2 mx-sm-3">
-                  <input type="text" style="margin-bottom: -7px;" class="form-control form-control-sm" id="symbol" name="symbol" placeholder="Stock Lookup">
+                  <div class="form-group has-search">
+                    <span class="fa fa-search form-control-feedback"></span>
+                    <input type="text" class="form-control form-control-sm" id="symbol" name="symbol"  placeholder="Stock Lookup">
+                  </div>
+                  <!-- <input type="text" style="margin-bottom: -7px;" class="form-control form-control-sm" id="symbol" name="symbol" placeholder="Stock Lookup"> -->
                 </div>
                 <!-- <button type="submit" class="btn btn-primary mb-2" data-loading="Searching...">Search</button> -->
               </form>
