@@ -54,6 +54,14 @@ $(document).ready(function() {
   for (var i = 0; i < percentages.length; i++) {
     percentage = percentages[i].getAttribute('data');
     percentages[i].innerHTML = numeral(percentage).format('+0.00%')
+
+    if(percentage > 0) {
+      percentages[i].classList.add('green')
+    } else if(changePercent == 0) {
+      percentages[i].classList.add('neutral')
+    } else {
+      percentages[i].classList.add('red')
+    }
   }
 
   // iterate through all "price" elements and format

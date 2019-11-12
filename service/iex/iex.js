@@ -227,13 +227,22 @@ async function getQuarterlyResults(symbol) {
  // make calls to fetch last 4 four quarters of income / earnings statements
  let incomeResult = await axios.get(incomeUrl);
  let earningsResult = await axios.get(earningsUrl);
- incomeResult = incomeResult.data.income.reverse();
- earningsResult = earningsResult.data.earnings.reverse();
 
- return {
-  incomeData: JSON.stringify(incomeResult),
-  earningsData: JSON.stringify(earningsResult),
-  lastReported: earningsResult[earningsResult.length - 1].EPSReportDate
+ if(!isEmpty(earningsResult.data) && !isEmpty(incomeResult.data)) {
+   incomeResult = incomeResult.data.income.reverse();
+   earningsResult = earningsResult.data.earnings.reverse();
+
+   return {
+    incomeData: JSON.stringify(incomeResult),
+    earningsData: JSON.stringify(earningsResult),
+    lastReported: earningsResult[earningsResult.length - 1].EPSReportDate
+   }
+ } else {
+   return {
+    incomeData: false,
+    earningsData: false,
+    lastReported: moment()
+   }
  }
 }
 
@@ -245,11 +254,19 @@ async function getAnnualResults(symbol) {
 
  // make calls to fetch last 4 four quarters of income statements
  let incomeResult = await axios.get(incomeUrl);
- incomeResult = incomeResult.data.income.reverse();
 
- return {
-  incomeData: JSON.stringify(incomeResult),
-  lastReported: incomeResult[incomeResult.length - 1].reportDate
+ if(!isEmpty(incomeResult.data)) {
+   incomeResult = incomeResult.data.income.reverse();
+
+   return {
+    incomeData: JSON.stringify(incomeResult),
+    lastReported: incomeResult[incomeResult.length - 1].reportDate
+   }
+ } else {
+   return {
+     incomeData: false,
+     lastReported: moment()
+   }
  }
 }
 
