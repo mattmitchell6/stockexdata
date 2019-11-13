@@ -86,6 +86,9 @@ router.get('/historicaldata', async function(req, res) {
     case 'ytd':
       dateLimit = moment().startOf('year');
       break;
+    case 'max':
+      dateLimit = moment(history[0].date);
+      break;
     default:
       dateLimit = moment().startOf('year')
   }
@@ -95,10 +98,13 @@ router.get('/historicaldata', async function(req, res) {
     // return appropriate date range values
     for(i=0; i < history.length; i++) {
       if(dateLimit.isSameOrBefore(history[i].date, 'day')) {
-        if(range != '5y') {
+        if(range == 'max' && !(i % 10)) {
           dates.push(history[i].date);
           prices.push(history[i].close);
-        } else if(!(i % 5)) {
+        } else if(range == '5y' && !(i % 5)) {
+          dates.push(history[i].date);
+          prices.push(history[i].close);
+        } else if(range != '5y' && range != 'max') {
           dates.push(history[i].date);
           prices.push(history[i].close);
         }

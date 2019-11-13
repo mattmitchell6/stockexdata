@@ -6,24 +6,10 @@
       <div class="tab-content col-md-12">
         {{> flash_message }}
 
-        <!-- <div class="row">
-          <div class="col-md-12">
-            <form class="form-inline pull-right">
-              <div class="form-group mb-2 mx-sm-3">
-                <input type="text" class="form-control" id="symbol" name="symbol" placeholder="BOX, CRM, TEAM, etc.">
-              </div>
-              <button type="submit" class="btn btn-primary mb-2" data-loading="Searching...">Search</button>
-            </form>
-          </div>
-        </div> -->
-
         <div class="tab-pane show active" id="login" role="tabpanel" aria-labelledby="login">
 
           <!-- general stock info -->
           <div class="card">
-            <!-- <div class="card-header">
-              <h4 class="text-center">Stock Info</h4>
-            </div> -->
             <div class="card-body">
               <div class="row mbs">
                 <div class="col col-md-6">
@@ -99,7 +85,7 @@
                   <div class="">
                     Dividend Yield
                     {{#if keyStats.dividendYield}}
-                      <span class="pull-right bold percentage" data="{{keyStats.dividendYield}}"></span>
+                      <span class="pull-right bold yield" data="{{keyStats.dividendYield}}"></span>
                     {{else}}
                       <span class="pull-right bold">NA</span>
                     {{/if}}
@@ -135,31 +121,27 @@
                       <span class="pull-right bold">NA</span>
                     {{/if}}
                   </div>
-
                 </div>
-
               </div>
             </div>
           </div>
 
           <div class="row mtm">
             <div class="col-md-8">
-
               <!-- Historical Stock Performance -->
               <div class="card">
                 <div class="card-body">
-                  <div class="row mbm">
+                  <div class="row mb20">
                     <div class="col-md-6">
                       <h5>Historical Performance</h5>
                     </div>
                     <div class="col-md-6">
                       <nav class="nav pull-right">
-                        <!-- <span class="nav-link range" onclick="updateDateRange(this,'1m')">1M</span> -->
                         <span class="nav-link range" onclick="updateDateRange(this,'6m')">6M</span>
                         <span class="nav-link range" onclick="updateDateRange(this,'ytd')">YTD</span>
                         <span class="nav-link range active" onclick="updateDateRange(this,'1y')">1Y</span>
                         <span class="nav-link range" onclick="updateDateRange(this,'5y')">5Y</span>
-                        <!-- <span class="nav-link range" onclick="updateDateRange(this,'max')">All Time</span> -->
+                        <span class="nav-link range" onclick="updateDateRange(this,'max')">All Time</span>
                       </nav>
                     </div>
                   </div>
@@ -172,7 +154,7 @@
               <!-- Company News -->
               <div class="card mtm">
                 <div class="card-body">
-                  <h5 class="mbm">News</h5>
+                  <h5 class="mb20">News</h5>
 
                   {{#each news}}
                     <div class="row mbs">
@@ -204,7 +186,7 @@
             <div class="col-md-4">
               <div class="card">
                 <div class="card-body" id="financialsCard">
-                  <div class="row mbm">
+                  <div class="row mb20">
                     <div class="col-md-5">
                       <h5>Financials</h5>
                     </div>
@@ -224,7 +206,7 @@
               <!-- Earnings -->
               <div class="card mtm">
                 <div class="card-body" id="earningsCard">
-                  <div class="row mbm">
+                  <div class="row mb20">
                     <div class="col-md-5">
                       <h5>Earnings</h5>
                     </div>

@@ -11,6 +11,7 @@ $(document).ready(function() {
   var prices = document.getElementsByClassName("price");
   var twoDecimals = document.getElementsByClassName("two-deciamals");
   var percentages = document.getElementsByClassName("percentage");
+  var yields = document.getElementsByClassName("yield");
   var employees = document.getElementsByClassName("employees");
   setNavigation();
 
@@ -49,6 +50,11 @@ $(document).ready(function() {
   for (var i = 0; i < twoDecimals.length; i++) {
     number = twoDecimals[i].getAttribute('data');
     twoDecimals[i].innerHTML = numeral(number).format('0.00')
+  }
+
+  for (var i = 0; i < yields.length; i++) {
+    yield = yields[i].getAttribute('data');
+    yields[i].innerHTML = numeral(yield).format('0.00%')
   }
 
   for (var i = 0; i < percentages.length; i++) {

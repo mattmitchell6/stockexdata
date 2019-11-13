@@ -89,7 +89,7 @@ class IEX {
         getQuote(symbol),
         getLogo(symbol),
         getNews(symbol),
-        getHistoricalPrices(symbol, '5y'),
+        getHistoricalPrices(symbol, 'max'),
         getQuarterlyResults(symbol),
         getAnnualResults(symbol),
         getKeyStats(symbol)
@@ -150,7 +150,7 @@ async function getLogo(symbol) {
  * fetch historical prices
  */
 async function getHistoricalPrices(symbol, range) {
-  const url = `${baseUrl}/${symbol}/chart/${range}?${token}&chartInterval=1&chartCloseOnly=true`
+  const url = `${baseUrl}/${symbol}/chart/${range}?${token}&chartInterval=2&chartCloseOnly=true`
 
   // fetch daily stock prices ytd
   let result = await axios.get(url);
@@ -178,7 +178,7 @@ async function updateHistoricalPrices(symbol, currentTime, lastUpdated, previous
   } else if(currentTime.diff(lastUpdated, 'years') <= 2) {
     range = '2y';
   } else {
-    range = '5y';
+    range = 'max';
   }
 
   // fetch daily stock prices based on calculated range above

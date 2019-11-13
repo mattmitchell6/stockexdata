@@ -59,6 +59,10 @@ function createChart(dates, prices) {
         }],
         xAxes: [{
           type: "time",
+          ticks: {
+            autoSkip: true,
+            maxTicksLimit: 20
+          },
           time: {
             displayFormats: {'day': 'MM/YY'},
             tooltipFormat: 'MMM D, YYYY',
