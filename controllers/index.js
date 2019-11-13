@@ -130,31 +130,35 @@ router.get('/incomedata', async function(req, res) {
 
   try {
 
-    // return appropriate date range values
-    if(type == 'quarterly') {
-      for(i=0; i < earningsData.length; i++) {
-        fiscalPeriods.push(earningsData[i].fiscalPeriod);
-        totalRevenueData.push(incomeData[i].totalRevenue);
-        netIncomeData.push(incomeData[i].netIncome);
+    if(earningsData || incomeData) {
+      // return appropriate date range values
+      if(type == 'quarterly') {
+        for(i=0; i < earningsData.length; i++) {
+          fiscalPeriods.push(earningsData[i].fiscalPeriod);
+          totalRevenueData.push(incomeData[i].totalRevenue);
+          netIncomeData.push(incomeData[i].netIncome);
+        }
+      } else if(type == 'annual') {
+        for(i=0; i < annualIncomeData.length; i++) {
+          fiscalPeriods.push(annualIncomeData[i].reportDate);
+          totalRevenueData.push(annualIncomeData[i].totalRevenue);
+          netIncomeData.push(annualIncomeData[i].netIncome);
+        }
+      } else {
+        throw new Error('Range type mismatch')
       }
-    } else if(type == 'annual') {
-      for(i=0; i < annualIncomeData.length; i++) {
-        fiscalPeriods.push(annualIncomeData[i].reportDate);
-        totalRevenueData.push(annualIncomeData[i].totalRevenue);
-        netIncomeData.push(annualIncomeData[i].netIncome);
-      }
-    } else {
-      throw new Error('Range type mismatch')
-    }
 
-    res.send({
-      fiscalPeriods: fiscalPeriods,
-      totalRevenueData: totalRevenueData,
-      earningsData: netIncomeData
-    });
+      res.send({
+        fiscalPeriods: fiscalPeriods,
+        totalRevenueData: totalRevenueData,
+        earningsData: netIncomeData
+      });
+    } else {
+      throw new Error('Data does not exist')
+    }
   } catch(error) {
     console.log(error);
-    res.send({status: 500, errorMessage: "Error in loading historical data"});
+    res.send(false)
   }
 })
 
@@ -168,21 +172,25 @@ router.get('/earningsdata', async function(req, res) {
 
   try {
 
-    // return appropriate date range values
-    for(i=0; i < earningsData.length; i++) {
-      fiscalPeriods.push(earningsData[i].fiscalPeriod);
-      earningsActual.push(earningsData[i].actualEPS);
-      earningsEstimate.push(earningsData[i].consensusEPS);
-    }
+    if(earningsData) {
+      // return appropriate date range values
+      for(i=0; i < earningsData.length; i++) {
+        fiscalPeriods.push(earningsData[i].fiscalPeriod);
+        earningsActual.push(earningsData[i].actualEPS);
+        earningsEstimate.push(earningsData[i].consensusEPS);
+      }
 
-    res.send({
-      fiscalPeriods: fiscalPeriods,
-      earningsActual: earningsActual,
-      earningsEstimate: earningsEstimate
-    });
+      res.send({
+        fiscalPeriods: fiscalPeriods,
+        earningsActual: earningsActual,
+        earningsEstimate: earningsEstimate
+      });
+    } else {
+      throw new Error('Data does not exist')
+    }
   } catch(error) {
     console.log(error);
-    res.send({status: 500, errorMessage: "Error in loading earnings data"});
+    res.send(false)
   }
 })
 

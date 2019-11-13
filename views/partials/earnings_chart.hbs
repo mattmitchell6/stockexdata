@@ -12,7 +12,12 @@ $(document).ready(function() {
     method: 'GET',
   }).then(function(result) {
     result.json().then(function(json) {
-      createEarningsChart(json.fiscalPeriods, json.earningsActual, json.earningsEstimate);
+      if(json) {
+        createEarningsChart(json.fiscalPeriods, json.earningsActual, json.earningsEstimate);
+      } else {
+        document.getElementById("earningsChart").style.display = "none";
+        document.getElementById("earningsCard").innerHTML += "<h4>NA</h4>"
+      }
     });
   });
 });

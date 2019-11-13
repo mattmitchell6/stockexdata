@@ -1,5 +1,5 @@
 <!-- Income Chart Partial -->
-<canvas id="incomeChart" height="224"></canvas>
+<canvas id="incomeChart" height="224" ></canvas>
 
 
 <script>
@@ -12,7 +12,13 @@ $(document).ready(function() {
     method: 'GET',
   }).then(function(result) {
     result.json().then(function(json) {
-      createIncomeChart(json.fiscalPeriods, json.totalRevenueData, json.earningsData);
+      if(json) {
+        createIncomeChart(json.fiscalPeriods, json.totalRevenueData, json.earningsData);
+      } else {
+        // throw up 'NA' or some error message
+        document.getElementById("incomeChart").style.display = "none";
+        document.getElementById("financialsCard").innerHTML += "<h4>NA</h4>"
+      }
     });
   });
 });
