@@ -43,7 +43,8 @@ router.get('/search', async function(req, res) {
       logoUrl: stock.logoUrl,
       keyStats: stock.keyStats.data,
       // history: stock.history.data,
-      news: stock.news.data
+      news: stock.news.data,
+      displayNavSearch: true
     })
   } catch(error) {
     let errorMessage;
