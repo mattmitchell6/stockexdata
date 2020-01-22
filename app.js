@@ -1,4 +1,3 @@
-require('sqreen'); // for app security
 const express = require('express');
 const favicon = require('serve-favicon');
 // const passport = require('passport');
