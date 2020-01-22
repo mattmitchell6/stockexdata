@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Live Stock Quotes App",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "seedcompanies": "node seeds/companyListSeed.js"
   },
   "author": "Matt Mitchell",
   "license": "MIT",

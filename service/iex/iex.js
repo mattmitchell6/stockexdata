@@ -118,6 +118,19 @@ class IEX {
 
     return unStringify(stock);
   }
+
+  /**
+   * fetch all IEX Symbols
+   */
+  static async getIEXSymbols() {
+    const url = `https://cloud.iexapis.com/stable/ref-data/symbols?${token}`
+
+    // make call to fetch all IEX symbols
+    let result = await axios.get(url);
+    result = result.data
+
+    return result;
+  }
 }
 
 /**
