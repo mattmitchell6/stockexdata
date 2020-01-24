@@ -1,29 +1,5 @@
-{{#> base }}
+// stock search filtering
 
-{{#*inline "content-block"}}
-  <div class="container mtm">
-    <div class="row d-flex justify-content-center">
-      <div class="tab-content col-md-6">
-        {{> flash_message }}
-
-        <!-- search -->
-        <form action="/search" method="get" class="mt-4">
-          <div class="input-group mb-3">
-            <input type="text" autocomplete="off" class="form-control" id="stockInput" name="symbol" placeholder="Search by symbol or company name">
-            <div class="dropdown-menu col-md-12" id="filteredResultsContainer">
-              <div id="filteredResults"></div>
-            </div>
-            <div class="input-group-append">
-              <button class="btn btn-primary" type="submit" data-loading="Searching...">Search</button>
-            </div>
-          </div>
-        </form>
-
-      </div>
-    </div>
-  </div>
-
-<script type="text/javascript">
 $("#stockInput").on("input", function() {
   const input = $(this).val();
   var filteredResultsContainer = document.getElementById('filteredResultsContainer')
@@ -52,8 +28,3 @@ $("#stockInput").on("input", function() {
     filteredResultsContainer.style.display = "none";
   }
 });
-</script>
-
-{{/inline}}
-
-{{/base}}

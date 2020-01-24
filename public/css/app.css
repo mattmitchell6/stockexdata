@@ -8,6 +8,23 @@ h1, h2, h3, h4, h5 {
   font-weight: 300;
 }
 
+.dropdown-menu {
+  right: 0% !important;
+  left: auto;
+}
+
+.overflow {
+  text-overflow: ellipsis;
+  overflow:hidden;
+}
+
+.dropdown-item {
+  font-weight: 300;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .navbar {
   background-color: #403F57 !important;
 }
@@ -64,7 +81,7 @@ h1, h2, h3, h4, h5 {
 }
 
 .btn:hover {
-  transform: translateY(-1px);
+  /*transform: translateY(-1px);*/
 }
 
 .btn.btn-success {

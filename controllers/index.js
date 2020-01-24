@@ -7,6 +7,7 @@ const moment = require('moment');
 
 const IEX = require('../service/iex/iex');
 const Stock = require('../models/stocks');
+const Company = require('../models/companies');
 // const passport = require('passport');
 // const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn('/');
 
@@ -200,6 +201,15 @@ router.get('/earningsdata', async function(req, res) {
     res.send(false)
   }
 })
+
+/**
+ * filter symbol search results
+ */
+router.get('/symbolfilter', async function(req, res) {
+  const input = req.query.input;
+  let searchResults = await Company.fuzzySearch(input).limit(6);
+  res.send(searchResults);
+});
 
 /**
  * log in
