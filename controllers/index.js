@@ -207,7 +207,12 @@ router.get('/earningsdata', async function(req, res) {
  */
 router.get('/symbolfilter', async function(req, res) {
   const input = req.query.input;
-  let searchResults = await Company.fuzzySearch(input).limit(6);
+  const searchResults = await Company.find({
+    $or: [
+      {symbol: {$regex: input, "$options": "i"}},
+      {companyName: {$regex: input, "$options": "i"}}
+    ]
+  }).limit(7)
   res.send(searchResults);
 });
 

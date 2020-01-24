@@ -20,29 +20,23 @@
           </a>
         </div>
         {{#if displayNavSearch}}
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <button class="navbar-toggler mb-2" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
         {{/if}}
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="nav navbar-nav">
-            {{#if displayNavSearch}}
-              <li class="nav-item">
-                <form action="/search" method="get" class="form-inline">
-                  <div class="has-search">
-                    <span class="fa fa-search form-control-feedback mt-2"></span>
-                    <input class="form-control form-control-sm" type="search" autocomplete="off" id="stockInput" name="symbol" placeholder="stock lookup" aria-label="Search">
-                    <div class="row">
-                      <div class="dropdown-menu col-md-4 col-sm-6 col-xs-12" id="filteredResultsContainer">
-                        <div id="filteredResults"></div>
-                      </div>
-                    </div>
-                  </div>
-                </form>
-              </li>
-            {{/if}}
-          </ul>
+          {{#if displayNavSearch}}
+            <form action="/search" method="get" class="form-inline">
+              <div class="search">
+                <span class="fa fa-search form-control-feedback mt-2"></span>
+                <input type="text" autocomplete="off" class="form-control form-control-sm" id="stockInput" name="symbol" placeholder="stock lookup">
+                <div class="dropdown-menu col-md-12" id="filteredResultsContainer">
+                  <div id="filteredResults"></div>
+                </div>
+              </div>
+            </form>
+          {{/if}}
         </div>
       </div>
     </nav>
@@ -51,37 +45,8 @@
     {{!-- Content goes here --}}
     {{/content-block}}
 
-<script type="text/javascript">
-
-$("#stockInput").on("input", function() {
-  const input = $(this).val();
-  var filteredResultsContainer = document.getElementById('filteredResultsContainer')
-
-  if(input.length >= 2) {
-
-    fetch('/symbolfilter?input=' + input, {
-      method: 'GET',
-    }).then(function(result) {
-      result.json().then(function(stocks) {
-        filteredResultsContainer.style.display = "list-item";
-        // update html
-        var filteredResults = document.getElementById('filteredResults')
-        var html = "";
-        for(var i = 0; i < stocks.length; i++) {
-          html += `<a class="dropdown-item" href="/search?symbol=${stocks[i].symbol}">`
-          html += '<div class="row">'
-          html += `<div class="bold col-md-4">${stocks[i].symbol}</div>`
-          html += `<div class="col-md-8 overflow">${stocks[i].companyName}</div>`
-          html += '</div></a>'
-        }
-        filteredResults.innerHTML = html
-      });
-    });
-  } else {
-    filteredResultsContainer.style.display = "none";
-  }
-});
-</script>
+    <!-- search filtering -->
+    <script type="text/javascript" src="/js/searchfilter.js"></script>
 
   </body>
 </html>

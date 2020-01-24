@@ -2,7 +2,6 @@
  * Model for stock symbol lookup data
  */
 const mongoose = require('mongoose');
-const fuzzySearching = require('mongoose-fuzzy-searching');
 
 const Schema = mongoose.Schema;
 
@@ -11,7 +10,7 @@ let companiesSchema = new Schema({
   companyName: String
 });
 
-companiesSchema.plugin(fuzzySearching, {fields: ['symbol', 'companyName']});
+companiesSchema.index({symbol: "text", companyName: "text"});
 
 const Company = mongoose.model('Company', companiesSchema);
 

@@ -46,10 +46,10 @@ class IEX {
       }
 
       // update quarterly results roughly once a quarter
-      if(currentTime.diff(stock.quarterlyResults.lastReported, 'months') >= 3) {
+      if(currentTime.diff(stock.quarterlyResults.lastReported, 'days') > 90) {
         console.log("updating quarterly data...");
         quarterlyResults = await getQuarterlyResults(symbol);
-        updates.quarterlyData = {
+        updates.quarterlyResults = {
           incomeData: quarterlyResults.incomeData,
           earningsData: quarterlyResults.earningsData,
           lastReported: quarterlyResults.lastReported
@@ -68,10 +68,10 @@ class IEX {
       }
 
       // update key stats once a day
-      if(!stock.keyStats || !stock.keyStats.data || currentTime.isAfter(stock.keyStats.lastUpdated, 'day')) {
+      if(!stock.keyStats || !stock.keyStats.data|| !stock.keyStats.lastUpdated || currentTime.isAfter(stock.keyStats.lastUpdated, 'day')) {
         console.log("updating key stats...");
         keyStats = await getKeyStats(symbol);
-        updates.keyStats = {data: keyStats, lastReported: currentTime}
+        updates.keyStats = {data: keyStats, lastUpdated: currentTime}
       }
 
       // if updates exist, save updates to db

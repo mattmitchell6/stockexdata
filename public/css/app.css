@@ -200,15 +200,23 @@ h1, h2, h3, h4, h5 {
   color: #6C757D;
 }
 
+.search {
+  position: relative;
+}
+
+.search .form-control-sm {
+  padding-left: 2.375rem;
+}
+
 /* search bar style */
-.has-search .form-control {
+.search .form-control {
     padding-left: 2.375rem;
 }
 
-.has-search .form-control-feedback {
+.search .form-control-feedback {
     position: absolute;
     z-index: 2;
-    display: block;
+    /*display: block;*/
     width: 2.375rem;
     height: 2.375rem;
     /*line-height: 2.375rem;*/
