@@ -52,17 +52,18 @@
     {{/content-block}}
 
 <script type="text/javascript">
+
 $("#stockInput").on("input", function() {
   const input = $(this).val();
   var filteredResultsContainer = document.getElementById('filteredResultsContainer')
 
   if(input.length >= 2) {
-    filteredResultsContainer.style.display = "list-item";
 
     fetch('/symbolfilter?input=' + input, {
       method: 'GET',
     }).then(function(result) {
       result.json().then(function(stocks) {
+        filteredResultsContainer.style.display = "list-item";
         // update html
         var filteredResults = document.getElementById('filteredResults')
         var html = "";
