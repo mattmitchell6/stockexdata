@@ -4,15 +4,19 @@
 
 <script>
 let ctx = document.getElementById('stockChart').getContext('2d');
-let chart;
+let chart, dates, prices;
 
 // create chart on page load
 $(document).ready(function() {
-  fetch('/historicaldata?symbol={{info.symbol}}&range=1y', {
+  fetch('/historicaldata?symbol={{info.symbol}}&range=max', {
     method: 'GET',
   }).then(function(result) {
     result.json().then(function(json) {
-      createChart(json.dates, json.prices);
+      dates = json.dates;
+      prices = json.prices
+
+      var data = organizeRangeData("1y")
+      createChart(data.dates, data.prices);
     });
   });
 });
@@ -90,19 +94,60 @@ function createChart(dates, prices) {
 
 function updateDateRange(event, range) {
   var prevRange = document.getElementsByClassName('nav-link active');
-  $(prevRange[0]).removeClass('active')
+  var data = organizeRangeData(range)
 
+  $(prevRange[0]).removeClass('active')
   $(event).addClass('active');
 
-  fetch('/historicaldata?symbol={{info.symbol}}&range=' + range, {
-    method: 'GET',
-  }).then(function(result) {
-    result.json().then(function(json) {
-      // update chart
-      chart.destroy();
-      createChart(json.dates, json.prices);
-    });
-  });
+  chart.destroy();
+  createChart(data.dates, data.prices);
+}
+
+function organizeRangeData(range) {
+  let dataDates = [], dataPrices = [], dateLimit;
+  const currentTime = moment();
+
+  // fetch date limit
+  switch(range) {
+    case '1m':
+      dateLimit = currentTime.subtract({'months': 1})
+      break;
+    case '6m':
+      dateLimit = currentTime.subtract({'months': 6})
+      break;
+    case '1y':
+      dateLimit = currentTime.subtract({'years': 1})
+      break;
+    case '5y':
+      dateLimit = currentTime.subtract({'years': 5})
+      break;
+    case 'ytd':
+      dateLimit = moment().startOf('year');
+      break;
+    case 'max':
+      dateLimit = currentTime.subtract({'years': 20}) // iex only returns 15 yrs of data
+      break;
+    default:
+      dateLimit = moment().startOf('year')
+  }
+
+  // return appropriate date range values
+  for(i = 0; i < dates.length; i++) {
+    if(dateLimit.isSameOrBefore(dates[i], 'day')) {
+      if(range == 'max' && !(i % 10)) {
+        dataDates.push(dates[i]);
+        dataPrices.push(prices[i]);
+      } else if(range == '5y' && !(i % 5)) {
+        dataDates.push(dates[i]);
+        dataPrices.push(prices[i]);
+      } else if(range != '5y' && range != 'max') {
+        dataDates.push(dates[i]);
+        dataPrices.push(prices[i]);
+      }
+    }
+  }
+
+  return {dates: dataDates, prices: dataPrices}
 }
 
 </script>

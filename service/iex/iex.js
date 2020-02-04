@@ -6,7 +6,7 @@ const moment = require('moment');
 
 const Stock = require('../../models/stocks');
 
-const baseUrl = "https://cloud.iexapis.com/stable/stock/"
+const baseUrl = "https://cloud.iexapis.com/stable/stock"
 const token = `token=${process.env.IEX_TOKEN}`;
 
 class IEX {
@@ -18,6 +18,8 @@ class IEX {
     let quote, logoUrl, news, history, quarterlyResults, annualResults, keyStats;
     let updates = {};
     const currentTime = moment();
+
+    // fetch stock by symbol from db
     let stock = await Stock.findOne({'symbol': symbol.toUpperCase()});
 
     // does db entry for stock exist?
@@ -31,8 +33,8 @@ class IEX {
         updates.news = {data: news, lastUpdated: currentTime}
       }
 
-      // update quote once every 30 minutes
-      if(currentTime.diff(stock.quote.lastUpdated, 'minutes') > 10) {
+      // update quote every 5 minutes
+      if(currentTime.diff(stock.quote.lastUpdated, 'minutes') > 5) {
         console.log("updating stock quote...");
         quote = await getQuote(symbol)
         updates.quote = {data: quote, lastUpdated: currentTime}
@@ -163,7 +165,7 @@ async function getLogo(symbol) {
  * fetch historical prices
  */
 async function getHistoricalPrices(symbol, range) {
-  const url = `${baseUrl}/${symbol}/chart/${range}?${token}&chartInterval=2&chartCloseOnly=true`
+  const url = `${baseUrl}/${symbol}/chart/${range}?${token}&chartInterval=1&chartCloseOnly=true`
 
   // fetch daily stock prices ytd
   let result = await axios.get(url);
@@ -193,6 +195,7 @@ async function updateHistoricalPrices(symbol, currentTime, lastUpdated, previous
   } else {
     range = 'max';
   }
+  // range = 'max'; // set to max for resetting stock history
 
   // fetch daily stock prices based on calculated range above
   const url = `${baseUrl}/${symbol}/chart/${range}?${token}&chartInterval=1&chartCloseOnly=true`
@@ -203,7 +206,7 @@ async function updateHistoricalPrices(symbol, currentTime, lastUpdated, previous
     return moment(day.date).isAfter(lastUpdated, 'day')
   });
 
-  history = history.concat(toAddDates)
+  history = history.concat(toAddDates);
 
   return JSON.stringify(history);
 }

@@ -58,58 +58,35 @@ router.get('/search', async function(req, res) {
     req.flash('error', errorMessage)
     res.redirect('/')
   }
+});
+
+router.get("/delete/:symbol", async function(req, res) {
+  const symbol = req.params.symbol;
+  const confirm = req.query.confirm
+
+  if(confirm == "true") {
+    await Stock.findOne({'symbol': symbol.toUpperCase()}).remove();
+    console.log(symbol + " removed...");
+  }
+
+  res.redirect('/')
 })
 
 router.get('/historicaldata', async function(req, res) {
   const symbol = req.query.symbol;
-  const range = req.query.range;
-  let prices = [], dates = [], dateLimit;
+  let prices = [], dates = [];
   const currentTime = moment();
 
   let stock = await Stock.findOne({'symbol': symbol.toUpperCase()});
   const history = JSON.parse(stock.history.data);
   const latestQuote = JSON.parse(stock.quote.data);
 
-  // fetch date limit
-  switch(range) {
-    case '1m':
-      dateLimit = currentTime.subtract({'months': 1})
-      break;
-    case '6m':
-      dateLimit = currentTime.subtract({'months': 6})
-      break;
-    case '1y':
-      dateLimit = currentTime.subtract({'years': 1})
-      break;
-    case '5y':
-      dateLimit = currentTime.subtract({'years': 5})
-      break;
-    case 'ytd':
-      dateLimit = moment().startOf('year');
-      break;
-    case 'max':
-      dateLimit = moment(history[0].date);
-      break;
-    default:
-      dateLimit = moment().startOf('year')
-  }
-
   try {
 
     // return appropriate date range values
     for(i=0; i < history.length; i++) {
-      if(dateLimit.isSameOrBefore(history[i].date, 'day')) {
-        if(range == 'max' && !(i % 10)) {
-          dates.push(history[i].date);
-          prices.push(history[i].close);
-        } else if(range == '5y' && !(i % 5)) {
-          dates.push(history[i].date);
-          prices.push(history[i].close);
-        } else if(range != '5y' && range != 'max') {
-          dates.push(history[i].date);
-          prices.push(history[i].close);
-        }
-      }
+      dates.push(history[i].date);
+      prices.push(history[i].close);
     }
 
     // append most recent quote price
