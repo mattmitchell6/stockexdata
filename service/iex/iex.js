@@ -9,13 +9,15 @@ const Stock = require('../../models/stocks');
 const baseUrl = "https://cloud.iexapis.com/stable/stock"
 const token = `token=${process.env.IEX_TOKEN}`;
 
+const MAX_NEWS_SUMMARY = 200;
+
 class IEX {
 
   /**
    * fetch all stock data
    */
   static async getStockData(symbol) {
-    let quote, logoUrl, news, history, quarterlyResults, annualResults, keyStats;
+    let quote, logoUrl, news, history, earningsResults, keyStats;
     let updates = {};
     const currentTime = moment();
 
@@ -47,25 +49,16 @@ class IEX {
         updates.history = {data: history, lastUpdated: currentTime}
       }
 
-      // update quarterly results roughly once a quarter
-      if(currentTime.diff(stock.quarterlyResults.lastReported, 'days') > 90) {
-        console.log("updating quarterly data...");
-        quarterlyResults = await getQuarterlyResults(symbol);
-        updates.quarterlyResults = {
-          incomeData: quarterlyResults.incomeData,
-          earningsData: quarterlyResults.earningsData,
-          lastReported: quarterlyResults.lastReported
-        }
-      }
-
-      // update annual income data once a year
-      //TODO: check againsts last updated earnings
-      if(!stock.annualResults || !stock.annualResults.incomeData) {
-        console.log("updating annual data...");
-        annualResults = await getAnnualResults(symbol);
-        updates.annualResults = {
-          incomeData: annualResults.incomeData,
-          lastReported: annualResults.lastReported
+      // update earnings results roughly once a quarter
+      // TODO: there is definitely a better way of doing this
+      if(currentTime.diff(stock.earningsResults.lastReported, 'days') > 90) {
+        console.log("updating earnings data...");
+        earningsResults = await getEarningsResults(symbol);
+        updates.earningsResults = {
+          quarterlyIncomeData: earningsResults.quarterlyIncomeData,
+          annualIncomeData: earningsResults.annualIncomeData,
+          earningsData: earningsResults.earningsData,
+          lastReported: earningsResults.lastReported
         }
       }
 
@@ -87,13 +80,12 @@ class IEX {
       console.log(`entry not found for ${symbol}...`);
 
       // fetch stock info, logo, quarterly data, etc.
-      [quote, logoUrl, news, history, quarterlyResults, annualResults, keyStats] = await Promise.all([
+      [quote, logoUrl, news, history, earningsResults, keyStats] = await Promise.all([
         getQuote(symbol),
         getLogo(symbol),
         getNews(symbol),
         getHistoricalPrices(symbol, 'max'),
-        getQuarterlyResults(symbol),
-        getAnnualResults(symbol),
+        getEarningsResults(symbol),
         getKeyStats(symbol)
       ]);
 
@@ -105,14 +97,11 @@ class IEX {
         logoUrl: logoUrl,
         history: {data: history, lastUpdated: currentTime},
         news: {data: news, lastUpdated: currentTime},
-        quarterlyResults: {
-          incomeData: quarterlyResults.incomeData,
-          earningsData: quarterlyResults.earningsData,
-          lastReported: quarterlyResults.lastReported
-        },
-        annualResults: {
-          incomeData: annualResults.incomeData,
-          lastReported: annualResults.lastReported
+        earningsResults: {
+          quarterlyIncomeData: earningsResults.quarterlyIncomeData,
+          annualIncomeData: earningsResults.annualIncomeData,
+          earningsData: earningsResults.earningsData,
+          lastReported: earningsResults.lastReported
         }
       })
       await stock.save()
@@ -195,7 +184,6 @@ async function updateHistoricalPrices(symbol, currentTime, lastUpdated, previous
   } else {
     range = 'max';
   }
-  // range = 'max'; // set to max for resetting stock history
 
   // fetch daily stock prices based on calculated range above
   const url = `${baseUrl}/${symbol}/chart/${range}?${token}&chartInterval=1&chartCloseOnly=true`
@@ -219,6 +207,12 @@ async function getNews(symbol) {
 
   // fetch last 10 news articles
   let result = await axios.get(url);
+
+  // max out news summary character count at 100 chars
+  for(i = 0; i < result.data.length; i++) {
+    result.data[i].summary = result.data[i].summary.substr(0, MAX_NEWS_SUMMARY) + "...."
+  }
+
   return JSON.stringify(result.data)
 }
 
@@ -236,54 +230,38 @@ async function getKeyStats(symbol) {
 /**
  * fetch quarterly results
  */
-async function getQuarterlyResults(symbol) {
- const incomeUrl = `${baseUrl}/${symbol}/income?last=4&period=quarter&${token}`
- const earningsUrl = `${baseUrl}/${symbol}/earnings?last=4&${token}`
+async function getEarningsResults(symbol) {
+  let quarterlyIncomeResult, annualIncomeResult, earningsResult;
+  const quarterlyIncomeUrl = `${baseUrl}/${symbol}/income?last=4&period=quarter&${token}`;
+  const annualIncomeUrl = `${baseUrl}/${symbol}/income?last=4&period=annual&${token}`;
+  const earningsUrl = `${baseUrl}/${symbol}/earnings?last=4&${token}`;
 
- // make calls to fetch last 4 four quarters of income / earnings statements
- let incomeResult = await axios.get(incomeUrl);
- let earningsResult = await axios.get(earningsUrl);
+  // make calls to fetch last 4 four quarters of income / earnings statements
+  [quarterlyIncomeResult, annualIncomeResult, earningsResult] = await Promise.all([
+    axios.get(quarterlyIncomeUrl),
+    axios.get(annualIncomeUrl),
+    axios.get(earningsUrl)
+  ])
 
- if(!isEmpty(earningsResult.data) && !isEmpty(incomeResult.data)) {
-   incomeResult = incomeResult.data.income.reverse();
-   earningsResult = earningsResult.data.earnings.reverse();
+  if(!isEmpty(earningsResult.data) && !isEmpty(quarterlyIncomeResult.data) && !isEmpty(annualIncomeResult.data)) {
+    quarterlyIncomeResult = quarterlyIncomeResult.data.income.reverse();
+    annualIncomeResult = annualIncomeResult.data.income.reverse();
+    earningsResult = earningsResult.data.earnings.reverse();
 
-   return {
-    incomeData: JSON.stringify(incomeResult),
-    earningsData: JSON.stringify(earningsResult),
-    lastReported: earningsResult[earningsResult.length - 1].EPSReportDate
-   }
- } else {
-   return {
-    incomeData: false,
-    earningsData: false,
-    lastReported: moment()
-   }
- }
-}
-
-/**
- * fetch annual results
- */
-async function getAnnualResults(symbol) {
- const incomeUrl = `${baseUrl}/${symbol}/income?last=4&period=annual&${token}`
-
- // make calls to fetch last 4 four quarters of income statements
- let incomeResult = await axios.get(incomeUrl);
-
- if(!isEmpty(incomeResult.data)) {
-   incomeResult = incomeResult.data.income.reverse();
-
-   return {
-    incomeData: JSON.stringify(incomeResult),
-    lastReported: incomeResult[incomeResult.length - 1].reportDate
-   }
- } else {
-   return {
-     incomeData: false,
-     lastReported: moment()
-   }
- }
+    return {
+      quarterlyIncomeData: JSON.stringify(quarterlyIncomeResult),
+      annualIncomeData: JSON.stringify(annualIncomeResult),
+      earningsData: JSON.stringify(earningsResult),
+      lastReported: earningsResult[earningsResult.length - 1].EPSReportDate
+    }
+  } else {
+    return {
+      quarterlyIncomeData: false,
+      annualIncomeData: false,
+      earningsData: false,
+      lastReported: moment()
+    }
+  }
 }
 
 function dailyChange(latestPrice, previousClose) {

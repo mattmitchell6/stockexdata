@@ -43,7 +43,6 @@ router.get('/search', async function(req, res) {
       quoteLastUpdated: stock.quote.lastUpdated,
       logoUrl: stock.logoUrl,
       keyStats: stock.keyStats.data,
-      // history: stock.history.data,
       news: stock.news.data,
       displayNavSearch: true
     })
@@ -60,6 +59,9 @@ router.get('/search', async function(req, res) {
   }
 });
 
+/**
+ * workaround for removing symbol db entry
+ */
 router.get("/delete/:symbol", async function(req, res) {
   const symbol = req.params.symbol;
   const confirm = req.query.confirm
@@ -75,14 +77,12 @@ router.get("/delete/:symbol", async function(req, res) {
 router.get('/historicaldata', async function(req, res) {
   const symbol = req.query.symbol;
   let prices = [], dates = [];
-  const currentTime = moment();
 
   let stock = await Stock.findOne({'symbol': symbol.toUpperCase()});
   const history = JSON.parse(stock.history.data);
   const latestQuote = JSON.parse(stock.quote.data);
 
   try {
-
     // return appropriate date range values
     for(i=0; i < history.length; i++) {
       dates.push(history[i].date);
@@ -106,25 +106,24 @@ router.get('/incomedata', async function(req, res) {
   const symbol = req.query.symbol;
   const type = req.query.type;
   let totalRevenueData = [], fiscalPeriods = [], netIncomeData = [];
-  const currentTime = moment();
 
   let stock = await Stock.findOne({'symbol': symbol.toUpperCase()});
-  const incomeData = JSON.parse(stock.quarterlyResults.incomeData);
-  const earningsData = JSON.parse(stock.quarterlyResults.earningsData);
-  const annualIncomeData = JSON.parse(stock.annualResults.incomeData);
+  const quarterlyIncomeData = JSON.parse(stock.earningsResults.quarterlyIncomeData);
+  const annualIncomeData = JSON.parse(stock.earningsResults.annualIncomeData);
+  const earningsData = JSON.parse(stock.earningsResults.earningsData);
 
   try {
 
-    if(earningsData || incomeData) {
+    if(earningsData || annualIncomeData || quarterlyIncomeData) {
       // return appropriate date range values
       if(type == 'quarterly') {
-        for(i=0; i < earningsData.length; i++) {
+        for(i = 0; i < earningsData.length; i++) {
           fiscalPeriods.push(earningsData[i].fiscalPeriod);
-          totalRevenueData.push(incomeData[i].totalRevenue);
-          netIncomeData.push(incomeData[i].netIncome);
+          totalRevenueData.push(quarterlyIncomeData[i].totalRevenue);
+          netIncomeData.push(quarterlyIncomeData[i].netIncome);
         }
       } else if(type == 'annual') {
-        for(i=0; i < annualIncomeData.length; i++) {
+        for(i = 0; i < annualIncomeData.length; i++) {
           fiscalPeriods.push(annualIncomeData[i].reportDate);
           totalRevenueData.push(annualIncomeData[i].totalRevenue);
           netIncomeData.push(annualIncomeData[i].netIncome);
@@ -147,37 +146,37 @@ router.get('/incomedata', async function(req, res) {
   }
 })
 
-router.get('/earningsdata', async function(req, res) {
-  const symbol = req.query.symbol;
-  let earningsActual = [], fiscalPeriods = [], earningsEstimate = [];
-  const currentTime = moment();
-
-  let stock = await Stock.findOne({'symbol': symbol.toUpperCase()});
-  const earningsData = JSON.parse(stock.quarterlyResults.earningsData);
-
-  try {
-
-    if(earningsData) {
-      // return appropriate date range values
-      for(i=0; i < earningsData.length; i++) {
-        fiscalPeriods.push(earningsData[i].fiscalPeriod);
-        earningsActual.push(earningsData[i].actualEPS);
-        earningsEstimate.push(earningsData[i].consensusEPS);
-      }
-
-      res.send({
-        fiscalPeriods: fiscalPeriods,
-        earningsActual: earningsActual,
-        earningsEstimate: earningsEstimate
-      });
-    } else {
-      throw new Error('Data does not exist')
-    }
-  } catch(error) {
-    console.log(error);
-    res.send(false)
-  }
-})
+// router.get('/earningsdata', async function(req, res) {
+//   const symbol = req.query.symbol;
+//   let earningsActual = [], fiscalPeriods = [], earningsEstimate = [];
+//   const currentTime = moment();
+//
+//   let stock = await Stock.findOne({'symbol': symbol.toUpperCase()});
+//   const earningsData = JSON.parse(stock.earningsResults.earningsData);
+//
+//   try {
+//
+//     if(earningsData) {
+//       // return appropriate date range values
+//       for(i=0; i < earningsData.length; i++) {
+//         fiscalPeriods.push(earningsData[i].fiscalPeriod);
+//         earningsActual.push(earningsData[i].actualEPS);
+//         earningsEstimate.push(earningsData[i].consensusEPS);
+//       }
+//
+//       res.send({
+//         fiscalPeriods: fiscalPeriods,
+//         earningsActual: earningsActual,
+//         earningsEstimate: earningsEstimate
+//       });
+//     } else {
+//       throw new Error('Data does not exist')
+//     }
+//   } catch(error) {
+//     console.log(error);
+//     res.send(false)
+//   }
+// })
 
 /**
  * filter symbol search results

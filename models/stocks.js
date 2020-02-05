@@ -11,8 +11,12 @@ let stockSchema = new Schema({
   logoUrl: String,
   history: {data: String, lastUpdated: Date},
   news: {data: String, lastUpdated: Date},
-  quarterlyResults: {incomeData: String, earningsData: String, lastReported: Date},
-  annualResults: {incomeData: String, lastReported: Date}
+  earningsResults: {
+    quarterlyIncomeData: String,
+    annualIncomeData: String,
+    earningsData: String,
+    lastReported: Date
+  }
 });
 
 const Stock = mongoose.model('Stock', stockSchema);
