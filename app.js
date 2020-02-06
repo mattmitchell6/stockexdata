@@ -1,17 +1,17 @@
 const express = require('express');
 const favicon = require('serve-favicon');
-// const passport = require('passport');
+const passport = require('passport');
 const mongoose = require('mongoose');
 const path = require('path');
 const exphbs = require('express-handlebars')
 const hbs = require('hbs')
 const flash = require('connect-flash');
 const handlebarsHelpers = require('./public/js/handlebars');
- var fs = require("fs");
+var fs = require("fs");
 require('dotenv').config();
 require('express-async-errors');
 
-// const strategy = require('./service/passport-local/passportStrategy.js');
+const strategy = require('./service/passport-google/passportStrategy.js');
 
 // Create a new Express application.
 var app = express();
@@ -36,8 +36,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 //app.use(favicon(path.join(__dirname, 'public', 'img/favicon-icon.png')))
 
 // Initialize Passport and restore authentication state, if any, from the session.
-// app.use(passport.initialize());
-// app.use(passport.session());
+app.use(passport.initialize());
+app.use(passport.session());
 
 // mongoose connect
 mongoose.connect(process.env.DATABASE_URL, {

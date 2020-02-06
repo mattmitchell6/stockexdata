@@ -1,38 +1,18 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const PassportLocalMongoose = require('passport-local-mongoose');
-const ERROR = 'user already exists'
+const findOrCreate = require('mongoose-findorcreate')
+// const PassportLocalMongoose = require('passport-local-mongoose');
+// const ERROR = 'user already exists'
 // mongoose.Promise = global.Promise; // to supress annoying warning
 
 let userSchema = new Schema({
-  username: String,
-  password: String
+  googleId: String,
+  name: String,
+  watchlist: [String]
 });
 
-userSchema.plugin(PassportLocalMongoose);
-
-/**
- * Create new user and add user to database
- */
-userSchema.statics.newUser = async function (user) {
-  let dbUser;
-  let username = user.username;
-
-  // check if user with submitted name exists
-  dbUser = await User.findOne({username: username});
-  if(dbUser) {
-    throw new Error(ERROR);
-  }
-
-  // add new user to database
-  return new Promise((resolve, reject) => {
-    User.register(
-      new User({username: user.username}), user.password, function(err, user) {
-      if (err) { reject(err); }
-      else { resolve(user); }
-    });
-  });
-}
+// userSchema.plugin(PassportLocalMongoose);
+userSchema.plugin(findOrCreate);
 
 var User = mongoose.model('User', userSchema);
 

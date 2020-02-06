@@ -24,7 +24,6 @@
             <span class="navbar-toggler-icon"></span>
           </button>
         {{/if}}
-
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           {{#if displayNavSearch}}
             <form action="/search" method="get" class="form-inline">
@@ -37,6 +36,11 @@
               </div>
             </form>
           {{/if}}
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="/auth/google">Login</a>
+            </li>
+          </ul>
         </div>
       </div>
     </nav>

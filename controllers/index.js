@@ -4,11 +4,12 @@
 const express = require('express');
 const router = express.Router();
 const moment = require('moment');
+const passport = require('passport');
+
 
 const IEX = require('../service/iex/iex');
 const Stock = require('../models/stocks');
 const Company = require('../models/companies');
-// const passport = require('passport');
 // const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn('/');
 
 // const User = require('../models/users');
@@ -213,6 +214,25 @@ router.get('/symbolfilter', async function(req, res) {
 //     res.redirect('/dashboard');
 //   });
 // });
+
+/**
+ * log in
+ */
+router.get('/auth/google', passport.authenticate('google', {scope: ['profile']}));
+
+/**
+ * log in
+ */
+// router.get('/auth/google/callback', passport.authenticate('google', {successRedirect: '/auth/google/success', failureRedirect: '/auth/google/failure'}), function(req, res) {
+//   console.log("back in auth callback");
+//   res.redirect('/')
+// });
+
+router.get('/auth/google/callback', passport.authenticate('google'), function(req, res) {
+  console.log('callback...');
+  console.log(req.user);
+  res.redirect('/');
+});
 
 /**
  * logout clear session
