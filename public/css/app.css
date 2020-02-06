@@ -224,3 +224,10 @@ h1, h2, h3, h4, h5 {
     pointer-events: none;
     color: #aaa;
 }
+
+@media (max-width: 800px) {
+  /* CSS that should be displayed if width is equal to or less than 800px goes here */
+  .history-chart {
+    /*height: 500 !important;*/
+  }
+}
