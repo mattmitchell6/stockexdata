@@ -10,7 +10,7 @@ let companiesSchema = new Schema({
   companyName: String
 });
 
-companiesSchema.index({symbol: "text", companyName: "text"});
+// companiesSchema.index({symbol: "text", companyName: "text"});
 
 const Company = mongoose.model('Company', companiesSchema);
 

@@ -67,7 +67,7 @@ router.get("/delete/:symbol", async function(req, res) {
   const confirm = req.query.confirm
 
   if(confirm == "true") {
-    await Stock.findOne({'symbol': symbol.toUpperCase()}).remove();
+    await Stock.findOne({'symbol': symbol.toUpperCase()}).deleteOne();
     console.log(symbol + " removed...");
   }
 

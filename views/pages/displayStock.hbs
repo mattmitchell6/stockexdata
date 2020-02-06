@@ -128,8 +128,8 @@
             </div>
           </div>
 
-          <div class="row mtm">
-            <div class="col-md-8">
+          <div class="row">
+            <div class="col-lg-8 col-md-12 mtm">
               <!-- Historical Stock Performance -->
               <div class="card">
                 <div class="card-body">
@@ -139,7 +139,7 @@
                     </div>
                     <div class="col-md-6">
                       <nav class="nav pull-right">
-                        <span class="nav-link range" onclick="updateDateRange(this,'6m')">6M</span>
+                        <!-- <span class="nav-link range" onclick="updateDateRange(this,'6m')">6M</span> -->
                         <span class="nav-link range" onclick="updateDateRange(this,'ytd')">YTD</span>
                         <span class="nav-link range active" onclick="updateDateRange(this,'1y')">1Y</span>
                         <span class="nav-link range" onclick="updateDateRange(this,'5y')">5Y</span>
@@ -152,7 +152,33 @@
                   {{> stock_chart}}
                 </div>
               </div>
+            </div>
 
+            <!-- Financials -->
+            <div class="col-lg-4 col-md-12 mtm">
+              <div class="card">
+                <div class="card-body" id="financialsCard">
+                  <div class="row mb20">
+                    <div class="col-md-5">
+                      <h5>Financials</h5>
+                    </div>
+                    <div class="col-md-7">
+                      <nav class="nav pull-right">
+                        <span class="nav-link financials range active" onclick="updateFinancialsRange(this,'quarterly')">Quarterly</span>
+                        <span class="nav-link financials range" onclick="updateFinancialsRange(this,'annual')">Annual</span>
+                      </nav>
+                    </div>
+                  </div>
+
+                  <!-- add financials chart -->
+                  {{> income_chart}}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-8 col-md-12">
               <!-- Company News -->
               <div class="card mtm">
                 <div class="card-body">
@@ -183,29 +209,6 @@
                 </div>
               </div>
             </div>
-
-            <!-- Financials -->
-            <div class="col-md-4">
-              <div class="card">
-                <div class="card-body" id="financialsCard">
-                  <div class="row mb20">
-                    <div class="col-md-5">
-                      <h5>Financials</h5>
-                    </div>
-                    <div class="col-md-7">
-                      <nav class="nav pull-right">
-                        <span class="nav-link financials range active" onclick="updateFinancialsRange(this,'quarterly')">Quarterly</span>
-                        <span class="nav-link financials range" onclick="updateFinancialsRange(this,'annual')">Annual</span>
-                      </nav>
-                    </div>
-                  </div>
-
-                  <!-- add financials chart -->
-                  {{> income_chart}}
-                </div>
-              </div>
-            </div>
-
           </div>
 
         </div>

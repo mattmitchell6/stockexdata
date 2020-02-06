@@ -264,6 +264,9 @@ async function getEarningsResults(symbol) {
   }
 }
 
+/**
+ * calculate daily stock price change percentage
+ */
 function dailyChange(latestPrice, previousClose) {
   let change = latestPrice - previousClose
   let changePercent = (latestPrice * 100) / previousClose - 100;
@@ -295,10 +298,6 @@ function unStringify(stock) {
     news: {
       data: JSON.parse(stock.news.data),
       lastUpdated: stock.news.lastUpdated
-    },
-    history: {
-      data: JSON.parse(stock.history.data),
-      lastUpdated: stock.history.lastUpdated
     }
   }
 }
