@@ -231,3 +231,12 @@ h1, h2, h3, h4, h5 {
     /*height: 500 !important;*/
   }
 }
+
+.watchlist {
+  border-style: solid;
+  border-color: #3F3F56;
+  border-radius: 15px;
+  border-width: 1px;
+  padding: 5px 10px;
+  font-size: 60%;
+}

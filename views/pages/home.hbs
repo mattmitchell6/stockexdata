@@ -3,7 +3,8 @@
 {{#*inline "content-block"}}
   <div class="container mtm">
     <div class="row d-flex justify-content-center">
-      <div class="tab-content col-md-6">
+
+      <div class="col-md-6">
         {{> flash_message }}
 
         <h4 class="text-center">Search by symbol or company name</h4>
@@ -22,6 +23,36 @@
         </form>
 
       </div>
+
+      <!-- watchlist -->
+      <div class="col-md-8">
+        <div class="card mtm">
+          <div class="card-body">
+            <h4>Watchlist</h4>
+            <hr>
+            {{#if user}}
+              {{#each user.watchlist}}
+                {{this.symbol}}
+              {{/each}}
+              {{#if user.watchlist}}
+                {{#each user.watchlist}}
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">{{this}}</h5>
+                    </div>
+                  </div>
+                {{/each}}
+              {{else}}
+                does not exist, add some TODO
+              {{/if}}
+            {{else}}
+              <a href="/auth/google">Login with Google</a> to create a watchlist
+            {{/if}}
+          </div>
+        </div>
+
+      </div>
+
     </div>
   </div>
 
