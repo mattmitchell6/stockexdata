@@ -8,6 +8,10 @@ h1, h2, h3, h4, h5 {
   font-weight: 300;
 }
 
+a:hover {
+  text-decoration: none;
+}
+
 .dropdown-menu {
   right: 0% !important;
   left: auto;
@@ -113,6 +117,10 @@ h1, h2, h3, h4, h5 {
 
 .mm {
   margin: 20px;
+}
+
+.mvs {
+  margin: 15px 0px;
 }
 
 .mbm {
@@ -234,9 +242,9 @@ h1, h2, h3, h4, h5 {
 
 .watchlist {
   border-style: solid;
-  border-color: #3F3F56;
+  border-color: #007bff;
   border-radius: 15px;
   border-width: 1px;
-  padding: 5px 10px;
-  font-size: 60%;
+  padding: 3px 6px;
+  font-size: 50%;
 }

@@ -36,9 +36,9 @@
               {{/each}}
               {{#if user.watchlist}}
                 {{#each user.watchlist}}
-                  <div class="card">
+                  <div class="card mvs">
                     <div class="card-body">
-                      <h5 class="card-title">{{this}}</h5>
+                      <a href="/search?symbol={{this}}"><h5 class="card-title">{{this}}</h5></a>
                     </div>
                   </div>
                 {{/each}}

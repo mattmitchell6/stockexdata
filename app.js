@@ -40,6 +40,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // mongoose connect
+mongoose.set('useFindAndModify', false);
 mongoose.connect(process.env.DATABASE_URL, {
   useNewUrlParser: true,
   reconnectTries: Number.MAX_VALUE,

@@ -18,7 +18,7 @@ class IEX {
    */
   static async getStockData(symbol) {
     let quote, logoUrl, news, history, earningsResults, keyStats;
-    let updates = {};
+    let updateTasks = [], updateTaskResults = [], updateKeys = [], updates = {};
     const currentTime = moment();
 
     // fetch stock by symbol from db
@@ -31,49 +31,50 @@ class IEX {
       // update news once a day
       if(currentTime.isAfter(stock.news.lastUpdated, 'day')) {
         console.log("updating news...");
-        news = await getNews(symbol)
-        updates.news = {data: news, lastUpdated: currentTime}
+        updateTasks.push(getNews(symbol))
+        updateKeys.push('news')
       }
 
       // update quote every 5 minutes
       if(currentTime.diff(stock.quote.lastUpdated, 'minutes') > 5) {
         console.log("updating stock quote...");
-        quote = await getQuote(symbol)
-        updates.quote = {data: quote, lastUpdated: currentTime}
+        updateTasks.push(getQuote(symbol))
+        updateKeys.push('quote')
       }
 
       // update history once a day
       if(currentTime.isAfter(stock.history.lastUpdated, 'day')) {
         console.log("updating historical quotes...");
-        history = await updateHistoricalPrices(symbol, currentTime, stock.history.lastUpdated, stock.history.data)
-        updates.history = {data: history, lastUpdated: currentTime}
+        updateTasks.push(updateHistoricalPrices(symbol, currentTime, stock.history.lastUpdated, stock.history.data))
+        updateKeys.push('history')
       }
 
       // update earnings results roughly once a quarter
       // TODO: there is definitely a better way of doing this
       if(currentTime.diff(stock.earningsResults.lastReported, 'days') > 90) {
         console.log("updating earnings data...");
-        earningsResults = await getEarningsResults(symbol);
-        updates.earningsResults = {
-          quarterlyIncomeData: earningsResults.quarterlyIncomeData,
-          annualIncomeData: earningsResults.annualIncomeData,
-          earningsData: earningsResults.earningsData,
-          lastReported: earningsResults.lastReported
-        }
+        updateTasks.push(getEarningsResults(symbol));
+        updateKeys.push('earningsResults')
       }
 
       // update key stats once a day
       if(!stock.keyStats || !stock.keyStats.data|| !stock.keyStats.lastUpdated || currentTime.isAfter(stock.keyStats.lastUpdated, 'day')) {
         console.log("updating key stats...");
-        keyStats = await getKeyStats(symbol);
-        updates.keyStats = {data: keyStats, lastUpdated: currentTime}
+        updateTasks.push(getKeyStats(symbol));
+        updateKeys.push('keyStats')
       }
 
+      console.log(updateTasks);
       // if updates exist, save updates to db
-      if(!isEmpty(updates)) {
+      if(updateTasks.length > 0) {
         console.log("updating stock db entry...");
-        await Stock.updateOne({'symbol': symbol.toUpperCase()}, updates);
-        stock = await Stock.findOne({'symbol': symbol.toUpperCase()});
+        updateTaskResults = await Promise.all(updateTasks)
+
+        for(let i = 0; i < updateTaskResults.length; i++) {
+          updates[updateKeys[i]] = updateTaskResults[i]
+        }
+
+        stock = await Stock.findOneAndUpdate({'symbol': symbol.toUpperCase()}, updates, {new: true});
       }
     // no entry exists for this stock, create a new one
     } else {
@@ -92,17 +93,12 @@ class IEX {
       // add new stock to db
       stock = new Stock({
         symbol: symbol.toUpperCase(),
-        quote: {data: quote, lastUpdated: currentTime},
-        keyStats: {data: keyStats, lastUpdated: currentTime},
+        quote: quote,
+        keyStats: keyStats,
         logoUrl: logoUrl,
-        history: {data: history, lastUpdated: currentTime},
-        news: {data: news, lastUpdated: currentTime},
-        earningsResults: {
-          quarterlyIncomeData: earningsResults.quarterlyIncomeData,
-          annualIncomeData: earningsResults.annualIncomeData,
-          earningsData: earningsResults.earningsData,
-          lastReported: earningsResults.lastReported
-        }
+        history: history,
+        news: news,
+        earningsResults: earningsResults
       })
       await stock.save()
     }
@@ -136,7 +132,7 @@ async function getQuote(symbol) {
 
   // calculate change
   result.dailyChange = dailyChange(result.latestPrice, result.previousClose)
-  return JSON.stringify(result);
+  return {data: JSON.stringify(result), lastUpdated: moment()};
 }
 
 /**
@@ -158,7 +154,7 @@ async function getHistoricalPrices(symbol, range) {
 
   // fetch daily stock prices ytd
   let result = await axios.get(url);
-  return JSON.stringify(result.data)
+  return {data: JSON.stringify(result.data), lastUpdated: moment()}
 }
 
 /**
@@ -196,7 +192,7 @@ async function updateHistoricalPrices(symbol, currentTime, lastUpdated, previous
 
   history = history.concat(toAddDates);
 
-  return JSON.stringify(history);
+  return {data: JSON.stringify(history), lastUpdated: moment()};
 }
 
  /**
@@ -213,7 +209,7 @@ async function getNews(symbol) {
     result.data[i].summary = result.data[i].summary.substr(0, MAX_NEWS_SUMMARY) + "...."
   }
 
-  return JSON.stringify(result.data)
+  return {data: JSON.stringify(result.data), lastUpdated: moment()}
 }
 
 /**
@@ -224,7 +220,7 @@ async function getKeyStats(symbol) {
 
  // fetch key stats
  let result = await axios.get(url);
- return JSON.stringify(result.data)
+ return {data: JSON.stringify(result.data), lastUpdated: moment()}
 }
 
 /**
