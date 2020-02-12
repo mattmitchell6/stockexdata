@@ -19,6 +19,7 @@ class IEX {
   static async getStockData(symbol) {
     let quote, logoUrl, news, history, earningsResults, keyStats;
     let updateTasks = [], updateTaskResults = [], updateKeys = [], updates = {};
+    let nextEarningsDate;
     const currentTime = moment();
 
     // fetch stock by symbol from db
@@ -47,8 +48,8 @@ class IEX {
       }
 
       // update earnings results roughly once a quarter
-      // TODO: there is definitely a better way of doing this
-      if(currentTime.diff(stock.earningsResults.lastReported, 'days') > 90) {
+      nextEarningsDate = unStringify(stock).keyStats.data.nextEarningsDate;
+      if(moment(nextEarningsDate).diff(stock.earningsResults.lastReported, 'days') > 150) {
         updateTasks.push(getEarningsResults(symbol));
         updateKeys.push('earningsResults')
       }
@@ -65,7 +66,7 @@ class IEX {
         updateTaskResults = await Promise.all(updateTasks)
 
         for(let i = 0; i < updateTaskResults.length; i++) {
-          console.log(`updating ${updateKeys[i]}...`);
+          console.log(`updating ${symbol} ${updateKeys[i]}...`);
           updates[updateKeys[i]] = updateTaskResults[i]
         }
 

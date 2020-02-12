@@ -30,7 +30,6 @@ router.get('/', async function(req, res) {
       watchlistTasks.push(IEX.getStockData(watchlist[i]))
     }
     watchlistQuotes = await Promise.all(watchlistTasks)
-    console.log(watchlistQuotes[0].quote);
   }
 
   res.render('pages/home', {
