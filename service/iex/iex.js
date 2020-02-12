@@ -30,21 +30,18 @@ class IEX {
 
       // update news once a day
       if(currentTime.isAfter(stock.news.lastUpdated, 'day')) {
-        console.log("updating news...");
         updateTasks.push(getNews(symbol))
         updateKeys.push('news')
       }
 
       // update quote every 5 minutes
       if(currentTime.diff(stock.quote.lastUpdated, 'minutes') > 5) {
-        console.log("updating stock quote...");
         updateTasks.push(getQuote(symbol))
         updateKeys.push('quote')
       }
 
       // update history once a day
       if(currentTime.isAfter(stock.history.lastUpdated, 'day')) {
-        console.log("updating historical quotes...");
         updateTasks.push(updateHistoricalPrices(symbol, currentTime, stock.history.lastUpdated, stock.history.data))
         updateKeys.push('history')
       }
@@ -52,25 +49,23 @@ class IEX {
       // update earnings results roughly once a quarter
       // TODO: there is definitely a better way of doing this
       if(currentTime.diff(stock.earningsResults.lastReported, 'days') > 90) {
-        console.log("updating earnings data...");
         updateTasks.push(getEarningsResults(symbol));
         updateKeys.push('earningsResults')
       }
 
       // update key stats once a day
       if(!stock.keyStats || !stock.keyStats.data|| !stock.keyStats.lastUpdated || currentTime.isAfter(stock.keyStats.lastUpdated, 'day')) {
-        console.log("updating key stats...");
         updateTasks.push(getKeyStats(symbol));
         updateKeys.push('keyStats')
       }
 
-      console.log(updateTasks);
       // if updates exist, save updates to db
       if(updateTasks.length > 0) {
         console.log("updating stock db entry...");
         updateTaskResults = await Promise.all(updateTasks)
 
         for(let i = 0; i < updateTaskResults.length; i++) {
+          console.log(`updating ${updateKeys[i]}...`);
           updates[updateKeys[i]] = updateTaskResults[i]
         }
 

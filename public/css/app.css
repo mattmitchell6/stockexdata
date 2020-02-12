@@ -103,6 +103,10 @@ a:hover {
   margin-top: 20px;
 }
 
+.mtxs {
+  margin-top: 5px;
+}
+
 .navbar-collapse {
   flex-grow: 0;
 }
@@ -207,6 +211,26 @@ a:hover {
 .neutral {
   color: #6C757D;
 }
+
+/* styles for watchlist change amount */
+.green-background {
+ background-color: #29A745;
+}
+
+.red-background {
+  background-color: #DC3545;
+}
+
+.neutral-background {
+  background-color: #6C757D;
+}
+
+.daily-change-watchlist {
+  color: #FFF;
+  border-radius: 5px;
+  padding: 2px 10px;
+}
+
 
 .search {
   position: relative;

@@ -4,29 +4,38 @@
 const express = require('express');
 const router = express.Router();
 const moment = require('moment');
-const passport = require('passport');
-const User = require('../models/users');
 
-
-const IEX = require('../service/iex/iex');
 const Stock = require('../models/stocks');
 const Company = require('../models/companies');
+const IEX = require('../service/iex/iex');
 // const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn('/');
 
 
 // load routes
-// router.use('/dashboard', ensureLoggedIn, require('./dashboard'))
+router.use('/watchlist', require('./watchlist'))
+router.use('/auth', require('./auth'))
 
 /**
  * base route
  */
-router.get('/', function(req, res) {
-  // if (req.user) {
-  //   res.redirect('/dashboard');
-  // } else {
-  //   res.render('pages/home');
-  // }
-  res.render('pages/home')
+router.get('/', async function(req, res) {
+  let watchlist, stock;
+  let watchlistQuotes = [], watchlistTasks = []
+
+  // if user is logged in and has items in watchlist, fetch quotes
+  if(req.user && req.user.watchlist.length > 0) {
+    watchlist = req.user.watchlist;
+
+    for(let i = 0; i < watchlist.length; i++) {
+      watchlistTasks.push(IEX.getStockData(watchlist[i]))
+    }
+    watchlistQuotes = await Promise.all(watchlistTasks)
+    console.log(watchlistQuotes[0].quote);
+  }
+
+  res.render('pages/home', {
+    watchlist: watchlistQuotes
+  })
 });
 
 /**
@@ -191,83 +200,6 @@ router.get('/symbolfilter', async function(req, res) {
     ]
   }).limit(7)
   res.send(searchResults);
-});
-
-/**
- * log in
- */
-// router.post('/login', passport.authenticate('local', { failureRedirect: '/', failureFlash: true }), function(req, res) {
-//   res.redirect('/');
-// });
-
-/**
- * sign up, create new user
- */
-// router.post('/signup', async function(req, res) {
-//   let userInfo = req.body;
-//
-//   // create new Stripe customer and db user
-//   await User.newUser(userInfo);
-//   console.log("Successfully created new user");
-//
-//   passport.authenticate('local') (req, res, function() {
-//     res.redirect('/dashboard');
-//   });
-// });
-
-/**
- * add company to watchlist
- */
-router.get('/watchlist/add/:symbol', async function(req, res) {
-  symbol = req.params.symbol;
-  const filter = {_id: req.user._id};
-  const update = {$push: {watchlist: symbol}};
-
-  let updatedUser = await User.findOneAndUpdate(filter, update, {new: true});
-  req.session.passport.user = updatedUser
-
-  res.redirect('/search?symbol=' + symbol)
-});
-
-/**
- * remove company from watchlist
- */
-router.get('/watchlist/remove/:symbol', async function(req, res) {
-  symbol = req.params.symbol;
-  const filter = {_id: req.user._id};
-  const update = {$pull: {watchlist: symbol}};
-
-  let updatedUser = await User.findOneAndUpdate(filter, update, {new: true});
-  req.session.passport.user = updatedUser
-
-  res.redirect('/search?symbol=' + symbol)
-})
-
-
-
-/**
- * log in
- */
-router.get('/auth/google', passport.authenticate('google', {scope: ['profile']}));
-
-/**
- * log in
- */
-// router.get('/auth/google/callback', passport.authenticate('google', {successRedirect: '/auth/google/success', failureRedirect: '/auth/google/failure'}), function(req, res) {
-//   console.log("back in auth callback");
-//   res.redirect('/')
-// });
-
-router.get('/auth/google/callback', passport.authenticate('google'), function(req, res) {
-  res.redirect('/');
-});
-
-/**
- * logout clear session
- */
-router.get('/logout', function(req, res) {
-  req.logout();
-  res.redirect('/');
 });
 
 module.exports = router;

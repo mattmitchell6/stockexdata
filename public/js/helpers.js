@@ -4,6 +4,7 @@
 
 $(document).ready(function() {
   var dailyChange = document.getElementsByClassName("daily-change");
+  var dailyChangeWatchlist = document.getElementsByClassName("daily-change-watchlist");
   var dates = document.getElementsByClassName("date");
   var newsDates = document.getElementsByClassName("news-date");
   var earningsDates = document.getElementsByClassName("earnings-date");
@@ -29,6 +30,22 @@ $(document).ready(function() {
     } else {
       dailyChange[i].classList.add('red')
       dailyChange[i].innerHTML = `${changePercent}% (${change})`;
+    }
+  }
+
+  // iterate through daily watchlist amounts
+  for (var i = 0; i < dailyChangeWatchlist.length; i++) {
+    changePercent = dailyChangeWatchlist[i].getAttribute('change-percent');
+
+    if(changePercent > 0) {
+      dailyChangeWatchlist[i].classList.add('green-background')
+      dailyChangeWatchlist[i].innerHTML = `+${changePercent}%`;
+    } else if(changePercent == 0) {
+      dailyChangeWatchlist[i].classList.add('neutral-background')
+      dailyChangeWatchlist[i].innerHTML = `${changePercent}%`;
+    } else {
+      dailyChangeWatchlist[i].classList.add('red-background')
+      dailyChangeWatchlist[i].innerHTML = `${changePercent}%`;
     }
   }
 

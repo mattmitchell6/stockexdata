@@ -31,19 +31,28 @@
             <h4>Watchlist</h4>
             <hr>
             {{#if user}}
-              {{#each user.watchlist}}
-                {{this.symbol}}
-              {{/each}}
-              {{#if user.watchlist}}
-                {{#each user.watchlist}}
+              {{#if watchlist}}
+                {{#each watchlist}}
                   <div class="card mvs">
                     <div class="card-body">
-                      <a href="/search?symbol={{this}}"><h5 class="card-title">{{this}}</h5></a>
+                      <div class="row">
+                        <div class="col-6">
+                          <a href="/search?symbol={{this.quote.data.symbol}}"><h5 class="card-title">{{this.quote.data.symbol}}</h5></a>
+                          <span>{{this.quote.data.companyName}}</span>
+                        </div>
+                        <div class="col-6">
+                          <div class="price pull-right" data-price="{{this.quote.data.latestPrice}}"></div>
+                          <br>
+                          <div class="daily-change-watchlist pull-right mtxs" change-percent="{{this.quote.data.dailyChange.changePercent}}">
+                          </div>
+                        </div>
+
+                      </div>
                     </div>
                   </div>
                 {{/each}}
               {{else}}
-                does not exist, add some TODO
+                Your watchlist is empty
               {{/if}}
             {{else}}
               <a href="/auth/google">Login with Google</a> to create a watchlist
