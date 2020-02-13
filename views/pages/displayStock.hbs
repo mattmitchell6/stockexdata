@@ -13,21 +13,21 @@
             <div class="card-body">
               <div class="row mbs">
                 <div class="col-8 overflow">
-                  <h3>{{info.symbol}}
-                    {{#if user}}
-                      {{#if_in_list info.symbol user.watchlist}}
-                        <a href="/watchlist/remove/{{info.symbol}}"><span class="watchlist"><i class="fas fa-star "></i> remove from watchlist</span></a>
-                      {{else}}
-                        <a href="/watchlist/add/{{info.symbol}}"><span class="watchlist"><i class="far fa-star"></i> add to watchlist</span></a>
-                      {{/if_in_list}}
-                    {{/if}}
-                  </h3>
+                  <h3>{{info.symbol}}</h3>
                   <span>{{info.companyName}}</span>
-
                 </div>
                 <div class="col-4">
                   <img src="{{logoUrl}}" height=50px alt="" class="pull-right">
                 </div>
+                {{#if user}}
+                  <div class="col-12" style="margin-top: .5rem">
+                    {{#if_in_list info.symbol user.watchlist}}
+                      <a href="/watchlist/remove/{{info.symbol}}"><span class="watchlist"><i class="fas fa-star "></i> remove from watchlist</span></a>
+                    {{else}}
+                      <a href="/watchlist/add/{{info.symbol}}"><span class="watchlist"><i class="far fa-star"></i> add to watchlist</span></a>
+                    {{/if_in_list}}
+                  </div>
+                {{/if}}
               </div>
               <hr>
 
