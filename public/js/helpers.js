@@ -116,6 +116,10 @@ $(document).ready(function() {
     $("button", this).attr('disabled', 'disabled');
     return true;
   });
+
+  $("a").click(function(e) {
+    $(this).click(function () { return false; });
+  });
 })
 
 // make navbar items active
