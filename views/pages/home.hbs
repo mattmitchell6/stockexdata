@@ -25,41 +25,36 @@
       </div>
 
       <!-- watchlist -->
-      <div class="col-md-8">
-        <div class="card mtm">
-          <div class="card-body">
-            <h4>Watchlist</h4>
-            <hr>
-            {{#if user}}
-              {{#if watchlist}}
-                {{#each watchlist}}
-                  <div class="card mvs">
-                    <div class="card-body">
-                      <div class="row">
-                        <div class="col-6">
-                          <a href="/search?symbol={{this.quote.data.symbol}}"><h5 class="card-title">{{this.quote.data.symbol}}</h5></a>
-                          <span>{{this.quote.data.companyName}}</span>
-                        </div>
-                        <div class="col-6">
-                          <div class="price pull-right" data-price="{{this.quote.data.latestPrice}}"></div>
-                          <br>
-                          <div class="daily-change-watchlist pull-right mtxs" change-percent="{{this.quote.data.dailyChange.changePercent}}">
-                          </div>
-                        </div>
-
+      <div class="col-md-8 mtm">
+        <h5>Watchlist</h5>
+        <hr>
+        {{#if user}}
+          {{#if watchlist}}
+            {{#each watchlist}}
+              <div class="card mvs">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-6 overflow">
+                      <a href="/search?symbol={{this.quote.data.symbol}}"><h5>{{this.quote.data.symbol}}</h5></a>
+                      <span>{{this.quote.data.companyName}}</span>
+                    </div>
+                    <div class="col-6">
+                      <div class="price pull-right" data-price="{{this.quote.data.latestPrice}}"></div>
+                      <br>
+                      <div class="daily-change-watchlist pull-right mtxs" change-percent="{{this.quote.data.dailyChange.changePercent}}">
                       </div>
                     </div>
-                  </div>
-                {{/each}}
-              {{else}}
-                Your watchlist is empty
-              {{/if}}
-            {{else}}
-              <a href="/auth/google">Login with Google</a> to create a watchlist
-            {{/if}}
-          </div>
-        </div>
 
+                  </div>
+                </div>
+              </div>
+            {{/each}}
+          {{else}}
+            Your watchlist is empty
+          {{/if}}
+        {{else}}
+          <a href="/auth/google">Login with Google</a> to create a watchlist
+        {{/if}}
       </div>
 
     </div>

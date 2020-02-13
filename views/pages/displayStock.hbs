@@ -12,7 +12,7 @@
           <div class="card">
             <div class="card-body">
               <div class="row mbs">
-                <div class="col-md-8 col-sm-8 col-xs-8">
+                <div class="col-8 overflow">
                   <h3>{{info.symbol}}
                     {{#if user}}
                       {{#if_in_list info.symbol user.watchlist}}
@@ -25,7 +25,7 @@
                   <span>{{info.companyName}}</span>
 
                 </div>
-                <div class="col-md-4 col-sm-4 col-xs-4">
+                <div class="col-4">
                   <img src="{{logoUrl}}" height=50px alt="" class="pull-right">
                 </div>
               </div>
@@ -144,10 +144,10 @@
               <div class="card">
                 <div class="card-body">
                   <div class="row mb20">
-                    <div class="col-md-6">
+                    <div class="col-5">
                       <h5>Historical Performance</h5>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-7">
                       <nav class="nav pull-right">
                         <!-- <span class="nav-link range" onclick="updateDateRange(this,'6m')">6M</span> -->
                         <span class="nav-link range" onclick="updateDateRange(this,'ytd')">YTD</span>
@@ -169,10 +169,10 @@
               <div class="card">
                 <div class="card-body" id="financialsCard">
                   <div class="row mb20">
-                    <div class="col-md-5">
+                    <div class="col-5">
                       <h5>Financials</h5>
                     </div>
-                    <div class="col-md-7">
+                    <div class="col-7">
                       <nav class="nav pull-right">
                         <span class="nav-link financials range active" onclick="updateFinancialsRange(this,'quarterly')">Quarterly</span>
                         <span class="nav-link financials range" onclick="updateFinancialsRange(this,'annual')">Annual</span>

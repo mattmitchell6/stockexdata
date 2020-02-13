@@ -19,14 +19,12 @@
             Stock Quotes
           </a>
         </div>
-        {{#if displayNavSearch}}
-          <button class="navbar-toggler mb-2" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-        {{/if}}
+        <button class="navbar-toggler mb-2" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           {{#if displayNavSearch}}
-            <form action="/search" method="get" class="form-inline">
+            <form action="/search" method="get" class="form-inline" style="padding-right: .8rem">
               <div class="search">
                 <span class="fa fa-search form-control-feedback mt-2"></span>
                 <input type="text" autocomplete="off" class="form-control form-control-sm" id="stockInput" name="symbol" placeholder="stock lookup">
@@ -39,9 +37,9 @@
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
               {{#if user}}
-                <a class="nav-link" href="/auth/logout">Logout</a>
+                <a class="login-link" href="/auth/logout">Logout</a>
               {{else}}
-                <a class="nav-link" href="/auth/google">Login</a>
+                <a class="login-link" href="/auth/google">Login</a>
               {{/if}}
             </li>
           </ul>
