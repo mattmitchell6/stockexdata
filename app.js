@@ -34,7 +34,7 @@ app.use(require('express-session')({
   secret: 'unique-secret',
   resave: false,
   saveUninitialized: false,
-  cookie: {maxAge: 30 * 86400 * 1000 } // 30 days 
+  cookie: {maxAge: 30 * 86400 * 1000 } // 30 days
 }));
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -70,6 +70,10 @@ app.use(require('./controllers'));
 app.use((err, req, res, next) => {
   console.log(err);
   res.render('pages/error', { error: err});
+});
+
+app.get("*", function(request, response){
+  response.redirect("https://" + request.headers.host + request.url);
 });
 
 

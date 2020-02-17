@@ -12,7 +12,7 @@
         <!-- search -->
         <form action="/search" method="get" class="mt-4">
           <div class="input-group mb-3">
-            <input type="text" autocomplete="off" class="form-control" id="stockInput" name="symbol" placeholder="BOX, SQ, Disney, etc.">
+            <input type="text" autocomplete="off" class="form-control" id="stockInput" name="symbol" placeholder="BOX, SQ, Apple, etc.">
             <div class="dropdown-menu col-md-12" id="filteredResultsContainer">
               <div id="filteredResults"></div>
             </div>
@@ -32,7 +32,7 @@
           {{#if watchlist}}
             {{#each watchlist}}
               <div class="card mvs">
-                <div class="card-body">
+                <div class="card-body watchlist-card">
                   <div class="row">
                     <div class="col-6 overflow">
                       <a href="/search?symbol={{this.quote.data.symbol}}"><h5>{{this.quote.data.symbol}}</h5></a>
