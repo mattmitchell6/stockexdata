@@ -72,8 +72,11 @@ app.use((err, req, res, next) => {
   res.render('pages/error', { error: err});
 });
 
-app.get("*", function(request, response){
-  response.redirect("https://" + request.headers.host + request.url);
+// always ensure https
+app.use(function(req, res){
+  if(req.protocol === "http") {
+    res.redirect("https://" + req.headers.host + req.url);
+  }
 });
 
 
