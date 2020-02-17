@@ -73,14 +73,14 @@ app.use((err, req, res, next) => {
 });
 
 // always ensure https
-app.use(function(req, res) {
-  console.log("protocol...");
-  // console.log(req.protocol);
-  // if(req.protocol === "http") {
-  //   res.redirect("https://" + req.headers.host + req.url);
-  // }
+app.use(function(req, res, next) {
+  console.log('ensure https...');
+  if ((req.get('X-Forwarded-Proto') !== 'https')) {
+    res.redirect('https://' + req.get('Host') + req.url);
+  } else {
+    next();
+  }
 });
-
 
 //start server
 const PORT = process.env.PORT || 3000;
