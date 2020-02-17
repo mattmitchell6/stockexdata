@@ -75,10 +75,10 @@ app.use((err, req, res, next) => {
 // always ensure https
 app.use(function(req, res) {
   console.log("protocol...");
-  console.log(req.protocol);
-  if(req.protocol === "http") {
-    res.redirect("https://" + req.headers.host + req.url);
-  }
+  // console.log(req.protocol);
+  // if(req.protocol === "http") {
+  //   res.redirect("https://" + req.headers.host + req.url);
+  // }
 });
 
 
