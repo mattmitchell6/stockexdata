@@ -72,15 +72,6 @@ app.use((err, req, res, next) => {
   res.render('pages/error', { error: err});
 });
 
-// always ensure https
-app.use(function(req, res, next) {
-  console.log('ensure https...');
-  if ((req.get('X-Forwarded-Proto') !== 'https')) {
-    res.redirect('https://' + req.get('Host') + req.url);
-  } else {
-    next();
-  }
-});
 
 //start server
 const PORT = process.env.PORT || 3000;
