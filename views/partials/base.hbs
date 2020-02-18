@@ -3,7 +3,7 @@
 <html class="no-js" lang="en">
   <head>
     <title>
-        Live Stock Quotes
+        StockEx Data
     </title>
 
     {{#> head-block}}
@@ -16,7 +16,7 @@
       <div class="container">
         <div class="navbar-header">
           <a href="/" class="navbar-brand">
-            <img src="/img/stockexlogo1.png" height="40px" alt="">
+            <img src="/img/stockexlogo.png" height="40px" alt="">
           </a>
         </div>
         <button class="navbar-toggler mb-2" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +39,10 @@
               {{#if user}}
                 <a class="login-link" href="/auth/logout">Logout</a>
               {{else}}
-                <a class="login-link" href="/auth/google">Login</a>
+                <a class="btn btn-sm btn-light" href="/auth/google">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/1024px-Google_%22G%22_Logo.svg.png" height="18px" style="margin-right: 3px" alt="">
+                  Login
+                </a>
               {{/if}}
             </li>
           </ul>
