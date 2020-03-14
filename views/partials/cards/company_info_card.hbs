@@ -7,33 +7,51 @@
       <hr>
 
       {{#if info.website}}
-        <div>
-          Website
-          <a href="{{info.website}}" class="pull-right">{{info.website}}</a>
+        <div class="row">
+          <div class="col-4">
+            Website
+          </div>
+          <div class="col-8 overflow">
+            <div class="pull-right">
+              <a href="{{info.website}}">{{info.website}}</a>
+            </div>
+          </div>
         </div>
         <hr>
       {{/if}}
 
       {{#if info.CEO}}
-        <div>
-          CEO
-          <span class="pull-right bold">{{info.CEO}}</span>
+        <div class="row">
+          <div class="col-4">
+            CEO
+          </div>
+          <div class="col-8 overflow pull-right">
+            <span class="bold pull-right">{{info.CEO}}</span>
+          </div>
         </div>
         <hr>
       {{/if}}
 
       {{#if info.state}}
-        <div>
-          Headquarters
-          <span class="pull-right bold">{{info.city}}, {{info.state}}</span>
+        <div class="row">
+          <div class="col-4">
+            HQ
+          </div>
+          <div class="col-8 overflow">
+            <span class="bold pull-right">{{info.city}}, {{info.state}}</span>
+          </div>
         </div>
         <hr>
       {{/if}}
 
       {{#if info.sector}}
-        <div>
-          Sector
-            <span class="pull-right bold">{{info.sector}}</span>
+        <div class="row">
+          <div class="col-4">
+            Sector
+          </div>
+          <div class="col-8 overflow">
+            <span class="bold pull-right">{{info.sector}}</span>
+          </div>
         </div>
         <hr>
       {{/if}}

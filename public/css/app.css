@@ -29,6 +29,13 @@ a:hover {
   white-space: nowrap;
 }
 
+.overflow > div {
+  text-overflow: ellipsis;
+  overflow:hidden;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
 .dropdown-item {
   font-weight: 300;
   white-space: nowrap;
