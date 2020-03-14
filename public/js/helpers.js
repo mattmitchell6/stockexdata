@@ -2,13 +2,6 @@
  * Clientside helper functions
  */
 
-// Start or resume session
-session_start();
-
-// Extend cookie life time by a year, to solve iOS cookie issue
-$cookieLifetime = 365 * 24 * 60 * 60; // A year in seconds
-setcookie(session_name(), session_id(), time() + $cookieLifetime);
-
 $(document).ready(function() {
   var dailyChange = document.getElementsByClassName("daily-change");
   var dailyChangeWatchlist = document.getElementsByClassName("daily-change-watchlist");
