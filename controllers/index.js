@@ -47,7 +47,7 @@ router.get('/search', async function(req, res) {
     // fetch data
     const stock = await IEX.getStockData(symbol);
 
-    res.render('pages/displayStock', {
+      res.render('pages/displayStock', {
       quote: stock.quote.data,
       info: stock.companyInfo.data,
       quoteLastUpdated: stock.quote.lastUpdated,

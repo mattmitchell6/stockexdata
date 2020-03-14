@@ -1,0 +1,21 @@
+<div class="card">
+  <div class="card-body">
+    <div class="row mbs">
+      <div class="col-sm-5 col-12 mbs">
+        <h5>Historical Performance</h5>
+      </div>
+      <div class="col-sm-7 col-12">
+        <nav class="nav pull-right">
+          <!-- <span class="nav-link range" onclick="updateDateRange(this,'6m')">6M</span> -->
+          <span class="nav-link range" onclick="updateDateRange(this,'ytd')">YTD</span>
+          <span class="nav-link range active" onclick="updateDateRange(this,'1y')">1Y</span>
+          <span class="nav-link range" onclick="updateDateRange(this,'5y')">5Y</span>
+          <span class="nav-link range" onclick="updateDateRange(this,'max')">All Time</span>
+        </nav>
+      </div>
+    </div>
+
+    <!-- stock chart partial -->
+    {{> stock_chart}}
+  </div>
+</div>

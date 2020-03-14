@@ -1,0 +1,51 @@
+<div class="card card-body mbm" id="infoCard">
+  <div class="row">
+    <div class="col-12">
+      <h5 class="mbm">About {{info.companyName}}</h5>
+      <div id="company-description" data-desc="{{info.description}}"></div>
+      <a id="morelesstext" href="#">Read More</a>
+      <hr>
+
+      {{#if info.website}}
+        <div>
+          Website
+          <a href="{{info.website}}" class="pull-right">{{info.website}}</a>
+        </div>
+        <hr>
+      {{/if}}
+
+      {{#if info.CEO}}
+        <div>
+          CEO
+          <span class="pull-right bold">{{info.CEO}}</span>
+        </div>
+        <hr>
+      {{/if}}
+
+      {{#if info.state}}
+        <div>
+          Headquarters
+          <span class="pull-right bold">{{info.city}}, {{info.state}}</span>
+        </div>
+        <hr>
+      {{/if}}
+
+      {{#if info.sector}}
+        <div>
+          Sector
+            <span class="pull-right bold">{{info.sector}}</span>
+        </div>
+        <hr>
+      {{/if}}
+
+      {{#if info.employees}}
+        <!-- <div>
+          Employees
+          <span class="pull-right bold employees" data="{{info.employees}}"></span>
+        </div>
+        <hr> -->
+      {{/if}}
+
+    </div>
+  </div>
+</div>

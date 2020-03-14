@@ -37,20 +37,20 @@ $(document).ready(function() {
 
   // update company description text
   if(description) {
-    description.innerHTML = description.innerHTML.substring(0, 300) + "...";
+    description.innerHTML = description.getAttribute('data-desc').substr(0, 200) + "... ";
 
     // button loading state
     $("#morelesstext").on("click", function(e) {
       e.preventDefault();
       if(this.innerHTML == "Read More") {
-        description.innerHTML = this.getAttribute('data');
+        description.innerHTML = description.getAttribute('data-desc');
         this.innerHTML = "Read Less"
       } else if(this.innerHTML == "Read Less") {
-        description.innerHTML = this.getAttribute('data').substr(0, 300) + "...";
+        description.innerHTML = description.getAttribute('data-desc').substr(0, 200) + "... ";
         this.innerHTML = "Read More"
       }
     })
-    
+
   }
 
   // iterate through daily watchlist amounts

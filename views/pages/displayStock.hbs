@@ -9,271 +9,32 @@
         <div class="tab-pane show active" id="login" role="tabpanel" aria-labelledby="login">
 
           <!-- general stock info -->
-          <div class="card">
-            <div class="card-body">
-              <div class="row mbs">
-                <div class="col-8 overflow">
-                  <h3>{{quote.symbol}}</h3>
-                  <span>{{quote.companyName}}</span>
-                </div>
-                <div class="col-4">
-                  <img src="{{logoUrl}}" height=50px alt="" class="pull-right logo">
-                </div>
-                {{#if user}}
-                  <div class="col-12" style="margin-top: .5rem">
-                    {{#if_in_list quote.symbol user.watchlist}}
-                      <a href="/watchlist/remove/{{quote.symbol}}"><span class="watchlist"><i class="fas fa-star "></i> remove from watchlist</span></a>
-                    {{else}}
-                      <a href="/watchlist/add/{{quote.symbol}}"><span class="watchlist"><i class="far fa-star"></i> add to watchlist</span></a>
-                    {{/if_in_list}}
-                  </div>
-                {{/if}}
-              </div>
-              <hr>
-
-              <div class="row">
-                <div class="col-md-12 mbm">
-                  <h4>
-                    <span class="price" data-price="{{quote.latestPrice}}"></span>
-                    <span class="daily-change" style="font-size: 80%"
-                      change="{{quote.dailyChange.change}}"
-                      change-percent="{{quote.dailyChange.changePercent}}">
-                    </span>
-                  </h4>
-                  <div class="text-muted">updated <span class="date" data-date="{{quote.latestUpdate}}"></span></div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
-                  <div>
-                    52 Week Range <span class="pull-right bold">{{quote.week52Low}} - {{quote.week52High}}</span>
-                  </div>
-                  <hr>
-
-                  <div class="">
-                    Market Cap
-                    {{#if quote.marketCap}}
-                      <span class="pull-right bold market-cap" data-market-cap="{{quote.marketCap}}"></span>
-                    {{else}}
-                      <span class="pull-right bold">NA</span>
-                    {{/if}}
-                  </div>
-                  <hr>
-
-                  <div class="">
-                    PE Ratio
-                    {{#if quote.peRatio}}
-                      <span class="pull-right bold">{{quote.peRatio}}</span>
-                    {{else}}
-                      <span class="pull-right bold">NA</span>
-                    {{/if}}
-                  </div>
-                  <hr>
-
-                </div>
-
-                <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
-                  <div class="">
-                    Earnings Date
-                    {{#if keyStats.nextEarningsDate}}
-                      <span class="pull-right bold earnings-date" data-date="{{keyStats.nextEarningsDate}}"></span>
-                    {{else}}
-                      <span class="pull-right bold">NA</span>
-                    {{/if}}
-                  </div>
-                  <hr>
-
-                  <div class="">
-                    EPS (ttm)
-                    {{#if keyStats.ttmEPS}}
-                      <span class="pull-right bold two-deciamals" data="{{keyStats.ttmEPS}}"></span>
-                    {{else}}
-                      <span class="pull-right bold">NA</span>
-                    {{/if}}
-                  </div>
-                  <hr>
-
-                  <div class="">
-                    Dividend Yield
-                    {{#if keyStats.dividendYield}}
-                      <span class="pull-right bold yield" data="{{keyStats.dividendYield}}"></span>
-                    {{else}}
-                      <span class="pull-right bold">NA</span>
-                    {{/if}}
-                  </div>
-                  <hr>
-                </div>
-
-                <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
-                  <div class="">
-                    Employees
-                    {{#if keyStats.employees}}
-                      <span class="pull-right bold employees" data="{{keyStats.employees}}"></span>
-                    {{else}}
-                      <span class="pull-right bold">NA</span>
-                    {{/if}}
-                  </div>
-                  <hr>
-
-                  <div class="">
-                    5 Year Price Change
-                    {{#if keyStats.ytdChangePercent}}
-                      <span class="pull-right bold percentage" data="{{keyStats.year5ChangePercent}}"></span>
-                    {{else}}
-                      <span class="pull-right bold">NA</span>
-                    {{/if}}
-                  </div>
-                  <hr>
-
-                  <div class="">
-                    YTD Price Change
-                    {{#if keyStats.ytdChangePercent}}
-                      <span class="pull-right bold percentage" data="{{keyStats.ytdChangePercent}}"></span>
-                    {{else}}
-                      <span class="pull-right bold">NA</span>
-                    {{/if}}
-                  </div>
-                  <hr>
-                </div>
-              </div>
-            </div>
-          </div>
+          {{> cards/quote_card}}
 
           <div class="row">
-            <div class="col-lg-8 col-md-12 mtm">
-              <!-- Historical Stock Performance -->
-              <div class="card">
-                <div class="card-body">
-                  <div class="row mbs">
-                    <div class="col-sm-5 col-12 mbs">
-                      <h5>Historical Performance</h5>
-                    </div>
-                    <div class="col-sm-7 col-12">
-                      <nav class="nav pull-right">
-                        <!-- <span class="nav-link range" onclick="updateDateRange(this,'6m')">6M</span> -->
-                        <span class="nav-link range" onclick="updateDateRange(this,'ytd')">YTD</span>
-                        <span class="nav-link range active" onclick="updateDateRange(this,'1y')">1Y</span>
-                        <span class="nav-link range" onclick="updateDateRange(this,'5y')">5Y</span>
-                        <span class="nav-link range" onclick="updateDateRange(this,'max')">All Time</span>
-                      </nav>
-                    </div>
-                  </div>
 
-                  <!-- stock chart partial -->
-                  {{> stock_chart}}
-                </div>
-              </div>
-            </div>
-
-            <!-- Financials -->
             <div class="col-lg-4 col-md-12 mtm">
 
               <!-- about company -->
               {{#if info.description}}
-                <div class="card mbm">
-                  <div class="card-body" id="infoCard">
-                    <div class="row mbs">
-                      <div class="col-12">
-                        <h5 class="mbm">About {{info.companyName}}</h5>
-                        <span id="company-description">{{info.description}}</span><a id="morelesstext" data="{{info.description}}" href="#">Read More</a>
-                        <hr>
-
-                        {{#if info.CEO}}
-                          <div>
-                            CEO
-                            <span class="pull-right bold">{{info.CEO}}</span>
-                          </div>
-                        {{/if}}
-                        <hr>
-
-                        {{#if info.state}}
-                          <div>
-                            Headquarters
-                            <span class="pull-right bold">{{info.city}}, {{info.state}}</span>
-                          </div>
-                        {{/if}}
-                        <hr>
-
-                        <div class="">
-                          Sector
-                          {{#if info.sector}}
-                            <span class="pull-right bold">{{info.sector}}</span>
-                          {{else}}
-                            <span class="pull-right bold">NA</span>
-                          {{/if}}
-                        </div>
-                        <hr>
-
-                        <div class="">
-                          Employees
-                          {{#if info.employees}}
-                            <span class="pull-right bold employees" data="{{info.employees}}"></span>
-                          {{else}}
-                            <span class="pull-right bold">NA</span>
-                          {{/if}}
-                        </div>
-                        <hr>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                {{> cards/company_info_card}}
               {{/if}}
 
-              <div class="card">
-                <div class="card-body" id="financialsCard">
-                  <div class="row mbs">
-                    <div class="col-sm-5 col-12 mbs">
-                      <h5>Financials</h5>
-                    </div>
-                    <div class="col-sm-7 col-12">
-                      <nav class="nav pull-right">
-                        <span class="nav-link financials range active" onclick="updateFinancialsRange(this,'quarterly')">Quarterly</span>
-                        <span class="nav-link financials range" onclick="updateFinancialsRange(this,'annual')">Annual</span>
-                      </nav>
-                    </div>
-                  </div>
-
-                  <!-- add financials chart -->
-                  {{> income_chart}}
-                </div>
-              </div>
+              <!-- Revenue Charts -->
+              {{#if_equals info.issueType "cs"}}
+                {{> cards/revenue_chart_card}}
+              {{/if_equals}}
             </div>
 
-          </div>
+            <div class="{{#if_equals info.issueType "cs"}}col-lg-8{{else}}col-lg-12{{/if_equals}} col-md-12 mtm">
+              <!-- Historical Stock Performance -->
+              {{> cards/historical_chart_card}}
 
-          <div class="row">
-            <div class="col-lg-8 col-md-12">
               <!-- Company News -->
-              <div class="card mtm">
-                <div class="card-body">
-                  <h5 class="mb20">News</h5>
-
-                  {{#each news}}
-                    <div class="row mbs">
-                      <div class="col-md-8">
-                        <a href="{{this.url}}">{{this.headline}}</a>
-                        <div class="text-muted news">
-                          {{this.summary}}
-                        </div>
-                      </div>
-                      <div class="col-md-4">
-                        <div class="pull-right">
-                          {{this.source}}
-                        </div>
-                        <br>
-                        <div class="pull-right">
-                          <div class="text-muted">
-                            <span class="news-date" data-date="{{this.datetime}}"></span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <hr>
-                  {{/each}}
-                </div>
-              </div>
+              {{> cards/news_card}}
             </div>
-          </div>
 
+          </div>
         </div>
       </div>
     </div>
