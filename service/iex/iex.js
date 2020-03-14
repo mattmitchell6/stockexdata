@@ -41,6 +41,12 @@ class IEX {
         updateKeys.push('quote')
       }
 
+      // update company info once a month
+      if(currentTime.diff(stock.companyInfo.lastUpdated, 'months') > 1) {
+        updateTasks.push(getCompanyInfo(symbol))
+        updateKeys.push('companyInfo')
+      }
+
       // update history once a day
       if(currentTime.isAfter(stock.history.lastUpdated, 'day')) {
         updateTasks.push(updateHistoricalPrices(symbol, currentTime, stock.history.lastUpdated, stock.history.data))
@@ -295,6 +301,10 @@ function unStringify(stock) {
   return {
     symbol: stock.symbol,
     logoUrl: stock.logoUrl,
+    companyInfo: {
+      data: JSON.parse(stock.companyInfo.data),
+      lastUpdated: stock.companyInfo.lastUpdated
+    },
     keyStats: {
       data: JSON.parse(stock.keyStats.data),
       lastUpdated: stock.keyStats.lastUpdated

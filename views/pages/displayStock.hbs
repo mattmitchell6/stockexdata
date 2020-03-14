@@ -13,18 +13,18 @@
             <div class="card-body">
               <div class="row mbs">
                 <div class="col-8 overflow">
-                  <h3>{{info.symbol}}</h3>
-                  <span>{{info.companyName}}</span>
+                  <h3>{{quote.symbol}}</h3>
+                  <span>{{quote.companyName}}</span>
                 </div>
                 <div class="col-4">
                   <img src="{{logoUrl}}" height=50px alt="" class="pull-right logo">
                 </div>
                 {{#if user}}
                   <div class="col-12" style="margin-top: .5rem">
-                    {{#if_in_list info.symbol user.watchlist}}
-                      <a href="/watchlist/remove/{{info.symbol}}"><span class="watchlist"><i class="fas fa-star "></i> remove from watchlist</span></a>
+                    {{#if_in_list quote.symbol user.watchlist}}
+                      <a href="/watchlist/remove/{{quote.symbol}}"><span class="watchlist"><i class="fas fa-star "></i> remove from watchlist</span></a>
                     {{else}}
-                      <a href="/watchlist/add/{{info.symbol}}"><span class="watchlist"><i class="far fa-star"></i> add to watchlist</span></a>
+                      <a href="/watchlist/add/{{quote.symbol}}"><span class="watchlist"><i class="far fa-star"></i> add to watchlist</span></a>
                     {{/if_in_list}}
                   </div>
                 {{/if}}
@@ -34,25 +34,25 @@
               <div class="row">
                 <div class="col-md-12 mbm">
                   <h4>
-                    <span class="price" data-price="{{info.latestPrice}}"></span>
+                    <span class="price" data-price="{{quote.latestPrice}}"></span>
                     <span class="daily-change" style="font-size: 80%"
-                      change="{{info.dailyChange.change}}"
-                      change-percent="{{info.dailyChange.changePercent}}">
+                      change="{{quote.dailyChange.change}}"
+                      change-percent="{{quote.dailyChange.changePercent}}">
                     </span>
                   </h4>
-                  <div class="text-muted">updated <span class="date" data-date="{{info.latestUpdate}}"></span></div>
+                  <div class="text-muted">updated <span class="date" data-date="{{quote.latestUpdate}}"></span></div>
                 </div>
 
                 <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
                   <div>
-                    52 Week Range <span class="pull-right bold">{{info.week52Low}} - {{info.week52High}}</span>
+                    52 Week Range <span class="pull-right bold">{{quote.week52Low}} - {{quote.week52High}}</span>
                   </div>
                   <hr>
 
                   <div class="">
                     Market Cap
-                    {{#if info.marketCap}}
-                      <span class="pull-right bold market-cap" data-market-cap="{{info.marketCap}}"></span>
+                    {{#if quote.marketCap}}
+                      <span class="pull-right bold market-cap" data-market-cap="{{quote.marketCap}}"></span>
                     {{else}}
                       <span class="pull-right bold">NA</span>
                     {{/if}}
@@ -61,8 +61,8 @@
 
                   <div class="">
                     PE Ratio
-                    {{#if info.peRatio}}
-                      <span class="pull-right bold">{{info.peRatio}}</span>
+                    {{#if quote.peRatio}}
+                      <span class="pull-right bold">{{quote.peRatio}}</span>
                     {{else}}
                       <span class="pull-right bold">NA</span>
                     {{/if}}
@@ -167,18 +167,58 @@
             <!-- Financials -->
             <div class="col-lg-4 col-md-12 mtm">
 
-              <div class="card">
-                <div class="card-body" id="infoCard">
-                  <div class="row mbs">
-                    <div class="col-12 mbs">
-                      <h5>About {{info.companyName}}</h5>
-                      <p>{{info.description}}</p>
+              <!-- about company -->
+              {{#if info.description}}
+                <div class="card mbm">
+                  <div class="card-body" id="infoCard">
+                    <div class="row mbs">
+                      <div class="col-12">
+                        <h5 class="mbm">About {{info.companyName}}</h5>
+                        <span id="company-description">{{info.description}}</span><a id="morelesstext" data="{{info.description}}" href="#">Read More</a>
+                        <hr>
+
+                        {{#if info.CEO}}
+                          <div>
+                            CEO
+                            <span class="pull-right bold">{{info.CEO}}</span>
+                          </div>
+                        {{/if}}
+                        <hr>
+
+                        {{#if info.state}}
+                          <div>
+                            Headquarters
+                            <span class="pull-right bold">{{info.city}}, {{info.state}}</span>
+                          </div>
+                        {{/if}}
+                        <hr>
+
+                        <div class="">
+                          Sector
+                          {{#if info.sector}}
+                            <span class="pull-right bold">{{info.sector}}</span>
+                          {{else}}
+                            <span class="pull-right bold">NA</span>
+                          {{/if}}
+                        </div>
+                        <hr>
+
+                        <div class="">
+                          Employees
+                          {{#if info.employees}}
+                            <span class="pull-right bold employees" data="{{info.employees}}"></span>
+                          {{else}}
+                            <span class="pull-right bold">NA</span>
+                          {{/if}}
+                        </div>
+                        <hr>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              {{/if}}
 
-              <div class="card mtm">
+              <div class="card">
                 <div class="card-body" id="financialsCard">
                   <div class="row mbs">
                     <div class="col-sm-5 col-12 mbs">

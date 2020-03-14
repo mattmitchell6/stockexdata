@@ -14,6 +14,8 @@ $(document).ready(function() {
   var percentages = document.getElementsByClassName("percentage");
   var yields = document.getElementsByClassName("yield");
   var employees = document.getElementsByClassName("employees");
+  var description = document.getElementById("company-description");
+  var morelesstext = document.getElementById("morelesstext");
   setNavigation();
 
   // iterate through daily change amounts
@@ -31,6 +33,24 @@ $(document).ready(function() {
       dailyChange[i].classList.add('red')
       dailyChange[i].innerHTML = `${changePercent}% (${change})`;
     }
+  }
+
+  // update company description text
+  if(description) {
+    description.innerHTML = description.innerHTML.substring(0, 300) + "...";
+
+    // button loading state
+    $("#morelesstext").on("click", function(e) {
+      e.preventDefault();
+      if(this.innerHTML == "Read More") {
+        description.innerHTML = this.getAttribute('data');
+        this.innerHTML = "Read Less"
+      } else if(this.innerHTML == "Read Less") {
+        description.innerHTML = this.getAttribute('data').substr(0, 300) + "...";
+        this.innerHTML = "Read More"
+      }
+    })
+    
   }
 
   // iterate through daily watchlist amounts
