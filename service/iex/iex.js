@@ -158,20 +158,21 @@ async function getHistoricalPrices(symbol, range) {
  */
 async function updateHistoricalPrices(symbol, currentTime, lastUpdated, previousHistory) {
   let history = JSON.parse(previousHistory);
+  let previousMostRecentQuote = history[history.length - 1];
   let range;
 
   // see how many historical stock quotes we've missed
-  if(currentTime.diff(lastUpdated, 'days') <= 5) {
+  if(currentTime.diff(previousMostRecentQuote.date, 'days') <= 5) {
     range = '5d';
-  } else if(currentTime.diff(lastUpdated, 'months') <= 1) {
+  } else if(currentTime.diff(previousMostRecentQuote.date, 'months') <= 1) {
     range = '1m';
-  } else if(currentTime.diff(lastUpdated, 'months') <= 3) {
+  } else if(currentTime.diff(previousMostRecentQuote.date, 'months') <= 3) {
     range = '3m';
-  } else if(currentTime.diff(lastUpdated, 'months') <= 6) {
+  } else if(currentTime.diff(previousMostRecentQuote.date, 'months') <= 6) {
     range = '6m';
-  } else if(currentTime.diff(lastUpdated, 'years') <= 1) {
+  } else if(currentTime.diff(previousMostRecentQuote.date, 'years') <= 1) {
     range = '1y';
-  } else if(currentTime.diff(lastUpdated, 'years') <= 2) {
+  } else if(currentTime.diff(previousMostRecentQuote.date, 'years') <= 2) {
     range = '2y';
   } else {
     range = 'max';
@@ -183,7 +184,7 @@ async function updateHistoricalPrices(symbol, currentTime, lastUpdated, previous
 
   // fill in daily price gaps
   let toAddDates = result.data.filter(function(day, index, arr) {
-    return moment(day.date).isAfter(lastUpdated, 'day')
+    return moment(day.date).isAfter(previousMostRecentQuote.date, 'day')
   });
 
   history = history.concat(toAddDates);
