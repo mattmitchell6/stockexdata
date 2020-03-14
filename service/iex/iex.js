@@ -17,7 +17,7 @@ class IEX {
    * fetch all stock data
    */
   static async getStockData(symbol) {
-    let quote, logoUrl, news, history, earningsResults, keyStats;
+    let quote, logoUrl, news, history, earningsResults, keyStats, companyInfo;
     let updateTasks = [], updateTaskResults = [], updateKeys = [], updates = {};
     let nextEarningsDate;
     const currentTime = moment();
@@ -77,7 +77,8 @@ class IEX {
       console.log(`entry not found for ${symbol}...`);
 
       // fetch stock info, logo, quarterly data, etc.
-      [quote, logoUrl, news, history, earningsResults, keyStats] = await Promise.all([
+      [companyInfo, quote, logoUrl, news, history, earningsResults, keyStats] = await Promise.all([
+        getCompanyInfo(symbol),
         getQuote(symbol),
         getLogo(symbol),
         getNews(symbol),
@@ -88,6 +89,7 @@ class IEX {
 
       // add new stock to db
       stock = new Stock({
+        companyInfo: companyInfo,
         symbol: symbol.toUpperCase(),
         quote: quote,
         keyStats: keyStats,
@@ -140,6 +142,19 @@ async function getLogo(symbol) {
   // make call to fetch logo
   let result = await axios.get(url);
   return result.data.url;
+}
+
+/**
+ * fetch company info
+ */
+async function getCompanyInfo(symbol) {
+  const url = `${baseUrl}/${symbol}/company?${token}`
+
+  // make call to fetch company info
+  let result = await axios.get(url);
+  result = result.data
+
+  return {data: JSON.stringify(result), lastUpdated: moment()};
 }
 
 /**

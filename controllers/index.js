@@ -47,6 +47,8 @@ router.get('/search', async function(req, res) {
     // fetch data
     const stock = await IEX.getStockData(symbol);
 
+    console.log(stock.quote.data);
+
     res.render('pages/displayStock', {
       info: stock.quote.data,
       quoteLastUpdated: stock.quote.lastUpdated,
@@ -120,6 +122,7 @@ router.get('/incomedata', async function(req, res) {
   const quarterlyIncomeData = JSON.parse(stock.earningsResults.quarterlyIncomeData);
   const annualIncomeData = JSON.parse(stock.earningsResults.annualIncomeData);
   const earningsData = JSON.parse(stock.earningsResults.earningsData);
+  console.log(earningsData);
 
   try {
 
