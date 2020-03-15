@@ -33,7 +33,9 @@
               {{> cards/historical_chart_card}}
 
               <!-- Company News -->
-              {{> cards/news_card}}
+              {{#if news}}
+                {{> cards/news_card}}
+              {{/if}}
             </div>
           </div>
         </div>

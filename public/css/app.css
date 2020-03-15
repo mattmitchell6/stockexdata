@@ -271,13 +271,6 @@ a:hover {
     color: #aaa;
 }
 
-@media (max-width: 800px) {
-  /* CSS that should be displayed if width is equal to or less than 800px goes here */
-  .history-chart {
-    /*height: 500 !important;*/
-  }
-}
-
 .watchlist {
   border-style: solid;
   border-color: #007bff;

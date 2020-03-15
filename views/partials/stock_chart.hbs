@@ -1,5 +1,7 @@
 <!-- Stock Chart Partial -->
-<canvas id="stockChart" class="history-chart" height="180"></canvas>
+<div class="" style="height: 420px">
+  <canvas id="stockChart" class="history-chart"></canvas>
+</div>
 
 
 <script>
@@ -43,6 +45,8 @@ function createChart(dates, prices) {
       }]
     },
     options: {
+      responsive: true,
+      maintainAspectRatio: false,
       legend: {
         display: false
       },
