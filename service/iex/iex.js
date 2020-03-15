@@ -224,7 +224,7 @@ async function getNews(symbol) {
 
   // max out news summary character count at 100 chars
   for(i = 0; i < result.data.length; i++) {
-    result.data[i].summary = result.data[i].summary.substr(0, MAX_NEWS_SUMMARY) + "...."
+    result.data[i].summary = result.data[i].summary.substr(0, MAX_NEWS_SUMMARY) + "..."
   }
 
   return {data: JSON.stringify(result.data), lastUpdated: moment()}

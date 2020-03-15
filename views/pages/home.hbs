@@ -29,28 +29,12 @@
         <h5>Watchlist</h5>
         <hr>
         {{#if user}}
-          {{#if watchlist}}
-            {{#each watchlist}}
-              <div class="card mvs">
-                <div class="card-body watchlist-card">
-                  <div class="row">
-                    <div class="col-6 overflow">
-                      <a href="/search?symbol={{this.quote.data.symbol}}"><h5>{{this.quote.data.symbol}}</h5></a>
-                      <span>{{this.quote.data.companyName}}</span>
-                    </div>
-                    <div class="col-6">
-                      <div class="price pull-right" data-price="{{this.quote.data.latestPrice}}"></div>
-                      <br>
-                      <div class="daily-change-watchlist pull-right mtxs" change-percent="{{this.quote.data.dailyChange.changePercent}}">
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-            {{/each}}
+          {{#if user.watchlist}}
+            <div id="watchlist-container">
+              <div id="watchlist-spinner" class="text-center"></div>
+            </div>
           {{else}}
-            Your watchlist is empty
+            Your watchlist is empty. Search for stocks and add them to your watchlist.
           {{/if}}
         {{else}}
           <a href="/auth/google" class="btn btn-primary btn-sm">
@@ -63,6 +47,48 @@
 
     </div>
   </div>
+
+  <!-- populate watchlist script -->
+  <script type="text/javascript">
+    var watchlistContainer = document.getElementById('watchlist-container');
+    var watchlistSpinner = document.getElementById('watchlist-spinner');
+
+    {{#if user.watchlist}}
+      var spinnerHtml = '<i class="fas fa-spinner fa-spin watchlist-load mtm"></i>'
+      watchlistSpinner.innerHTML += spinnerHtml
+    {{/if}}
+
+    {{#each user.watchlist}}
+      fetch('/fetch/{{this}}', { method: 'GET'})
+        .then(function(result) {
+          result.json().then(function(stock) {
+            var html = '';
+            var quote = stock.quote.data;
+
+            // update html
+            html += '<div class="card mvs card-body">'
+            html += '<div class="row watchlist-item">'
+            html += '<div class="col-6 overflow">'
+            html += `<a href="/search?symbol=${stock.symbol}"><h5>${stock.symbol}</h5></a>`
+            html += `<span>${quote.companyName}</span></div>`
+
+            html += '<div class="col-6">'
+            html += `<div class="price pull-right" data-price="${quote.latestPrice}"></div><br>`
+            html += `<div class="daily-change-watchlist pull-right mtxs" change-percent="${quote.dailyChange.changePercent}">`;
+            html += "</div></div></div>"
+
+            watchlistSpinner.innerHTML = "";
+            watchlistContainer.innerHTML += html
+            stylePrices();
+            styleChangeWatchlist();
+          })
+        .catch(function(error) {
+          console.log(error);
+        })
+        })
+    {{/each}}
+
+  </script>
 
 {{/inline}}
 

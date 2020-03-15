@@ -20,20 +20,14 @@ router.use('/auth', require('./auth'))
  */
 router.get('/', async function(req, res) {
   let watchlist, stock;
-  let watchlistQuotes = [], watchlistTasks = []
 
-  // if user is logged in and has items in watchlist, fetch quotes
+  // if user is logged in and has items in watchlist
   if(req.user && req.user.watchlist.length > 0) {
     watchlist = req.user.watchlist;
-
-    for(let i = 0; i < watchlist.length; i++) {
-      watchlistTasks.push(IEX.getStockData(watchlist[i]))
-    }
-    watchlistQuotes = await Promise.all(watchlistTasks)
   }
 
   res.render('pages/home', {
-    watchlist: watchlistQuotes
+    watchlist: watchlist
   })
 });
 
@@ -47,7 +41,7 @@ router.get('/search', async function(req, res) {
     // fetch data
     const stock = await IEX.getStockData(symbol);
 
-      res.render('pages/displayStock', {
+    res.render('pages/displayStock', {
       quote: stock.quote.data,
       info: stock.companyInfo.data,
       quoteLastUpdated: stock.quote.lastUpdated,
@@ -67,6 +61,16 @@ router.get('/search', async function(req, res) {
     req.flash('error', errorMessage)
     res.redirect('/')
   }
+});
+
+/**
+ * fetch stock by symbol
+ */
+router.get('/fetch/:symbol', async function(req, res) {
+  const symbol = req.params.symbol;
+  const stock = await IEX.getStockData(symbol);
+
+  res.json(stock)
 });
 
 /**

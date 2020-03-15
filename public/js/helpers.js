@@ -4,12 +4,10 @@
 
 $(document).ready(function() {
   var dailyChange = document.getElementsByClassName("daily-change");
-  var dailyChangeWatchlist = document.getElementsByClassName("daily-change-watchlist");
   var dates = document.getElementsByClassName("date");
   var newsDates = document.getElementsByClassName("news-date");
   var earningsDates = document.getElementsByClassName("earnings-date");
   var marketCaps = document.getElementsByClassName("market-cap");
-  var prices = document.getElementsByClassName("price");
   var twoDecimals = document.getElementsByClassName("two-deciamals");
   var percentages = document.getElementsByClassName("percentage");
   var yields = document.getElementsByClassName("yield");
@@ -17,6 +15,8 @@ $(document).ready(function() {
   var description = document.getElementById("company-description");
   var morelesstext = document.getElementById("morelesstext");
   setNavigation();
+  stylePrices();
+  styleChangeWatchlist()
 
   // iterate through daily change amounts
   for (var i = 0; i < dailyChange.length; i++) {
@@ -51,22 +51,6 @@ $(document).ready(function() {
       }
     })
 
-  }
-
-  // iterate through daily watchlist amounts
-  for (var i = 0; i < dailyChangeWatchlist.length; i++) {
-    changePercent = dailyChangeWatchlist[i].getAttribute('change-percent');
-
-    if(changePercent > 0) {
-      dailyChangeWatchlist[i].classList.add('green-background')
-      dailyChangeWatchlist[i].innerHTML = `+${changePercent}%`;
-    } else if(changePercent == 0) {
-      dailyChangeWatchlist[i].classList.add('neutral-background')
-      dailyChangeWatchlist[i].innerHTML = `${changePercent}%`;
-    } else {
-      dailyChangeWatchlist[i].classList.add('red-background')
-      dailyChangeWatchlist[i].innerHTML = `${changePercent}%`;
-    }
   }
 
   // iterate through all "date" elements and convert from unix timestart to human readable
@@ -107,12 +91,6 @@ $(document).ready(function() {
     }
   }
 
-  // iterate through all "price" elements and format
-  for (var i = 0; i < prices.length; i++) {
-    price = prices[i].getAttribute('data-price');
-    prices[i].innerHTML = numeral(price).format('$0,0.00');
-  }
-
   // iterate through all "market-cap" elements and format number
   for (var i = 0; i < marketCaps.length; i++) {
     marketCap = marketCaps[i].getAttribute('data-market-cap');
@@ -143,6 +121,36 @@ $(document).ready(function() {
     $(this).click(function () { return false; });
   });
 })
+
+// iterate through all "price" elements and format
+function stylePrices() {
+  var prices = document.getElementsByClassName("price");
+
+  for (var i = 0; i < prices.length; i++) {
+    price = prices[i].getAttribute('data-price');
+    prices[i].innerHTML = numeral(price).format('$0,0.00');
+  }
+}
+
+function styleChangeWatchlist() {
+  var dailyChangeWatchlist = document.getElementsByClassName("daily-change-watchlist");
+
+  // iterate through daily watchlist amounts
+  for (var i = 0; i < dailyChangeWatchlist.length; i++) {
+    changePercent = dailyChangeWatchlist[i].getAttribute('change-percent');
+
+    if(changePercent > 0) {
+      dailyChangeWatchlist[i].classList.add('green-background')
+      dailyChangeWatchlist[i].innerHTML = `+${changePercent}%`;
+    } else if(changePercent == 0) {
+      dailyChangeWatchlist[i].classList.add('neutral-background')
+      dailyChangeWatchlist[i].innerHTML = `${changePercent}%`;
+    } else {
+      dailyChangeWatchlist[i].classList.add('red-background')
+      dailyChangeWatchlist[i].innerHTML = `${changePercent}%`;
+    }
+  }
+}
 
 // make navbar items active
 function setNavigation() {
