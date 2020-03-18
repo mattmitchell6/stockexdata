@@ -6,6 +6,7 @@ const router = express.Router();
 const moment = require('moment');
 
 const Stock = require('../models/stocks');
+const User = require('../models/users');
 const Company = require('../models/companies');
 const IEX = require('../service/iex/iex');
 // const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn('/');
@@ -19,11 +20,12 @@ router.use('/auth', require('./auth'))
  * base route
  */
 router.get('/', async function(req, res) {
-  let watchlist, stock;
+  let watchlist, stock, user;
 
   // if user is logged in and has items in watchlist
   if(req.user && req.user.watchlist.length > 0) {
-    watchlist = req.user.watchlist;
+    user = await User.findOne({'_id': req.user._id});
+    watchlist = user.watchlist;
   }
 
   res.render('pages/home', {
