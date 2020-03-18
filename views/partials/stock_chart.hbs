@@ -97,7 +97,7 @@ function createChart(dates, prices) {
 }
 
 function updateDateRange(event, range) {
-  var prevRange = document.getElementsByClassName('nav-link active');
+  var prevRange = document.getElementsByClassName('nav-link historical active');
   var data = organizeRangeData(range)
 
   $(prevRange[0]).removeClass('active')
