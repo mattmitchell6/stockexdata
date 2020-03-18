@@ -58,7 +58,7 @@
       watchlistSpinner.innerHTML += spinnerHtml
     {{/if}}
 
-    {{#each user.watchlist}}
+    {{#each watchlist}}
       fetch('/fetch/{{this}}', { method: 'GET'})
         .then(function(result) {
           result.json().then(function(stock) {
