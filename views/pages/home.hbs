@@ -7,7 +7,7 @@
       <div class="col-md-6">
         {{> flash_message }}
 
-        <h4 class="text-center">Search by symbol or company name</h4>
+        <h4 class="text-center white-text">Search by symbol or company name</h4>
 
         <!-- search -->
         <form action="/search" method="get" class="mt-4">
@@ -17,7 +17,7 @@
               <div id="filteredResults"></div>
             </div>
             <div class="input-group-append">
-              <button class="btn btn-primary" type="submit" data-loading="Searching...">Search</button>
+              <button class="btn btn-blue" type="submit" data-loading="Searching...">Search</button>
             </div>
           </div>
         </form>
@@ -26,22 +26,26 @@
 
       <!-- watchlist -->
       <div class="col-md-8 mtm">
-        <h5>Watchlist</h5>
-        <hr>
+        <h5 class="white-text">Watchlist</h5>
+        <hr class="white-background">
         {{#if user}}
           {{#if user.watchlist}}
             <div id="watchlist-container">
               <div id="watchlist-spinner" class="text-center"></div>
             </div>
           {{else}}
-            Your watchlist is empty. Search for stocks and add them to your watchlist.
+          <div class="white-text">
+
+          </div>
           {{/if}}
         {{else}}
-          <a href="/auth/google" class="btn btn-primary btn-sm">
+          <a href="/auth/google" class="btn btn-light btn-sm">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/1024px-Google_%22G%22_Logo.svg.png" height="18px" style="margin-right: 3px" alt="">
             Login with Google
           </a>
-          to create and view your watchlist
+          <span class="white-text">
+            to create and view your watchlist
+          </span>
         {{/if}}
       </div>
 
@@ -54,7 +58,7 @@
     var watchlistSpinner = document.getElementById('watchlist-spinner');
 
     {{#if user.watchlist}}
-      var spinnerHtml = '<i class="fas fa-spinner fa-spin watchlist-load mtm"></i>'
+      var spinnerHtml = '<i class="fas fa-spinner fa-spin watchlist-load mtm white-text"></i>'
       watchlistSpinner.innerHTML += spinnerHtml
     {{/if}}
 

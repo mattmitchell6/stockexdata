@@ -1,5 +1,6 @@
 body {
-  background: #f2f6fa;
+  /* background: #f2f6fa; */
+  background: #333745;
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
 }
@@ -44,7 +45,22 @@ a:hover {
 }
 
 .navbar {
-  background-color: #403F57 !important;
+  /* background-color: #403F57 !important; */
+  background-color: #333745 !important;
+}
+
+.white-text {
+  color: white;
+}
+
+.white-background {
+  background: white;
+}
+
+.btn-blue {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: white;
 }
 
 /*.btn {
