@@ -4,7 +4,7 @@
 
 <script>
 let ctxEarnings = document.getElementById('earningsChart').getContext('2d');
-let earningsChart;
+let earningsChart, earningsFiscalPeriods, earningsActual, earningsEstimate;
 
 // create chart on page load
 $(document).ready(function() {
@@ -13,7 +13,11 @@ $(document).ready(function() {
   }).then(function(result) {
     result.json().then(function(json) {
       if(json) {
-        createEarningsChart(json.fiscalPeriods, json.earningsActual, json.earningsEstimate);
+        earningsFiscalPeriods = json.fiscalPeriods;
+        earningsActual = json.earningsActual;
+        earningsEstimate = json.earningsEstimate;
+
+        createEarningsChart(earningsFiscalPeriods, earningsActual, earningsEstimate);
       } else {
         document.getElementById("earningsChart").style.display = "none";
         document.getElementById("earningsCard").innerHTML += "<h4>NA</h4>"
@@ -61,11 +65,6 @@ function createEarningsChart(fiscalPeriods, earningsActual, earningsEstimate) {
           gridLines: {
             borderDash: [8, 4]
           }
-          // ticks: {
-          //   callback: function(value, index, values) {
-          //     return numeral(value).format('0.00a').toUpperCase()
-          //   }
-          // }
         }],
         xAxes: [{
           gridLines: {
@@ -76,12 +75,6 @@ function createEarningsChart(fiscalPeriods, earningsActual, earningsEstimate) {
       tooltips: {
         mode: 'index',
         intersect: false
-        // callbacks: {
-        //   label: function(tooltipItem, data) {
-        //     return data.datasets[tooltipItem.datasetIndex].label + ": " +
-        //       numeral(tooltipItem.value).format('0.00a').toUpperCase()
-        //   }
-        // }
       }
     }
   });

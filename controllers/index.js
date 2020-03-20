@@ -75,21 +75,6 @@ router.get('/fetch/:symbol', async function(req, res) {
   res.json(stock)
 });
 
-/**
- * workaround for removing symbol db entry
- */
-router.get("/delete/:symbol", async function(req, res) {
-  const symbol = req.params.symbol;
-  const confirm = req.query.confirm
-
-  if(confirm == "true") {
-    await Stock.findOne({'symbol': symbol.toUpperCase()}).deleteOne();
-    console.log(symbol + " removed...");
-  }
-
-  res.redirect('/')
-})
-
 router.get('/historicaldata', async function(req, res) {
   const symbol = req.query.symbol;
   let prices = [], dates = [];
@@ -121,7 +106,9 @@ router.get('/historicaldata', async function(req, res) {
 router.get('/incomedata', async function(req, res) {
   const symbol = req.query.symbol;
   const type = req.query.type;
-  let totalRevenueData = [], fiscalPeriods = [], netIncomeData = [];
+  let totalRevenueData = {quarterly: [], annual: []},
+    fiscalPeriods = {quarterly: [], annual: []},
+    netIncomeData = {quarterly: [], annual: []}
 
   let stock = await Stock.findOne({'symbol': symbol.toUpperCase()});
   const quarterlyIncomeData = JSON.parse(stock.earningsResults.quarterlyIncomeData);
@@ -129,29 +116,51 @@ router.get('/incomedata', async function(req, res) {
   const earningsData = JSON.parse(stock.earningsResults.earningsData);
 
   try {
+    for(i = 0; i < earningsData.length; i++) {
+      fiscalPeriods.quarterly.push(earningsData[i].fiscalPeriod);
+      totalRevenueData.quarterly.push(quarterlyIncomeData[i].totalRevenue);
+      netIncomeData.quarterly.push(quarterlyIncomeData[i].netIncome);
+    }
 
-    if(earningsData || annualIncomeData || quarterlyIncomeData) {
+    for(i = 0; i < annualIncomeData.length; i++) {
+      fiscalPeriods.annual.push(annualIncomeData[i].reportDate);
+      totalRevenueData.annual.push(annualIncomeData[i].totalRevenue);
+      netIncomeData.annual.push(annualIncomeData[i].netIncome);
+    }
+
+    res.send({
+      fiscalPeriods: fiscalPeriods,
+      totalRevenueData: totalRevenueData,
+      earningsData: netIncomeData
+    });
+  } catch(error) {
+    console.log(error);
+    res.send(false)
+  }
+})
+
+router.get('/earningsdata', async function(req, res) {
+  const symbol = req.query.symbol;
+  let earningsActual = [], fiscalPeriods = [], earningsEstimate = [];
+  const currentTime = moment();
+
+  let stock = await Stock.findOne({'symbol': symbol.toUpperCase()});
+  const earningsData = JSON.parse(stock.earningsResults.earningsData);
+
+  try {
+
+    if(earningsData) {
       // return appropriate date range values
-      if(type == 'quarterly') {
-        for(i = 0; i < earningsData.length; i++) {
-          fiscalPeriods.push(earningsData[i].fiscalPeriod);
-          totalRevenueData.push(quarterlyIncomeData[i].totalRevenue);
-          netIncomeData.push(quarterlyIncomeData[i].netIncome);
-        }
-      } else if(type == 'annual') {
-        for(i = 0; i < annualIncomeData.length; i++) {
-          fiscalPeriods.push(annualIncomeData[i].reportDate);
-          totalRevenueData.push(annualIncomeData[i].totalRevenue);
-          netIncomeData.push(annualIncomeData[i].netIncome);
-        }
-      } else {
-        throw new Error('Range type mismatch')
+      for(i=0; i < earningsData.length; i++) {
+        fiscalPeriods.push(earningsData[i].fiscalPeriod);
+        earningsActual.push(earningsData[i].actualEPS);
+        earningsEstimate.push(earningsData[i].consensusEPS);
       }
 
       res.send({
         fiscalPeriods: fiscalPeriods,
-        totalRevenueData: totalRevenueData,
-        earningsData: netIncomeData
+        earningsActual: earningsActual,
+        earningsEstimate: earningsEstimate
       });
     } else {
       throw new Error('Data does not exist')
@@ -161,38 +170,6 @@ router.get('/incomedata', async function(req, res) {
     res.send(false)
   }
 })
-
-// router.get('/earningsdata', async function(req, res) {
-//   const symbol = req.query.symbol;
-//   let earningsActual = [], fiscalPeriods = [], earningsEstimate = [];
-//   const currentTime = moment();
-//
-//   let stock = await Stock.findOne({'symbol': symbol.toUpperCase()});
-//   const earningsData = JSON.parse(stock.earningsResults.earningsData);
-//
-//   try {
-//
-//     if(earningsData) {
-//       // return appropriate date range values
-//       for(i=0; i < earningsData.length; i++) {
-//         fiscalPeriods.push(earningsData[i].fiscalPeriod);
-//         earningsActual.push(earningsData[i].actualEPS);
-//         earningsEstimate.push(earningsData[i].consensusEPS);
-//       }
-//
-//       res.send({
-//         fiscalPeriods: fiscalPeriods,
-//         earningsActual: earningsActual,
-//         earningsEstimate: earningsEstimate
-//       });
-//     } else {
-//       throw new Error('Data does not exist')
-//     }
-//   } catch(error) {
-//     console.log(error);
-//     res.send(false)
-//   }
-// })
 
 /**
  * filter symbol search results
@@ -207,5 +184,21 @@ router.get('/symbolfilter', async function(req, res) {
   }).limit(7)
   res.send(searchResults);
 });
+
+
+/**
+ * workaround for removing symbol db entry
+ */
+router.get("/delete/:symbol", async function(req, res) {
+  const symbol = req.params.symbol;
+  const confirm = req.query.confirm
+
+  if(confirm == "true") {
+    await Stock.findOne({'symbol': symbol.toUpperCase()}).deleteOne();
+    console.log(symbol + " removed...");
+  }
+
+  res.redirect('/')
+})
 
 module.exports = router;

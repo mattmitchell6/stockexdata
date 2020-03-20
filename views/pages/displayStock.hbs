@@ -22,9 +22,11 @@
                 {{/if}}
 
                 <!-- revenue -->
-                {{#if_equals info.issueType "cs"}}
-                  {{> cards/revenue_chart_card}}
-                {{/if_equals}}
+                {{> cards/revenue_chart_card}}
+
+                <!-- eps -->
+                {{> cards/eps_chart_card}}
+
               </div>
             {{/if_equals}}
 

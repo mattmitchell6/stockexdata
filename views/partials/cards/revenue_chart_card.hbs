@@ -1,18 +1,16 @@
-<div class="card">
-  <div class="card-body" id="financialsCard">
-    <div class="row mbs">
-      <div class="col-sm-5 col-12 mbs">
-        <h5>Financials</h5>
-      </div>
-      <div class="col-sm-7 col-12">
-        <nav class="nav pull-right">
-          <span class="nav-link financials range active" onclick="updateFinancialsRange(this,'quarterly')">Quarterly</span>
-          <span class="nav-link financials range" onclick="updateFinancialsRange(this,'annual')">Annual</span>
-        </nav>
-      </div>
+<div class="card mbm card-body" id="financialsCard">
+  <div class="row mbs">
+    <div class="col-sm-5 col-12 mbs">
+      <h5>Financials</h5>
     </div>
-
-    <!-- add financials chart -->
-    {{> income_chart}}
+    <div class="col-sm-7 col-12">
+      <nav class="nav pull-right">
+        <span class="nav-link financials range active" onclick="updateFinancialsRange(this,'quarterly')">Quarterly</span>
+        <span class="nav-link financials range" onclick="updateFinancialsRange(this,'annual')">Annual</span>
+      </nav>
+    </div>
   </div>
+
+  <!-- add financials chart -->
+  {{> charts/income_chart}}
 </div>
