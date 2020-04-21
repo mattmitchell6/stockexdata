@@ -194,8 +194,6 @@ router.get('/allcompanies', async function(req, res) {
 });
 
 
-
-
 /**
  * workaround for removing symbol db entry
  */

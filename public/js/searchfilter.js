@@ -25,7 +25,7 @@ $("#stockInput").on("input", function() {
   let filteredResultsContainer = document.getElementById('filteredResultsContainer');
   let results;
 
-  if(pattern.length >= 2) {
+  if(pattern.length >= 2 && fuse) {
     results = fuse.search(pattern)
 
     if(results.length > 0) {
