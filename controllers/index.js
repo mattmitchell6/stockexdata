@@ -172,7 +172,7 @@ router.get('/earningsdata', async function(req, res) {
 })
 
 /**
- * filter symbol search results
+ * filter symbol search results DELETE
  */
 router.get('/symbolfilter', async function(req, res) {
   const input = req.query.input;
@@ -184,6 +184,16 @@ router.get('/symbolfilter', async function(req, res) {
   }).limit(7)
   res.send(searchResults);
 });
+
+/**
+ * fetch all companies
+ */
+router.get('/allcompanies', async function(req, res) {
+  const allCompanies = await Company.find({})
+  res.send(allCompanies);
+});
+
+
 
 
 /**
