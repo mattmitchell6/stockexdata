@@ -11,13 +11,19 @@ const options = {
   }]
 };
 let fuse;
-fetch('/allcompanies', {
-  method: 'GET',
-}).then(function(result) {
-  result.json().then(function(companies) {
-    fuse = new Fuse(companies, options);
+
+if(sessionStorage.getItem('companies')) {
+  fuse = new Fuse(JSON.parse(sessionStorage.getItem('companies')), options)
+} else {
+  fetch('/allcompanies', {
+    method: 'GET',
+  }).then(function(result) {
+    result.json().then(function(companies) {
+      fuse = new Fuse(companies, options);
+      sessionStorage.setItem('companies', JSON.stringify(companies))
+    });
   });
-});
+}
 
 // stock search filtering
 $("#stockInput").on("input", function() {
