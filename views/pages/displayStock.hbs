@@ -13,11 +13,11 @@
 
           <div class="row">
 
-            {{#if_equals info.issueType "cs"}}
+            {{#if_equals stock.companyInfo.issueType "cs"}}
               <div class="col-lg-4 col-md-12">
 
                 <!-- about company -->
-                {{#if info.description}}
+                {{#if stock.companyInfo.description}}
                   {{> cards/company_info_card}}
                 {{/if}}
 
@@ -30,12 +30,12 @@
               </div>
             {{/if_equals}}
 
-            <div class="{{#if_equals info.issueType "cs"}}col-lg-8{{else}}col-lg-12{{/if_equals}} col-md-12">
+            <div class="{{#if_equals stock.companyInfo.issueType "cs"}}col-lg-8{{else}}col-lg-12{{/if_equals}} col-md-12">
               <!-- historical stock performance -->
               {{> cards/historical_chart_card}}
 
               <!-- Company News -->
-              {{#if news}}
+              {{#if stock.news}}
                 {{> cards/news_card}}
               {{/if}}
             </div>

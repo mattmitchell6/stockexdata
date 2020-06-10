@@ -10,7 +10,7 @@ let incomeChart, fiscalPeriods, totalRevenueData, earningsData;
 
 // create chart on page load
 $(document).ready(function() {
-  fetch('/incomedata?symbol={{info.symbol}}', {
+  fetch('/data/income?symbol={{stock.companyInfo.symbol}}', {
     method: 'GET',
   }).then(function(result) {
     result.json().then(function(json) {

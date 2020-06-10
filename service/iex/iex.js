@@ -54,7 +54,8 @@ class IEX {
       }
 
       // update earnings results roughly once a quarter
-      nextEarningsDate = unStringify(stock).keyStats.data.nextEarningsDate;
+      nextEarningsDate = unStringify(stock).keyStats.nextEarningsDate;
+      console.log(nextEarningsDate);
       if(moment(nextEarningsDate).diff(stock.earningsResults.lastReported, 'days') > 150) {
         updateTasks.push(getEarningsResults(symbol));
         updateKeys.push('earningsResults')
@@ -301,22 +302,11 @@ function unStringify(stock) {
   return {
     symbol: stock.symbol,
     logoUrl: stock.logoUrl,
-    companyInfo: {
-      data: JSON.parse(stock.companyInfo.data),
-      lastUpdated: stock.companyInfo.lastUpdated
-    },
-    keyStats: {
-      data: JSON.parse(stock.keyStats.data),
-      lastUpdated: stock.keyStats.lastUpdated
-    },
-    quote: {
-      data: JSON.parse(stock.quote.data),
-      lastUpdated: stock.quote.lastUpdated
-    },
-    news: {
-      data: JSON.parse(stock.news.data),
-      lastUpdated: stock.news.lastUpdated
-    }
+    companyInfo: JSON.parse(stock.companyInfo.data),
+    keyStats: JSON.parse(stock.keyStats.data),
+    quote: JSON.parse(stock.quote.data),
+    quoteLastUpdated: stock.quote.lastUpdated,
+    news: JSON.parse(stock.news.data)
   }
 }
 

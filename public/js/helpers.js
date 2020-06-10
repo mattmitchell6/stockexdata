@@ -50,13 +50,12 @@ $(document).ready(function() {
         this.innerHTML = "Read More"
       }
     })
-
   }
 
   // iterate through all "date" elements and convert from unix timestart to human readable
   for (var i = 0; i < dates.length; i++) {
     date = dates[i].getAttribute('data-date');
-    dates[i].innerHTML = moment.unix(date / 1000).format('MM/DD h:mm a z');
+    dates[i].innerHTML = moment(date).format('MM/DD h:mm a z');
   }
   for (var i = 0; i < newsDates.length; i++) {
     date = newsDates[i].getAttribute('data-date');

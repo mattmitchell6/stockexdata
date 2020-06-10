@@ -1,71 +1,71 @@
 <div class="card card-body mb20" id="infoCard">
   <div class="row">
     <div class="col-12">
-      <h5 class="mbm">About {{info.companyName}}</h5>
-      <div id="company-description" data-desc="{{info.description}}"></div>
+      <h5 class="mbm">About {{stock.companyInfo.companyName}}</h5>
+      <div id="company-description" data-desc="{{stock.companyInfo.description}}"></div>
       <a id="morelesstext" href="#">Read More</a>
       <hr>
 
-      {{#if info.website}}
+      {{#if stock.companyInfo.website}}
         <div class="row">
           <div class="col-4">
             Website
           </div>
           <div class="col-8 overflow">
             <div class="pull-right">
-              <a href="{{info.website}}">{{info.website}}</a>
+              <a href="{{stock.companyInfo.website}}">{{stock.companyInfo.website}}</a>
             </div>
           </div>
         </div>
         <hr>
       {{/if}}
 
-      {{#if info.CEO}}
+      {{#if stock.companyInfo.CEO}}
         <div class="row">
           <div class="col-4">
             CEO
           </div>
           <div class="col-8 overflow">
             <div class="pull-right">
-              <span class="bold">{{info.CEO}}</span>
+              <span class="bold">{{stock.companyInfo.CEO}}</span>
             </div>
           </div>
         </div>
         <hr>
       {{/if}}
 
-      {{#if info.state}}
+      {{#if stock.companyInfo.state}}
         <div class="row">
           <div class="col-4">
             HQ
           </div>
           <div class="col-8 overflow">
             <div class="pull-right">
-              <span class="bold">{{info.city}}, {{info.state}}</span>
+              <span class="bold">{{stock.companyInfo.city}}, {{stock.companyInfo.state}}</span>
             </div>
           </div>
         </div>
         <hr>
       {{/if}}
 
-      {{#if info.sector}}
+      {{#if stock.companyInfo.sector}}
         <div class="row">
           <div class="col-4">
             Sector
           </div>
           <div class="col-8 overflow">
             <div class="pull-right">
-              <span class="bold">{{info.sector}}</span>
+              <span class="bold">{{stock.companyInfo.sector}}</span>
             </div>
           </div>
         </div>
         <hr>
       {{/if}}
 
-      {{#if info.employees}}
+      {{#if stock.companyInfo.employees}}
         <!-- <div>
           Employees
-          <span class="pull-right bold employees" data="{{info.employees}}"></span>
+          <span class="pull-right bold employees" data="{{stock.companyInfo.employees}}"></span>
         </div>
         <hr> -->
       {{/if}}

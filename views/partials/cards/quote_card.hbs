@@ -1,18 +1,18 @@
 <div class="card card-body mb20">
   <div class="row mbs">
     <div class="col-8 overflow">
-      <h3>{{quote.symbol}}</h3>
-      <span>{{quote.companyName}}</span>
+      <h3>{{stock.quote.symbol}}</h3>
+      <span>{{stock.quote.companyName}}</span>
     </div>
     <div class="col-4">
-      <img src="{{logoUrl}}" height=50px alt="" class="pull-right logo">
+      <img src="{{stock.logoUrl}}" height=50px alt="" class="pull-right logo">
     </div>
     {{#if user}}
       <div class="col-12" style="margin-top: .5rem">
-        {{#if_in_list quote.symbol user.watchlist}}
-          <a href="/watchlist/remove/{{quote.symbol}}"><span class="watchlist"><i class="fas fa-star "></i> remove from watchlist</span></a>
+        {{#if_in_list stock.quote.symbol user.watchlist}}
+          <a href="/watchlist/remove/{{stock.quote.symbol}}"><span class="watchlist"><i class="fas fa-star "></i> remove from watchlist</span></a>
         {{else}}
-          <a href="/watchlist/add/{{quote.symbol}}"><span class="watchlist"><i class="far fa-star"></i> add to watchlist</span></a>
+          <a href="/watchlist/add/{{stock.quote.symbol}}"><span class="watchlist"><i class="far fa-star"></i> add to watchlist</span></a>
         {{/if_in_list}}
       </div>
     {{/if}}
@@ -22,25 +22,25 @@
   <div class="row">
     <div class="col-md-12 mbm">
       <h4>
-        <span class="price" data-price="{{quote.latestPrice}}"></span>
+        <span class="price" data-price="{{stock.quote.latestPrice}}"></span>
         <span class="daily-change" style="font-size: 80%"
-          change="{{quote.dailyChange.change}}"
-          change-percent="{{quote.dailyChange.changePercent}}">
+          change="{{stock.quote.dailyChange.change}}"
+          change-percent="{{stock.quote.dailyChange.changePercent}}">
         </span>
-      </h4>
-      <div class="text-muted">updated <span class="date" data-date="{{quote.latestUpdate}}"></span></div>
+      </h4>      
+      <div class="text-muted">updated <span class="date" data-date="{{stock.quoteLastUpdated}}"></span></div>
     </div>
 
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
       <div>
-        52 Week Range <span class="pull-right bold">{{quote.week52Low}} - {{quote.week52High}}</span>
+        52 Week Range <span class="pull-right bold">{{stock.quote.week52Low}} - {{stock.quote.week52High}}</span>
       </div>
       <hr>
 
       <div class="">
         Market Cap
-        {{#if quote.marketCap}}
-          <span class="pull-right bold market-cap" data-market-cap="{{quote.marketCap}}"></span>
+        {{#if stock.quote.marketCap}}
+          <span class="pull-right bold market-cap" data-market-cap="{{stock.quote.marketCap}}"></span>
         {{else}}
           <span class="pull-right bold">NA</span>
         {{/if}}
@@ -49,8 +49,8 @@
 
       <div class="">
         PE Ratio
-        {{#if quote.peRatio}}
-          <span class="pull-right bold">{{quote.peRatio}}</span>
+        {{#if stock.quote.peRatio}}
+          <span class="pull-right bold">{{stock.quote.peRatio}}</span>
         {{else}}
           <span class="pull-right bold">NA</span>
         {{/if}}
@@ -62,8 +62,8 @@
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
       <div class="">
         Earnings Date
-        {{#if keyStats.nextEarningsDate}}
-          <span class="pull-right bold earnings-date" data-date="{{keyStats.nextEarningsDate}}"></span>
+        {{#if stock.keyStats.nextEarningsDate}}
+          <span class="pull-right bold earnings-date" data-date="{{stock.keyStats.nextEarningsDate}}"></span>
         {{else}}
           <span class="pull-right bold">NA</span>
         {{/if}}
@@ -72,8 +72,8 @@
 
       <div class="">
         EPS (ttm)
-        {{#if keyStats.ttmEPS}}
-          <span class="pull-right bold two-deciamals" data="{{keyStats.ttmEPS}}"></span>
+        {{#if stock.keyStats.ttmEPS}}
+          <span class="pull-right bold two-deciamals" data="{{stock.keyStats.ttmEPS}}"></span>
         {{else}}
           <span class="pull-right bold">NA</span>
         {{/if}}
@@ -82,8 +82,8 @@
 
       <div class="">
         Dividend Yield
-        {{#if keyStats.dividendYield}}
-          <span class="pull-right bold yield" data="{{keyStats.dividendYield}}"></span>
+        {{#if stock.keyStats.dividendYield}}
+          <span class="pull-right bold yield" data="{{stock.keyStats.dividendYield}}"></span>
         {{else}}
           <span class="pull-right bold">NA</span>
         {{/if}}
@@ -94,8 +94,8 @@
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
       <div class="">
         Employees
-        {{#if keyStats.employees}}
-          <span class="pull-right bold employees" data="{{keyStats.employees}}"></span>
+        {{#if stock.keyStats.employees}}
+          <span class="pull-right bold employees" data="{{stock.keyStats.employees}}"></span>
         {{else}}
           <span class="pull-right bold">NA</span>
         {{/if}}
@@ -104,8 +104,8 @@
 
       <div class="">
         5 Year Price Change
-        {{#if keyStats.ytdChangePercent}}
-          <span class="pull-right bold percentage" data="{{keyStats.year5ChangePercent}}"></span>
+        {{#if stock.keyStats.ytdChangePercent}}
+          <span class="pull-right bold percentage" data="{{stock.keyStats.year5ChangePercent}}"></span>
         {{else}}
           <span class="pull-right bold">NA</span>
         {{/if}}
@@ -114,8 +114,8 @@
 
       <div class="">
         YTD Price Change
-        {{#if keyStats.ytdChangePercent}}
-          <span class="pull-right bold percentage" data="{{keyStats.ytdChangePercent}}"></span>
+        {{#if stock.keyStats.ytdChangePercent}}
+          <span class="pull-right bold percentage" data="{{stock.keyStats.ytdChangePercent}}"></span>
         {{else}}
           <span class="pull-right bold">NA</span>
         {{/if}}

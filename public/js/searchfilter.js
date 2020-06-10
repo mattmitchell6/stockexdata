@@ -1,5 +1,3 @@
-
-
 // fetch all companies
 const options = {
   keys: [{

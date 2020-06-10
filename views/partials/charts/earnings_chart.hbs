@@ -8,7 +8,7 @@ let earningsChart, earningsFiscalPeriods, earningsActual, earningsEstimate;
 
 // create chart on page load
 $(document).ready(function() {
-  fetch('/earningsdata?symbol={{info.symbol}}', {
+  fetch('/data/earnings?symbol={{stock.companyInfo.symbol}}', {
     method: 'GET',
   }).then(function(result) {
     result.json().then(function(json) {

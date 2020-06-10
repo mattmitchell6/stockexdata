@@ -10,7 +10,7 @@ let chart, dates, prices;
 
 // create chart on page load
 $(document).ready(function() {
-  fetch('/historicaldata?symbol={{info.symbol}}&range=max', {
+  fetch('/data/historical?symbol={{stock.symbol}}&range=max', {
     method: 'GET',
   }).then(function(result) {
     result.json().then(function(json) {
