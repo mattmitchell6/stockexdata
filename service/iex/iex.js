@@ -5,6 +5,7 @@ const axios = require('axios');
 const moment = require('moment');
 
 const Stock = require('../../models/stocks');
+const request = require('./request');
 
 const baseUrl = "https://cloud.iexapis.com/stable/stock"
 const token = `token=${process.env.IEX_TOKEN}`;
@@ -31,19 +32,19 @@ class IEX {
 
       // update news once a day
       if(currentTime.isAfter(stock.news.lastUpdated, 'day')) {
-        updateTasks.push(getNews(symbol))
+        updateTasks.push(request.news(symbol))
         updateKeys.push('news')
       }
 
       // update quote every 5 minutes
       if(currentTime.diff(stock.quote.lastUpdated, 'minutes') > 5) {
-        updateTasks.push(getQuote(symbol))
+        updateTasks.push(request.quote(symbol))
         updateKeys.push('quote')
       }
 
       // update company info once a month
       if(currentTime.diff(stock.companyInfo.lastUpdated, 'months') > 1) {
-        updateTasks.push(getCompanyInfo(symbol))
+        updateTasks.push(request.companyInfo(symbol))
         updateKeys.push('companyInfo')
       }
 
@@ -55,15 +56,14 @@ class IEX {
 
       // update earnings results roughly once a quarter
       nextEarningsDate = unStringify(stock).keyStats.nextEarningsDate;
-      console.log(nextEarningsDate);
       if(moment(nextEarningsDate).diff(stock.earningsResults.lastReported, 'days') > 150) {
-        updateTasks.push(getEarningsResults(symbol));
+        updateTasks.push(request.earningsResults(symbol));
         updateKeys.push('earningsResults')
       }
 
       // update key stats once a day
       if(!stock.keyStats || !stock.keyStats.data|| !stock.keyStats.lastUpdated || currentTime.isAfter(stock.keyStats.lastUpdated, 'day')) {
-        updateTasks.push(getKeyStats(symbol));
+        updateTasks.push(request.keyStats(symbol));
         updateKeys.push('keyStats')
       }
 
@@ -85,13 +85,13 @@ class IEX {
 
       // fetch stock info, logo, quarterly data, etc.
       [companyInfo, quote, logoUrl, news, history, earningsResults, keyStats] = await Promise.all([
-        getCompanyInfo(symbol),
-        getQuote(symbol),
-        getLogo(symbol),
-        getNews(symbol),
-        getHistoricalPrices(symbol, 'max'),
-        getEarningsResults(symbol),
-        getKeyStats(symbol)
+        request.companyInfo(symbol),
+        request.quote(symbol),
+        request.logo(symbol),
+        request.news(symbol),
+        request.historicalPrices(symbol, 'max'),
+        request.earningsResults(symbol),
+        request.keyStats(symbol)
       ]);
 
       // add new stock to db
@@ -123,56 +123,6 @@ class IEX {
 
     return result;
   }
-}
-
-/**
- * fetch real-time price quote
- */
-async function getQuote(symbol) {
-  const url = `${baseUrl}/${symbol}/quote?${token}`
-
-  // make call to fetch quote
-  let result = await axios.get(url);
-  result = result.data
-
-  // calculate change
-  result.dailyChange = dailyChange(result.latestPrice, result.previousClose)
-  return {data: JSON.stringify(result), lastUpdated: moment()};
-}
-
-/**
- * fetch company logo
- */
-async function getLogo(symbol) {
-  const url = `${baseUrl}/${symbol}/logo?${token}`
-
-  // make call to fetch logo
-  let result = await axios.get(url);
-  return result.data.url;
-}
-
-/**
- * fetch company info
- */
-async function getCompanyInfo(symbol) {
-  const url = `${baseUrl}/${symbol}/company?${token}`
-
-  // make call to fetch company info
-  let result = await axios.get(url);
-  result = result.data
-
-  return {data: JSON.stringify(result), lastUpdated: moment()};
-}
-
-/**
- * fetch historical prices
- */
-async function getHistoricalPrices(symbol, range) {
-  const url = `${baseUrl}/${symbol}/chart/${range}?${token}&chartInterval=1&chartCloseOnly=true`
-
-  // fetch daily stock prices ytd
-  let result = await axios.get(url);
-  return {data: JSON.stringify(result.data), lastUpdated: moment()}
 }
 
 /**
@@ -214,70 +164,6 @@ async function updateHistoricalPrices(symbol, currentTime, lastUpdated, previous
   return {data: JSON.stringify(history), lastUpdated: moment()};
 }
 
- /**
-  * fetch company news
-  */
-async function getNews(symbol) {
-  const url = `${baseUrl}/${symbol}/news/last?${token}`
-
-  // fetch last 10 news articles
-  let result = await axios.get(url);
-
-  // max out news summary character count at 100 chars
-  for(i = 0; i < result.data.length; i++) {
-    result.data[i].summary = result.data[i].summary.substr(0, MAX_NEWS_SUMMARY) + "..."
-  }
-
-  return {data: JSON.stringify(result.data), lastUpdated: moment()}
-}
-
-/**
- * fetch key stats
- */
-async function getKeyStats(symbol) {
- const url = `${baseUrl}/${symbol}/stats?${token}`
-
- // fetch key stats
- let result = await axios.get(url);
- return {data: JSON.stringify(result.data), lastUpdated: moment()}
-}
-
-/**
- * fetch quarterly results
- */
-async function getEarningsResults(symbol) {
-  let quarterlyIncomeResult, annualIncomeResult, earningsResult;
-  const quarterlyIncomeUrl = `${baseUrl}/${symbol}/income?last=4&period=quarter&${token}`;
-  const annualIncomeUrl = `${baseUrl}/${symbol}/income?last=4&period=annual&${token}`;
-  const earningsUrl = `${baseUrl}/${symbol}/earnings?last=4&${token}`;
-
-  // make calls to fetch last 4 four quarters of income / earnings statements
-  [quarterlyIncomeResult, annualIncomeResult, earningsResult] = await Promise.all([
-    axios.get(quarterlyIncomeUrl),
-    axios.get(annualIncomeUrl),
-    axios.get(earningsUrl)
-  ])
-
-  if(!isEmpty(earningsResult.data) && !isEmpty(quarterlyIncomeResult.data) && !isEmpty(annualIncomeResult.data)) {
-    quarterlyIncomeResult = quarterlyIncomeResult.data.income.reverse();
-    annualIncomeResult = annualIncomeResult.data.income.reverse();
-    earningsResult = earningsResult.data.earnings.reverse();
-
-    return {
-      quarterlyIncomeData: JSON.stringify(quarterlyIncomeResult),
-      annualIncomeData: JSON.stringify(annualIncomeResult),
-      earningsData: JSON.stringify(earningsResult),
-      lastReported: earningsResult[earningsResult.length - 1].EPSReportDate
-    }
-  } else {
-    return {
-      quarterlyIncomeData: false,
-      annualIncomeData: false,
-      earningsData: false,
-      lastReported: moment()
-    }
-  }
-}
 
 /**
  * calculate daily stock price change percentage

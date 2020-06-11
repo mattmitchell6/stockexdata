@@ -38,7 +38,7 @@ $("#stockInput").on("input", function() {
       var filteredResults = document.getElementById('filteredResults')
       var html = "";
       for(var i = 0; i < results.length && i < 7; i++) {
-        html += `<a class="dropdown-item" href="/search?symbol=${results[i].item.symbol}">`
+        html += `<a class="dropdown-item" href="/${results[i].item.symbol}">`
         html += '<div class="row">'
         html += `<div class="bold col-md-4">${results[i].item.symbol}</div>`
         html += `<div class="col-md-8 overflow">${results[i].item.companyName}</div>`

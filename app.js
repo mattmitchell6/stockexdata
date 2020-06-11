@@ -9,14 +9,14 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const mongoStore = require('connect-mongo')(session);
 const handlebarsHelpers = require('./public/js/handlebars');
-var fs = require("fs");
+const fs = require("fs");
 require('dotenv').config();
 require('express-async-errors');
 
 const strategy = require('./service/passport-google/passportStrategy.js');
 
 // Create a new Express application.
-var app = express();
+let app = express();
 
 // view engine setup (Handlebars)
 app.set('view engine', 'hbs');
@@ -78,7 +78,6 @@ app.use((err, req, res, next) => {
   console.log(err);
   res.render('pages/error', { error: err});
 });
-
 
 //start server
 const PORT = process.env.PORT || 3000;

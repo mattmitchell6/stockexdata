@@ -33,10 +33,10 @@ router.get('/', async function(req, res) {
 });
 
 /**
- * search by symbol
+ * lookup company by symbol
  */
-router.get('/search', async function(req, res) {
-  const symbol = req.query.symbol;
+router.get('/:symbol', async function(req, res) {
+  const symbol = req.params.symbol;
 
   try {
     // fetch data

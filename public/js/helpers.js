@@ -18,6 +18,12 @@ $(document).ready(function() {
   stylePrices();
   styleChangeWatchlist()
 
+  $("form").submit(function(e) {
+    e.preventDefault();
+    var symbol = $("#stockInput" ).val();
+    window.location.replace(`/${symbol.toUpperCase()}`);
+  });
+
   // iterate through daily change amounts
   for (var i = 0; i < dailyChange.length; i++) {
     changePercent = dailyChange[i].getAttribute('change-percent');
