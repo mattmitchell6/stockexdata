@@ -50,6 +50,7 @@ router.get('/:symbol', async function(req, res) {
     if(error.response && error.response.status == 404) {
       errorMessage = `Could not find symbol "${symbol}"`;
     } else {
+      console.log(error);
       throw new Error(error);
     }
 

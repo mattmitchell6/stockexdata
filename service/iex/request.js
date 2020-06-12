@@ -1,5 +1,5 @@
 /**
- * Helper class for formatting and sending requests to IEX
+ * Helper class for sending requests to IEX
  */
 const axios = require('axios');
 const moment = require('moment');
@@ -7,6 +7,7 @@ const moment = require('moment');
 const baseUrl = "https://cloud.iexapis.com/stable/stock"
 const token = `token=${process.env.IEX_TOKEN}`;
 
+const MAX_NEWS_SUMMARY = 200;
 
 class request {
 
@@ -70,7 +71,7 @@ class request {
     let result = await axios.get(url);
 
     // max out news summary character count at 100 chars
-    for(i = 0; i < result.data.length; i++) {
+    for(let i = 0; i < result.data.length; i++) {
       result.data[i].summary = result.data[i].summary.substr(0, MAX_NEWS_SUMMARY) + "..."
     }
 
@@ -124,6 +125,45 @@ class request {
       }
     }
   }
+
+  /**
+   * update historical prices
+   */
+  static async updateHistoricalPrices(symbol, currentTime, lastUpdated, previousHistory) {
+    let history = JSON.parse(previousHistory);
+    let previousMostRecentQuote = history[history.length - 1];
+    let range;
+
+    // see how many historical stock quotes we've missed
+    if(currentTime.diff(previousMostRecentQuote.date, 'days') <= 5) {
+      range = '5d';
+    } else if(currentTime.diff(previousMostRecentQuote.date, 'months') <= 1) {
+      range = '1m';
+    } else if(currentTime.diff(previousMostRecentQuote.date, 'months') <= 3) {
+      range = '3m';
+    } else if(currentTime.diff(previousMostRecentQuote.date, 'months') <= 6) {
+      range = '6m';
+    } else if(currentTime.diff(previousMostRecentQuote.date, 'years') <= 1) {
+      range = '1y';
+    } else if(currentTime.diff(previousMostRecentQuote.date, 'years') <= 2) {
+      range = '2y';
+    } else {
+      range = 'max';
+    }
+
+    // fetch daily stock prices based on calculated range above
+    const url = `${baseUrl}/${symbol}/chart/${range}?${token}&chartInterval=1&chartCloseOnly=true`
+    let result = await axios.get(url);
+
+    // fill in daily price gaps
+    let toAddDates = result.data.filter(function(day, index, arr) {
+      return moment(day.date).isAfter(previousMostRecentQuote.date, 'day')
+    });
+
+    history = history.concat(toAddDates);
+
+    return {data: JSON.stringify(history), lastUpdated: moment()};
+  }
 }
 
 /**
@@ -141,5 +181,13 @@ function dailyChange(latestPrice, previousClose) {
     change: change
   }
 }
+
+/**
+ * is the object empty?
+ */
+function isEmpty(obj) {
+  return Object.getOwnPropertyNames(obj).length === 0;
+}
+
 
 module.exports = request;

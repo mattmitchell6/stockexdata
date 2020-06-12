@@ -1,5 +1,5 @@
 /**
- * Class for making API calls to IEX
+ * Class for making API calls to IEX and organizing data
  */
 const axios = require('axios');
 const moment = require('moment');
@@ -7,10 +7,7 @@ const moment = require('moment');
 const Stock = require('../../models/stocks');
 const request = require('./request');
 
-const baseUrl = "https://cloud.iexapis.com/stable/stock"
 const token = `token=${process.env.IEX_TOKEN}`;
-
-const MAX_NEWS_SUMMARY = 200;
 
 class IEX {
 
@@ -50,7 +47,7 @@ class IEX {
 
       // update history once a day
       if(currentTime.isAfter(stock.history.lastUpdated, 'day')) {
-        updateTasks.push(updateHistoricalPrices(symbol, currentTime, stock.history.lastUpdated, stock.history.data))
+        updateTasks.push(request.updateHistoricalPrices(symbol, currentTime, stock.history.lastUpdated, stock.history.data))
         updateKeys.push('history')
       }
 
@@ -126,62 +123,6 @@ class IEX {
 }
 
 /**
- * update historical prices
- */
-async function updateHistoricalPrices(symbol, currentTime, lastUpdated, previousHistory) {
-  let history = JSON.parse(previousHistory);
-  let previousMostRecentQuote = history[history.length - 1];
-  let range;
-
-  // see how many historical stock quotes we've missed
-  if(currentTime.diff(previousMostRecentQuote.date, 'days') <= 5) {
-    range = '5d';
-  } else if(currentTime.diff(previousMostRecentQuote.date, 'months') <= 1) {
-    range = '1m';
-  } else if(currentTime.diff(previousMostRecentQuote.date, 'months') <= 3) {
-    range = '3m';
-  } else if(currentTime.diff(previousMostRecentQuote.date, 'months') <= 6) {
-    range = '6m';
-  } else if(currentTime.diff(previousMostRecentQuote.date, 'years') <= 1) {
-    range = '1y';
-  } else if(currentTime.diff(previousMostRecentQuote.date, 'years') <= 2) {
-    range = '2y';
-  } else {
-    range = 'max';
-  }
-
-  // fetch daily stock prices based on calculated range above
-  const url = `${baseUrl}/${symbol}/chart/${range}?${token}&chartInterval=1&chartCloseOnly=true`
-  let result = await axios.get(url);
-
-  // fill in daily price gaps
-  let toAddDates = result.data.filter(function(day, index, arr) {
-    return moment(day.date).isAfter(previousMostRecentQuote.date, 'day')
-  });
-
-  history = history.concat(toAddDates);
-
-  return {data: JSON.stringify(history), lastUpdated: moment()};
-}
-
-
-/**
- * calculate daily stock price change percentage
- */
-function dailyChange(latestPrice, previousClose) {
-  let change = latestPrice - previousClose
-  let changePercent = (latestPrice * 100) / previousClose - 100;
-
-  changePercent = changePercent.toFixed(2);
-  change = change.toFixed(2);
-
-  return {
-    changePercent: changePercent,
-    change: change
-  }
-}
-
-/**
  * convert all stringified data entries to json
  */
 function unStringify(stock) {
@@ -195,13 +136,5 @@ function unStringify(stock) {
     news: JSON.parse(stock.news.data)
   }
 }
-
-/**
- * is the object empty?
- */
-function isEmpty(obj) {
-  return Object.getOwnPropertyNames(obj).length === 0;
-}
-
 
 module.exports = IEX;
