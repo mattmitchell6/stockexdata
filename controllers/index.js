@@ -70,9 +70,9 @@ router.get('/fetch/:symbol', async function(req, res) {
 });
 
 /**
- * fetch all companies
+ * fetch all companies for filtering
  */
-router.get('/allcompanies', async function(req, res) {
+router.get('/filter/allcompanies', async function(req, res) {
   const allCompanies = await Company.find({})
   res.send(allCompanies);
 });
