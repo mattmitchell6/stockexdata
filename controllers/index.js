@@ -9,7 +9,6 @@ const Company = require('../models/companies');
 const IEX = require('../service/iex/iex');
 // const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn('/');
 
-
 // load routes
 router.use('/watchlist', require('./watchlist'))
 router.use('/auth', require('./auth'))
@@ -33,7 +32,7 @@ router.get('/', async function(req, res) {
 });
 
 /**
- * lookup company by symbol
+ * lookup stock by symbol
  */
 router.get('/:symbol', async function(req, res) {
   const symbol = req.params.symbol;
@@ -60,19 +59,9 @@ router.get('/:symbol', async function(req, res) {
 });
 
 /**
- * fetch stock by symbol
- */
-router.get('/fetch/:symbol', async function(req, res) {
-  const symbol = req.params.symbol;
-  const stock = await IEX.getStockData(symbol);
-
-  res.json(stock)
-});
-
-/**
  * fetch all companies for filtering
  */
-router.get('/filter/allcompanies', async function(req, res) {
+router.get('/fetch/allcompanies', async function(req, res) {
   const allCompanies = await Company.find({})
   res.send(allCompanies);
 });

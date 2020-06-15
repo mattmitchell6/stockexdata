@@ -63,7 +63,7 @@
     {{/if}}
 
     {{#each watchlist}}
-      fetch('/fetch/{{this}}', { method: 'GET'})
+      fetch('/watchlist/fetch/{{this}}', { method: 'GET'})
         .then(function(result) {
           result.json().then(function(stock) {
             var html = '';

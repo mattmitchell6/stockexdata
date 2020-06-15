@@ -1,4 +1,7 @@
-// fetch all companies
+/**
+ * fetch all stocks for filtering
+ */
+let fuse;
 const options = {
   keys: [{
     name: "symbol",
@@ -8,12 +11,11 @@ const options = {
     weight: .4
   }]
 };
-let fuse;
 
 if(sessionStorage.getItem('companies')) {
   fuse = new Fuse(JSON.parse(sessionStorage.getItem('companies')), options)
 } else {
-  fetch('/filter/allcompanies', {
+  fetch('/fetch/allcompanies', {
     method: 'GET',
   }).then(function(result) {
     result.json().then(function(companies) {
@@ -23,7 +25,7 @@ if(sessionStorage.getItem('companies')) {
   });
 }
 
-// stock search filtering
+// stock filtering
 $("#stockInput").on("input", function() {
   const pattern = $(this).val();
   let filteredResultsContainer = document.getElementById('filteredResultsContainer');

@@ -1,5 +1,5 @@
 /**
- * Clientside helper functions
+ * clientside helper functions
  */
 
 $(document).ready(function() {

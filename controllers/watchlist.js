@@ -4,6 +4,7 @@
 const router = require('express').Router();
 
 const User = require('../models/users');
+const IEX = require('../service/iex/iex');
 
 /**
  * add company to watchlist
@@ -32,5 +33,15 @@ router.get('/remove/:symbol', async function(req, res) {
 
   res.redirect('/search?symbol=' + symbol)
 })
+
+/**
+ * quick watchlist stock lookup
+ */
+router.get('/fetch/:symbol', async function(req, res) {
+  const symbol = req.params.symbol;
+  const stock = await IEX.getStockData(symbol);
+
+  res.json(stock)
+});
 
 module.exports = router;
