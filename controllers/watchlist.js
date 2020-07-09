@@ -17,7 +17,7 @@ router.get('/add/:symbol', async function(req, res) {
   let updatedUser = await User.findOneAndUpdate(filter, update, {new: true});
   req.session.passport.user = updatedUser
 
-  res.redirect('/search?symbol=' + symbol)
+  res.redirect('/' + symbol)
 });
 
 /**
@@ -31,7 +31,7 @@ router.get('/remove/:symbol', async function(req, res) {
   let updatedUser = await User.findOneAndUpdate(filter, update, {new: true});
   req.session.passport.user = updatedUser
 
-  res.redirect('/search?symbol=' + symbol)
+  res.redirect('/' + symbol)
 })
 
 /**
