@@ -288,12 +288,13 @@ a:hover {
 }
 
 .watchlist {
-  border-style: solid;
+  /*border-style: solid;
   border-color: #007bff;
   border-radius: 15px;
   border-width: 1px;
-  padding: 3px 6px;
-  font-size: 70%;
+  padding: 3px 6px;*/
+  /*font-size: 70%;*/
+  font-size: 22px;
 }
 
 .watchlist-card {

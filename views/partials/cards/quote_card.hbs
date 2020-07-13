@@ -1,34 +1,30 @@
 <div class="card card-body mb20">
-  <div class="row mbs">
-    <div class="col-8 overflow">
-      <h3>{{stock.quote.symbol}}</h3>
-      <span>{{stock.quote.companyName}}</span>
-    </div>
-    <div class="col-4">
-      <img src="{{stock.logoUrl}}" height=50px alt="" class="pull-right logo">
-    </div>
-    {{#if user}}
-      <div class="col-12" style="margin-top: .5rem">
-        {{#if_in_list stock.quote.symbol user.watchlist}}
-          <a href="/watchlist/remove/{{stock.quote.symbol}}"><span class="watchlist"><i class="fas fa-star "></i> remove from watchlist</span></a>
-        {{else}}
-          <a href="/watchlist/add/{{stock.quote.symbol}}"><span class="watchlist"><i class="far fa-star"></i> add to watchlist</span></a>
-        {{/if_in_list}}
-      </div>
-    {{/if}}
-  </div>
-  <hr>
 
   <div class="row">
-    <div class="col-md-12 mbm">
+    <div class="col-8 mbm">
       <h4>
-        <span class="price" data-price="{{stock.quote.latestPrice}}"></span>
-        <span class="daily-change" style="font-size: 80%"
+        {{stock.quote.companyName}} <span class="text-muted">({{stock.quote.symbol}})</span>
+        {{#if user}}
+          {{#if_in_list stock.quote.symbol user.watchlist}}
+            <a href="/watchlist/remove/{{stock.quote.symbol}}"><span class="watchlist"><i class="fas fa-star "></i></span></a>
+          {{else}}
+            <a href="/watchlist/add/{{stock.quote.symbol}}"><span class="watchlist"><i class="far fa-star"></i></span></a>
+          {{/if_in_list}}
+        {{else}}
+          <a href="/auth/google"><span class="watchlist"><i class="far fa-star"></i></span></a>
+        {{/if}}
+      </h4>
+      <h3>
+        <span class="price" data-price="{{stock.quote.latestPrice}}" style="font-weight: 500"></span>
+        <span class="daily-change" style="font-size: 70%"
           change="{{stock.quote.dailyChange.change}}"
           change-percent="{{stock.quote.dailyChange.changePercent}}">
         </span>
-      </h4>      
+      </h3>
       <div class="text-muted">updated <span class="date" data-date="{{stock.quoteLastUpdated}}"></span></div>
+    </div>
+    <div class="col-4 mbm">
+      <img src="{{stock.logoUrl}}" height=50px alt="" class="pull-right logo">
     </div>
 
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
