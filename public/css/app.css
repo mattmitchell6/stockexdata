@@ -312,3 +312,17 @@ a:hover {
 .watchlist-load {
   font-size: 25px;
 }
+
+.news-image {
+  background-position: 50% center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-origin: border-box;
+  width: 100%;
+  /*height: 100%;*/
+  border-radius: 0.1875rem;
+}
+
+.news.text-muted:hover {
+  color: #000 !important;
+}
