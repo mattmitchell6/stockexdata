@@ -323,6 +323,6 @@ a:hover {
   border-radius: 0.1875rem;
 }
 
-.news.text-muted:hover {
+a:hover .news.text-muted {
   color: #000 !important;
 }
