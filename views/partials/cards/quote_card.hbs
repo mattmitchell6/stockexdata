@@ -1,7 +1,7 @@
 <div class="card card-body mb20">
 
   <div class="row">
-    <div class="col-8 mbm">
+    <div class="col-sm-8 col-xs-12 mbm">
       <h4>
         {{stock.quote.companyName}} <span class="text-muted">({{stock.quote.symbol}})</span>
         {{#if user}}
@@ -23,7 +23,7 @@
       </h3>
       <div class="text-muted" style="font-size: 80%">updated <span class="date" data-date="{{stock.quoteLastUpdated}}"></span></div>
     </div>
-    <div class="col-4 mbm">
+    <div class="col-sm-4 d-none d-sm-block mbm">
       <img src="{{stock.logoUrl}}" height=50px alt="" class="pull-right logo">
     </div>
 
