@@ -13,10 +13,7 @@ router.get('/google', passport.authenticate('google', {scope: ['profile']}));
  * Google callback
  */
 router.get('/google/callback', passport.authenticate('google'), function(req, res) {
-  let path = req.headers.referer.split('/')
-  path = "/" + path[path.length - 1];
-
-  res.redirect(path)
+  res.redirect('/');
 });
 
 /**
